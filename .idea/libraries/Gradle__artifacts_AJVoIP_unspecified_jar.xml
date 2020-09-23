@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: artifacts:AJVoIP:unspecified@jar">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/AJVoIP/build/.transforms/38cf957b6df7b8b3a3421463dd0a80f6/jetified-AJVoIP/AndroidManifest.xml" />
+      <root url="jar://$PROJECT_DIR$/AJVoIP/build/.transforms/38cf957b6df7b8b3a3421463dd0a80f6/jetified-AJVoIP/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/AJVoIP/build/.transforms/38cf957b6df7b8b3a3421463dd0a80f6/jetified-AJVoIP/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
