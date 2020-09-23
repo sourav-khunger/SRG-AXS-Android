@@ -5,16 +5,9 @@
     tools:contexts=".ScreenSlidePagerActivity">
 
     <item
-        android:id="@+id/menuActivity"
-        android:title="Setting"
-        android:icon="@drawable/ic_baseline_settings_24"/>
+        android:id="@+id/changeDateOption"
+        android:title="Change Date"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_calender"/>
 
-    <item
-        android:id="@+id/action_setting"
-        android:title="Setting"
-        android:icon="@drawable/ic_baseline_settings_24"/>
-
-    <item
-        android:id="@+id/action_logout"
-        android:title="Logout"/>
 </menu>

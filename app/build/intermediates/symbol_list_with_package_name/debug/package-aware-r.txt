@@ -27,6 +27,11 @@ anim design_bottom_sheet_slide_in
 anim design_bottom_sheet_slide_out
 anim design_snackbar_in
 anim design_snackbar_out
+anim dispose_center
+anim elastic_down
+anim elastic_up
+anim fade_in
+anim fade_out
 anim fragment_close_enter
 anim fragment_close_exit
 anim fragment_fade_enter
@@ -41,6 +46,8 @@ anim nav_default_enter_anim
 anim nav_default_exit_anim
 anim nav_default_pop_enter_anim
 anim nav_default_pop_exit_anim
+anim show_down_center
+anim show_up_center
 anim ucrop_loader_circle_path
 anim ucrop_loader_circle_scale
 animator design_appbar_state_list_animator
@@ -808,6 +815,23 @@ attr spanCount
 attr spinBars
 attr spinnerDropDownItemStyle
 attr spinnerStyle
+attr spinner_arrow_animate
+attr spinner_arrow_animate_duration
+attr spinner_arrow_drawable
+attr spinner_arrow_gravity
+attr spinner_arrow_padding
+attr spinner_arrow_show
+attr spinner_dismiss_notified_select
+attr spinner_divider_color
+attr spinner_divider_show
+attr spinner_divider_size
+attr spinner_item_array
+attr spinner_popup_animation
+attr spinner_popup_animation_style
+attr spinner_popup_background
+attr spinner_popup_elevation
+attr spinner_popup_height
+attr spinner_popup_width
 attr splitTrack
 attr squaredFinder
 attr srcCompat
@@ -1758,6 +1782,8 @@ drawable abc_textfield_search_activated_mtrl_alpha
 drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
+drawable arrow
+drawable arrow_vector
 drawable avd_hide_password
 drawable avd_show_password
 drawable axs_logo
@@ -1774,6 +1800,7 @@ drawable btn_radio_on_to_off_mtrl_animation
 drawable button_bg
 drawable button_bg_dark
 drawable cam_btn3
+drawable com
 drawable common_full_open_on_phone
 drawable common_google_signin_btn_icon_dark
 drawable common_google_signin_btn_icon_dark_focused
@@ -1819,6 +1846,7 @@ drawable ic_baseline_place_primary_light_32
 drawable ic_baseline_refresh_24
 drawable ic_baseline_scanner_24
 drawable ic_baseline_settings_24
+drawable ic_calender
 drawable ic_clock_black_24dp
 drawable ic_closed_cardboard_box_32
 drawable ic_keyboard_black_24dp
@@ -1864,10 +1892,13 @@ drawable notification_template_icon_low_bg
 drawable notification_tile_bg
 drawable notify_panel_notification_icon_bg
 drawable pickup
+drawable pin
+drawable placeholder
 drawable progress
 drawable qrcode
 drawable rectangle_rounded_corner
 drawable right
+drawable route
 drawable scan_package
 drawable selection_band_overlay
 drawable test_custom_background
@@ -1956,13 +1987,11 @@ id action_container
 id action_context_bar
 id action_divider
 id action_image
-id action_logout
 id action_menu_divider
 id action_menu_presenter
 id action_mode_bar
 id action_mode_bar_stub
 id action_mode_close_button
-id action_setting
 id action_shipmentPhotoFragment_to_shipmentPhotoPreviewFragment
 id action_shipmentPhotoPreviewFragment_to_shipmentPhotoFragment
 id action_shipmentPhotoPreviewFragment_to_shipment_recipient
@@ -2009,6 +2038,7 @@ id beginOnFirstDraw
 id beginning
 id bidirectional
 id blocking
+id body
 id bottom
 id bounce
 id box_img
@@ -2023,11 +2053,13 @@ id cancel_action
 id cancel_button
 id captureBtn
 id center
+id centerMap
 id center_horizontal
 id center_vertical
 id chain
 id chains
 id changeDateButton
+id changeDateOption
 id checkbox
 id checked
 id chip
@@ -2101,6 +2133,7 @@ id dragUp
 id drawer_layout
 id driver_company_nav_text
 id driver_name_nav_text
+id dropdown
 id dropdown_menu
 id durationET
 id easeIn
@@ -2177,6 +2210,7 @@ id incoming
 id info
 id invisible
 id italic
+id item_default_text
 id item_touch_helper_previous_elevation
 id jumpToEnd
 id jumpToStart
@@ -2205,6 +2239,8 @@ id makethisStopButton
 id map
 id mapfragment
 id mapfragment1
+id markerName
+id markerTxt
 id masked
 id material_clock_display
 id material_clock_face
@@ -2230,7 +2266,6 @@ id max2160p
 id max480p
 id max720p
 id media_actions
-id menuActivity
 id menu_crop
 id menu_loader
 id message
@@ -2333,6 +2368,7 @@ id recipient_address_text
 id recipient_name_edit_text
 id recipient_name_text
 id rectangles
+id recyclerView
 id ref_no_input_layout
 id reffNo
 id reverseSawtooth
@@ -2373,6 +2409,7 @@ id search_src_text
 id search_voice_btn
 id select_dialog_listview
 id selected
+id selectedDate
 id selection_type
 id selfDispatchButton
 id sendButton
@@ -2406,6 +2443,7 @@ id signature_pad_description
 id signature_pad_title
 id signature_text
 id signature_time
+id simpleFrameLayout
 id sin
 id skipCollapsed
 id slide
@@ -2659,7 +2697,10 @@ layout fragment_route
 layout fragment_selfdispatch
 layout fragment_summary
 layout fragment_to_do_task_list
+layout item_default
+layout layout_body
 layout layout_focus_marker
+layout marker_dialog
 layout material_chip_input_combo
 layout material_clock_display
 layout material_clock_display_divider
@@ -3165,7 +3206,10 @@ style CardView
 style CardView_Dark
 style CardView_Light
 style DeliveryStatusRadioStyle
+style DropDown
+style Elastic
 style EmptyTheme
+style Fade
 style HeaderBar
 style MaterialAlertDialog_MaterialComponents
 style MaterialAlertDialog_MaterialComponents_Body_Text
@@ -3761,6 +3805,7 @@ styleable OnClick clickAction targetId
 styleable OnSwipe dragDirection dragScale dragThreshold limitBoundsTo maxAcceleration maxVelocity moveWhenScrollAtTop nestedScrollFlags onTouchUp touchAnchorId touchAnchorSide touchRegionId
 styleable PopupWindow android_popupBackground android_popupAnimationStyle overlapAnchor
 styleable PopupWindowBackgroundState state_above_anchor
+styleable PowerSpinnerView spinner_arrow_animate spinner_arrow_animate_duration spinner_arrow_drawable spinner_arrow_gravity spinner_arrow_padding spinner_arrow_show spinner_dismiss_notified_select spinner_divider_color spinner_divider_show spinner_divider_size spinner_item_array spinner_popup_animation spinner_popup_animation_style spinner_popup_background spinner_popup_elevation spinner_popup_height spinner_popup_width
 styleable ProgressIndicator android_indeterminate circularInset circularRadius growMode indicatorColor indicatorColors indicatorCornerRadius indicatorType indicatorWidth inverse linearSeamless minHideDelay trackColor
 styleable PropertySet android_visibility android_alpha layout_constraintTag motionProgress visibilityMode
 styleable RadialViewGroup materialCircleRadius

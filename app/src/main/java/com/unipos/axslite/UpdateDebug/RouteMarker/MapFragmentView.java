@@ -17,60 +17,89 @@
 package com.unipos.axslite.UpdateDebug.RouteMarker;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.PointF;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
+import android.os.Environment;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.here.android.mpa.common.GeoBoundingBox;
 import com.here.android.mpa.common.GeoCoordinate;
 import com.here.android.mpa.common.GeoPolygon;
 import com.here.android.mpa.common.GeoPolyline;
 import com.here.android.mpa.common.Image;
 import com.here.android.mpa.common.OnEngineInitListener;
+import com.here.android.mpa.common.PositioningManager;
+import com.here.android.mpa.common.ViewObject;
 import com.here.android.mpa.common.ViewRect;
+import com.here.android.mpa.guidance.NavigationManager;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapCircle;
+import com.here.android.mpa.mapping.MapGesture;
 import com.here.android.mpa.mapping.MapMarker;
+import com.here.android.mpa.mapping.MapObject;
 import com.here.android.mpa.mapping.MapPolygon;
 import com.here.android.mpa.mapping.MapPolyline;
 import com.here.android.mpa.mapping.AndroidXMapFragment;
+import com.here.android.mpa.mapping.MapRoute;
+import com.here.android.mpa.mapping.OnMapRenderListener;
+import com.here.android.mpa.routing.CoreRouter;
+import com.here.android.mpa.routing.Route;
+import com.here.android.mpa.routing.RouteOptions;
+import com.here.android.mpa.routing.RoutePlan;
+import com.here.android.mpa.routing.RouteResult;
+import com.here.android.mpa.routing.RouteWaypoint;
+import com.here.android.mpa.routing.Router;
+import com.here.android.mpa.routing.RoutingError;
+import com.unipos.axslite.BackgroudService.Workers.LocationService;
+import com.unipos.axslite.Database.Entities.TaskInfoEntity;
+import com.unipos.axslite.Database.Repository.TaskInfoRepository;
 import com.unipos.axslite.R;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * This class encapsulates the properties and functionality of the Map view.
  */
 public class MapFragmentView {
     private static final String TAG = MapFragmentView.class.getSimpleName();
-
-    private static final int ADD_MARKER_MENU_ID = 0;
-    private static final int REMOVE_MARKER_MENU_ID = 1;
-    private static final int ADD_POLYGON_MENU_ID = 2;
-    private static final int REMOVE_POLYGON_MENU_ID = 3;
-    private static final int ADD_POLYLINE_MENU_ID = 4;
-    private static final int REMOVE_POLYLINE_MENU_ID = 5;
-    private static final int ADD_CIRCLE_MENU_ID = 6;
-    private static final int REMOVE_CIRCLE_MENU_ID = 7;
-    private static final int NAVIGATE_TO_MENU_ID = 8;
 
     private AndroidXMapFragment m_mapFragment;
     private AppCompatActivity m_activity;
@@ -82,6 +111,16 @@ public class MapFragmentView {
     private final LinkedList<MapCircle> m_circles = new LinkedList<>();
     private final LinkedList<MapMarker> m_map_markers = new LinkedList<>();
     MapPolyline addMapPolyline;
+    private Route m_route;
+    MapRoute mapRoute;
+    private GeoCoordinate geoCoordinate;
+    List<TaskInfoEntity> taskInfoEntities = new ArrayList<>();
+
+    Spinner routeSpinner;
+    ArrayList<String> routeSelectionList = new ArrayList<>();
+    private TaskInfoRepository mTaskInfoRepository;
+    private TextView markerTxt;
+    ImageView centerMap;
 //    private Scen mapScene;
 
     /**
@@ -90,9 +129,72 @@ public class MapFragmentView {
      *
      * @param activity
      */
-    public MapFragmentView(AppCompatActivity activity) {
+    public MapFragmentView(AppCompatActivity activity, ArrayList<String> routeSelectionList, List<TaskInfoEntity> taskInfoEntities) {
         m_activity = activity;
+        this.routeSelectionList = routeSelectionList;
+        this.taskInfoEntities = taskInfoEntities;
         initMapFragment();
+        initUI();
+    }
+
+    void initUI() {
+//        m_naviControlButton = (Button) m_activity.findViewById(R.id.naviCtrlButton);
+        centerMap = m_activity.findViewById(R.id.centerMap);
+        routeSpinner = m_activity.findViewById(R.id.routeSpinner);
+        markerTxt = m_activity.findViewById(R.id.markerTxt);
+
+        mTaskInfoRepository = new TaskInfoRepository(m_activity.getApplication());
+        taskInfoEntities = mTaskInfoRepository.getTaskInfos1();
+
+  /*      routeSelectionList.add("    Show All   ");
+        routeSelectionList.add("    Show DC   ");
+        for (int i = 0; i < taskInfoEntities.size(); i++) {
+
+            routeSelectionList.add(" " + (i + 1) + ". " + taskInfoEntities.get(i).getName());
+        }*/
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(m_activity, android.R.layout.simple_spinner_dropdown_item, routeSelectionList);
+        routeSpinner.setAdapter(arrayAdapter);
+
+        routeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (m_mapFragment != null && m_map != null) {
+                    if (i == 0) {
+                        m_map.setZoomLevel(13.3, Map.Animation.BOW);
+                        m_map.setCenter(m_route.getDestination(), Map.Animation.BOW);
+                        markerTxt.setVisibility(View.GONE);
+                    }
+                    if (i > 1) {
+                        markerTxt.setVisibility(View.VISIBLE);
+                        i = i - 2;
+                        m_map.setZoomLevel(14.6, Map.Animation.BOW);
+                        double lat = Double.parseDouble(taskInfoEntities.get(i).getLatitude());
+                        double longi = Double.parseDouble(taskInfoEntities.get(i).getLongitude());
+                        m_map.setCenter(new GeoCoordinate(lat, longi),
+                                Map.Animation.BOW);
+                        markerTxt.setText(taskInfoEntities.get(i).getName());
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                m_map.setCenter(PositioningManager.getInstance().getLastKnownPosition().getCoordinate(),
+                        Map.Animation.BOW);
+            }
+        });
+        centerMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                m_map.setZoomLevel(13.3, Map.Animation.BOW);
+                m_map.setCenter(PositioningManager.getInstance().getLastKnownPosition().getCoordinate(),
+                        Map.Animation.BOW);
+            }
+        });
+        if (m_map != null && !PositioningManager.getInstance().isActive()) {
+            PositioningManager.getInstance().start(PositioningManager.LocationMethod.GPS_NETWORK); // use gps plus cell and wifi
+        }
     }
 
     private AndroidXMapFragment getMapFragment() {
@@ -125,22 +227,28 @@ public class MapFragmentView {
                          */
                         m_map = m_mapFragment.getMap();
 
+
                         /*
                          * Set the map center to the 4350 Still Creek Dr Burnaby BC (no animation).
                          */
-                        m_map.setCenter(new GeoCoordinate(29.9753092, 77.571972),
+                        geoCoordinate = new GeoCoordinate(LocationService.latitude, LocationService.longitude);
+                        geoCoordinate = PositioningManager.getInstance().getLastKnownPosition().getCoordinate();
+                        m_map.setCenter(geoCoordinate,
                                 Map.Animation.BOW);
 
                         /* Set the zoom level to the average between min and max zoom level. */
-                        m_map.setZoomLevel(14);
+                        m_map.setZoomLevel(15);
 
                         m_activity.supportInvalidateOptionsMenu();
+                        m_mapFragment.getMapGesture().addOnGestureListener(onGestureListener, 0, false);
 //                        m_map =
-                        MapPolyline mapPolyline = createPolyline();
-                        m_map.addMapObject(mapPolyline);
+                        /*MapPolyline mapPolyline =*/
+                        createPolyline();
+//                        m_map.addMapObject(mapPolyline);
                         /*
                          * Set up a handler for handling MapMarker drag events.
                          */
+
                         m_mapFragment.setMapMarkerDragListener(new OnDragListenerHandler());
 
                     } else {
@@ -164,120 +272,99 @@ public class MapFragmentView {
         }
     }
 
-    boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case ADD_MARKER_MENU_ID:
-                addMapMarkerObject();
-                break;
-            case REMOVE_MARKER_MENU_ID:
-                if (!m_map_markers.isEmpty()) {
-                    m_map.removeMapObject(m_map_markers.removeLast());
-                }
-                break;
-            case ADD_POLYGON_MENU_ID:
-                addPolygonObject();
-                break;
-            case REMOVE_POLYGON_MENU_ID:
-                if (!m_polygons.isEmpty()) {
-                    m_map.removeMapObject(m_polygons.removeLast());
-                }
-                break;
-            case ADD_POLYLINE_MENU_ID:
-                addPolylineObject();
-                break;
-            case REMOVE_POLYLINE_MENU_ID:
-                if (!m_polylines.isEmpty()) {
-                    m_map.removeMapObject(m_polylines.removeLast());
-                }
-                break;
-            case ADD_CIRCLE_MENU_ID:
-                addCircleObject();
-                break;
-            case REMOVE_CIRCLE_MENU_ID:
-                if (!m_circles.isEmpty()) {
-                    m_map.removeMapObject(m_circles.removeLast());
-                }
-                break;
 
-            case NAVIGATE_TO_MENU_ID:
-                if (!m_map_markers.isEmpty()) {
-                    int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
-                            100, m_activity.getResources().getDisplayMetrics());
-                    navigateToMapMarkers(m_map_markers, padding);
-                } else {
-                    Toast.makeText(m_activity, "There is no any map markers added on the map",
-                            Toast.LENGTH_SHORT).show();
-                }
-                break;
+
+    private MapGesture.OnGestureListener onGestureListener = new MapGesture.OnGestureListener() {
+        @Override
+        public void onPanStart() {
+
         }
 
-        return true;
-    }
+        @Override
+        public void onPanEnd() {
 
-    boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, ADD_MARKER_MENU_ID, ADD_MARKER_MENU_ID, "Add Marker");
-        menu.add(0, REMOVE_MARKER_MENU_ID, REMOVE_MARKER_MENU_ID, "Remove Marker");
-        menu.add(0, ADD_POLYGON_MENU_ID, ADD_POLYGON_MENU_ID, "Add Polygon");
-        menu.add(0, REMOVE_POLYGON_MENU_ID, REMOVE_POLYGON_MENU_ID, "Remove polygon");
-        menu.add(0, ADD_POLYLINE_MENU_ID, ADD_POLYLINE_MENU_ID, "Add polyline");
-        menu.add(0, REMOVE_POLYLINE_MENU_ID, REMOVE_POLYLINE_MENU_ID, "Remove polyline");
-        menu.add(0, ADD_CIRCLE_MENU_ID, ADD_CIRCLE_MENU_ID, "Add circle");
-        menu.add(0, REMOVE_CIRCLE_MENU_ID, REMOVE_CIRCLE_MENU_ID, "Remove circle");
-        menu.add(0, NAVIGATE_TO_MENU_ID, NAVIGATE_TO_MENU_ID, "Navigate to added markers");
+        }
 
-        return true;
-    }
+        @Override
+        public void onMultiFingerManipulationStart() {
 
-    /**
-     * Create a MapPolygon and add the MapPolygon to active map view.
-     */
-    private void addPolygonObject() {
-        // create an bounding box centered at current cent
-        GeoBoundingBox boundingBox = new GeoBoundingBox(m_map.getCenter(), 1000, 1000);
-        // add boundingbox's four vertices to list of Geocoordinates.
-        List<GeoCoordinate> coordinates = new ArrayList<GeoCoordinate>();
-        coordinates.add(boundingBox.getTopLeft());
-        coordinates.add(new GeoCoordinate(boundingBox.getTopLeft().getLatitude(),
-                boundingBox.getBottomRight().getLongitude(),
-                boundingBox.getTopLeft().getAltitude()));
-        coordinates.add(boundingBox.getBottomRight());
-        coordinates.add(new GeoCoordinate(boundingBox.getBottomRight().getLatitude(),
-                boundingBox.getTopLeft().getLongitude(), boundingBox.getTopLeft().getAltitude()));
-        // create GeoPolygon with list of GeoCoordinates.
-        GeoPolygon geoPolygon = new GeoPolygon(coordinates);
-        // create MapPolygon with GeoPolygon.
-        MapPolygon polygon = new MapPolygon(geoPolygon);
-        // set line color, fill color and line width
-        polygon.setLineColor(Color.RED);
-        polygon.setFillColor(Color.GRAY);
-        polygon.setLineWidth(12);
-        // add MapPolygon to map.
-        m_map.addMapObject(polygon);
+        }
 
-        m_polygons.add(polygon);
-    }
+        @Override
+        public void onMultiFingerManipulationEnd() {
 
-    /**
-     * Create a MapPolyline and add the MapPolyline to active map view.
-     */
-    private void addPolylineObject() {
-        // create boundingBox centered at current location
-        GeoBoundingBox boundingBox = new GeoBoundingBox(m_map.getCenter(), 1000, 1000);
-        // add boundingBox's top left and bottom right vertices to list of GeoCoordinates
-        List<GeoCoordinate> coordinates = new ArrayList<GeoCoordinate>();
-        coordinates.add(boundingBox.getTopLeft());
-        coordinates.add(boundingBox.getBottomRight());
-        // create GeoPolyline with list of GeoCoordinates
-        GeoPolyline geoPolyline = new GeoPolyline(coordinates);
-        MapPolyline polyline = new MapPolyline(geoPolyline);
-        polyline.setLineColor(Color.BLUE);
-        polyline.setLineWidth(12);
-        // add GeoPolyline to current active map
-        m_map.addMapObject(polyline);
+        }
 
-        m_polylines.add(polyline);
-    }
+        @Override
+        public boolean onMapObjectsSelected(@NonNull List<ViewObject> list) {
+            for (ViewObject viewObject : list) {
+                if (viewObject.getBaseType() == ViewObject.Type.USER_OBJECT) {
+                    MapObject mapObject = (MapObject) viewObject;
 
+                    if (mapObject.getType() == MapObject.Type.MARKER) {
+
+                        MapMarker window_marker = ((MapMarker) mapObject);
+                        m_map.setCenter(window_marker.getCoordinate(), Map.Animation.BOW);
+//                        showDialog(window_marker.getTitle());
+                        Log.e("MARKER", "Title is................." + window_marker.getTitle());
+                        markerTxt.setText(window_marker.getTitle());
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onTapEvent(@NonNull PointF pointF) {
+            return false;
+        }
+
+        @Override
+        public boolean onDoubleTapEvent(@NonNull PointF pointF) {
+            return false;
+        }
+
+        @Override
+        public void onPinchLocked() {
+
+        }
+
+        @Override
+        public boolean onPinchZoomEvent(float v, @NonNull PointF pointF) {
+            return false;
+        }
+
+        @Override
+        public void onRotateLocked() {
+
+        }
+
+        @Override
+        public boolean onRotateEvent(float v) {
+            return false;
+        }
+
+        @Override
+        public boolean onTiltEvent(float v) {
+            return false;
+        }
+
+        @Override
+        public boolean onLongPressEvent(@NonNull PointF pointF) {
+            return false;
+        }
+
+        @Override
+        public void onLongPressRelease() {
+
+        }
+
+        @Override
+        public boolean onTwoFingerTapEvent(@NonNull PointF pointF) {
+            return false;
+        }
+    };
 
     /**
      * create a MapCircle and add the MapCircle to active map view.
@@ -294,31 +381,111 @@ public class MapFragmentView {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private MapPolyline createPolyline() {
+    private void createPolyline() {
         ArrayList<GeoCoordinate> coordinates = new ArrayList<>();
-        coordinates.add(new GeoCoordinate(29.9753092, 77.571972));
-        coordinates.add(new GeoCoordinate(29.9685473, 77.5644495));
-        coordinates.add(new GeoCoordinate(29.9623858, 77.5483282));
-        coordinates.add(new GeoCoordinate(29.9701266, 77.5698228));
+        for (int i = 0; i < taskInfoEntities.size(); i++) {
+            double longi = Double.parseDouble(taskInfoEntities.get(i).getLongitude());
+            double lat = Double.parseDouble(taskInfoEntities.get(i).getLatitude());
+            coordinates.add(new GeoCoordinate(lat, longi));
+            Log.e(TAG, "createPolyline: " + coordinates.get(i));
+        }
+//        coordinates.add(new GeoCoordinate(29.9753092, 77.571972));
+//        coordinates.add(new GeoCoordinate(29.9685473, 77.5644495));
+//        coordinates.add(new GeoCoordinate(29.9623858, 77.5483282));
+//        coordinates.add(new GeoCoordinate(29.9701266, 77.5698228));
 
-        GeoPolyline geoPolyline;
+//        GeoPolyline geoPolyline;
+        /* Initialize a CoreRouter */
+        CoreRouter coreRouter = new CoreRouter();
+
+        /* Initialize a RoutePlan */
+        RoutePlan routePlan = new RoutePlan();
+        RouteOptions routeOptions = new RouteOptions();
+        /* Other transport modes are also available e.g Pedestrian */
+        routeOptions.setTransportMode(RouteOptions.TransportMode.CAR);
+        /* Disable highway in this route. */
+        routeOptions.setHighwaysAllowed(false);
+        /* Calculate the shortest route available. */
+        routeOptions.setRouteType(RouteOptions.Type.SHORTEST);
+        /* Calculate 1 route. */
+        routeOptions.setRouteCount(1);
+        /* Finally set the route option */
+        routePlan.setRouteOptions(routeOptions);
+        Image image = new Image();
         try {
-            geoPolyline = new GeoPolyline(coordinates);
-        } catch (ExceptionInInitializerError e) {
-            // Less than two vertices.
+            image.setImageResource(R.drawable.pin);
+        } catch (IOException e) {
             e.printStackTrace();
-            return null;
+        }
+//        List<RouteWaypoint> routeWaypoints = new ArrayList<>();
+        for (int i = 0; i < coordinates.size(); i++) {
+
+//            RouteWaypoint destination = ;
+            routePlan.addWaypoint(new RouteWaypoint(coordinates.get(i)));
+
+            MapMarker defaultMarker = new MapMarker(coordinates.get(i), image);
+            defaultMarker.setAnchorPoint(new PointF(image.getWidth() / 2, image.getHeight()));
+            defaultMarker.setCoordinate(coordinates.get(i));
+            defaultMarker.setTitle(taskInfoEntities.get(i).getName());
+            defaultMarker.setVisible(true);
+
+            m_map.addMapObject(defaultMarker);
+
         }
 
-        int widthInPixels = 20;
-//        Color lineColor = new Color((short) 0x00, (short) 0x90, (short) 0x8A, (short) 0xA0);
-        MapPolyline mapPolyline = new MapPolyline(geoPolyline);
-        mapPolyline.setLineColor(generateColor());
-        mapPolyline.setLineWidth(widthInPixels);
+        /* Add both waypoints to the route plan */
+//        try {
+//            geoPolyline = new GeoPolyline(coordinates);
+//
+//        } catch (ExceptionInInitializerError e) {
+//            // Less than two vertices.
+//            e.printStackTrace();
+//            return null;
+//        }
+//
+//        int widthInPixels = 20;
+////        Color lineColor = new Color((short) 0x00, (short) 0x90, (short) 0x8A, (short) 0xA0);
+//        MapPolyline mapPolyline = new MapPolyline(geoPolyline);
+//        mapPolyline.setLineColor(generateColor());
+//        mapPolyline.setLineWidth(widthInPixels);
+        coreRouter.calculateRoute(coordinates, routeOptions, new Router.Listener<List<RouteResult>, RoutingError>() {
+            @Override
+            public void onProgress(int i) {
 
-        return mapPolyline;
+            }
+
+            @Override
+            public void onCalculateRouteFinished(@Nullable List<RouteResult> routeResults, @NonNull RoutingError routingError) {
+                if (routingError == RoutingError.NONE) {
+                    m_route = routeResults.get(0).getRoute();
+                    mapRoute = new MapRoute(m_route);
+                    m_map.addMapObject(mapRoute);
+                }
+            }
+        });
     }
 
+
+    private class OnDragListenerHandler implements MapMarker.OnDragListener {
+        @Override
+        public void onMarkerDrag(MapMarker mapMarker) {
+
+            Log.e(TAG, "onMarkerDrag: " + mapMarker.getTitle() + " -> " + mapMarker
+                    .getCoordinate());
+        }
+
+        @Override
+        public void onMarkerDragEnd(MapMarker mapMarker) {
+            Log.e(TAG, "onMarkerDragEnd: " + mapMarker.getTitle() + " -> " + mapMarker
+                    .getCoordinate());
+        }
+
+        @Override
+        public void onMarkerDragStart(MapMarker mapMarker) {
+            Log.e(TAG, "onMarkerDragStart: " + mapMarker.getTitle() + " -> " + mapMarker
+                    .getCoordinate());
+        }
+    }
     @RequiresApi(api = Build.VERSION_CODES.O)
     int generateColor() {
         Random random = new Random();
@@ -328,73 +495,12 @@ public class MapFragmentView {
     /**
      * create a MapMarker and add the MapMarker to active map view.
      */
-    private void addMapMarkerObject() {
-        // create an image from cafe.png.
-        Image marker_img = new Image();
-        try {
-            marker_img.setImageResource(R.drawable.gps_position);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // create a MapMarker centered at current location with png image.
-        MapMarker marker = new MapMarker(m_map.getCenter(), marker_img);
-        /*
-         * Set MapMarker draggable.
-         * How to move to?
-         * In order to activate dragging of the MapMarker you have to do a long press on
-         * the MapMarker then move it to a new position and release the MapMarker.
-         */
-        marker.setDraggable(true);
-        marker.setTitle("MapMarker id: " + mapMarkerCount++);
-        // add a MapMarker to current active map.
-        m_map.addMapObject(marker);
-
-        m_map_markers.add(marker);
+    void showDialog(String marker) {
+        Dialog dialog = new Dialog(m_activity, R.style.MyDialogTheme);
+        dialog.setContentView(R.layout.marker_dialog);
+        TextView markerTxt = dialog.findViewById(R.id.markerName);
+        markerTxt.setText(marker);
+        dialog.show();
     }
 
-    private void navigateToMapMarkers(List<MapMarker> markers, int padding) {
-        // find max and min latitudes and longitudes in order to calculate
-        // geo bounding box so then we can map.zoomTo(geoBox, ...) to it.
-        double minLat = 90.0d;
-        double minLon = 180.0d;
-        double maxLat = -90.0d;
-        double maxLon = -180.0d;
-
-        for (MapMarker marker : markers) {
-            GeoCoordinate coordinate = marker.getCoordinate();
-            double latitude = coordinate.getLatitude();
-            double longitude = coordinate.getLongitude();
-            minLat = Math.min(minLat, latitude);
-            minLon = Math.min(minLon, longitude);
-            maxLat = Math.max(maxLat, latitude);
-            maxLon = Math.max(maxLon, longitude);
-        }
-
-        GeoBoundingBox box = new GeoBoundingBox(new GeoCoordinate(maxLat, minLon),
-                new GeoCoordinate(minLat, maxLon));
-
-        ViewRect viewRect = new ViewRect(padding, padding, m_map.getWidth() - padding * 2,
-                m_map.getHeight() - padding * 2);
-        m_map.zoomTo(box, viewRect, Map.Animation.LINEAR, Map.MOVE_PRESERVE_ORIENTATION);
-    }
-
-    private class OnDragListenerHandler implements MapMarker.OnDragListener {
-        @Override
-        public void onMarkerDrag(MapMarker mapMarker) {
-            Log.i(TAG, "onMarkerDrag: " + mapMarker.getTitle() + " -> " + mapMarker
-                    .getCoordinate());
-        }
-
-        @Override
-        public void onMarkerDragEnd(MapMarker mapMarker) {
-            Log.i(TAG, "onMarkerDragEnd: " + mapMarker.getTitle() + " -> " + mapMarker
-                    .getCoordinate());
-        }
-
-        @Override
-        public void onMarkerDragStart(MapMarker mapMarker) {
-            Log.i(TAG, "onMarkerDragStart: " + mapMarker.getTitle() + " -> " + mapMarker
-                    .getCoordinate());
-        }
-    }
 }

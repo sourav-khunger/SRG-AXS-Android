@@ -14,16 +14,18 @@
             android:icon="@drawable/ic_baseline_refresh_24"
             android:title="Refresh" />
         <item
+            android:visible="false"
             android:id="@+id/nav_show_calendar"
             android:icon="@drawable/ic_baseline_exit_to_app_24"
-            android:title="Check Previous History" />
+            android:title="Change Date" />
         <item
+            android:visible="false"
             android:id="@+id/nav_Menu"
             android:icon="@drawable/grid"
             android:title="Options" />
         <item
             android:id="@+id/route_menu"
-            android:icon="@drawable/grid"
+            android:icon="@drawable/route"
             android:title="Show Routes"
             android:visible="true" />
     </group>

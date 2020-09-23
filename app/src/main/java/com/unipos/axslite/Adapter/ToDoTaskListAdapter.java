@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
 import com.unipos.axslite.Database.Repository.TaskInfoRepository;
+import com.unipos.axslite.POJO.TaskInfo;
 import com.unipos.axslite.POJO.TaskInfoGroupByLocationKey;
 import com.unipos.axslite.R;
 
@@ -20,7 +21,7 @@ import java.util.List;
 
 public class ToDoTaskListAdapter extends RecyclerView.Adapter<ToDoTaskListAdapter.ToDoTaskListViewHolder> {
 
-    List<TaskInfoEntity> listsOfTaskInfoEntities;
+    List<TaskInfo> listsOfTaskInfoEntities;
     private List<TaskInfoGroupByLocationKey> listOfTaskInfoGroupByLocationKeys;
     private String TAG = "adapter";
     private OnItemLongClickListener listener;
@@ -34,7 +35,8 @@ public class ToDoTaskListAdapter extends RecyclerView.Adapter<ToDoTaskListAdapte
         this.listener = listener;
     }
 
-    public ToDoTaskListAdapter(List<TaskInfoGroupByLocationKey> listOfTaskInfoGroupByLocationKeys, Application application, List<TaskInfoEntity> listsOfTaskInfoEntities) {
+    public ToDoTaskListAdapter(List<TaskInfoGroupByLocationKey> listOfTaskInfoGroupByLocationKeys,
+                               Application application, List<TaskInfo> listsOfTaskInfoEntities) {
         this.listOfTaskInfoGroupByLocationKeys = listOfTaskInfoGroupByLocationKeys;
         this.listsOfTaskInfoEntities = listsOfTaskInfoEntities;
         mTaskInfoRepository = new TaskInfoRepository(application);
@@ -64,15 +66,18 @@ public class ToDoTaskListAdapter extends RecyclerView.Adapter<ToDoTaskListAdapte
 
         holder.tvTaskAddress.setText(address);
         holder.tvPostalCode.setText(postalCode);
-        holder.tvUserName.setText(listsOfTaskInfoEntities.get(position).getName());
+        if (listsOfTaskInfoEntities != null) {
+            holder.tvUserName.setText(listsOfTaskInfoEntities.get(position).getName());
+            holder.tvBarcode.setText("Barcode No. " + listsOfTaskInfoEntities.get(position).getBarcode());
+        }
+
 
         List<TaskInfoEntity> completedTasks = mTaskInfoRepository.getTaskInfoCompleted(listOfTaskInfoGroupByLocationKeys.get(position).getLocationKey());
 //        List<TaskInfoEntity> completedTasks = mTaskInfoRepository.getTaskInfoByLocationKey(listOfTaskInfoGroupByLocationKeys.get(position).getLocationKey());
         int completedCounts = completedTasks.size();
         int i = position + 1;
-        holder.tvBarcode.setText("Barcode No. " + listsOfTaskInfoEntities.get(position).getBarcode());
         holder.position.setText("" + i);
-        holder.tvQuantity1.setText("Quantity - " + listsOfTaskInfoEntities.get(position).getQuantity());
+        holder.tvQuantity1.setText("Quantity - " + counts);
         holder.tvQuantity.setText(completedCounts + " / " + counts + " Shipments ");
     }
 

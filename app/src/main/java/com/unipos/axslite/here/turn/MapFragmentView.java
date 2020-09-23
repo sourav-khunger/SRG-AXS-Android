@@ -282,7 +282,7 @@ public class MapFragmentView {
 
                         //Put this call in Map.onTransformListener if the animation(Linear/Bow)
                         //is used in setCenter()
-                        m_map.setZoomLevel(15);
+                        m_map.setZoomLevel(16);
 //                        m_map.setTrafficInfoVisible(true);
 //                        m_mapFragment.getMapGesture().setRotateEnabled(true);
                         // the arController is also ready to be used now
@@ -1113,37 +1113,37 @@ public class MapFragmentView {
             }
         }
     };
-
-    private void createPositionMarkerMesh() {
-
-        FloatBuffer buff = FloatBuffer.allocate(9);
-
-        buff.put(0);
-        buff.put(0.5f);
-        buff.put(0);
-        buff.put(0.2f);
-        buff.put(-0.3f);
-        buff.put(0);
-        buff.put(-0.2f);
-        buff.put(-0.3f);
-        buff.put(0);
-
-        IntBuffer vertIndicieBuffer = IntBuffer.allocate(3);
-        vertIndicieBuffer.put(2);
-        vertIndicieBuffer.put(1);
-        vertIndicieBuffer.put(0);
-
-        LocalMesh myMesh = new LocalMesh();
-        myMesh.setVertices(buff);
-        myMesh.setVertexIndices(vertIndicieBuffer);
-
-        m_PositionMesh = new MapLocalModel();
-        m_PositionMesh.setMesh(myMesh);
-        m_PositionMesh.setScale(7.0f);
-        m_PositionMesh.setDynamicScalingEnabled(true); // keep size when zooming
-
-        m_map.addMapObject(m_PositionMesh); // add mesh to map. we set position later when we have the first reliable information
-    }
+//
+//    private void createPositionMarkerMesh() {
+//
+//        FloatBuffer buff = FloatBuffer.allocate(9);
+//
+//        buff.put(0);
+//        buff.put(0.5f);
+//        buff.put(0);
+//        buff.put(0.2f);
+//        buff.put(-0.3f);
+//        buff.put(0);
+//        buff.put(-0.2f);
+//        buff.put(-0.3f);
+//        buff.put(0);
+//
+//        IntBuffer vertIndicieBuffer = IntBuffer.allocate(3);
+//        vertIndicieBuffer.put(2);
+//        vertIndicieBuffer.put(1);
+//        vertIndicieBuffer.put(0);
+//
+//        LocalMesh myMesh = new LocalMesh();
+//        myMesh.setVertices(buff);
+//        myMesh.setVertexIndices(vertIndicieBuffer);
+//
+//        m_PositionMesh = new MapLocalModel();
+//        m_PositionMesh.setMesh(myMesh);
+//        m_PositionMesh.setScale(7.0f);
+//        m_PositionMesh.setDynamicScalingEnabled(true); // keep size when zooming
+//
+//        m_map.addMapObject(m_PositionMesh); // add mesh to map. we set position later when we have the first reliable information
+//    }
 
     final private NavigationManager.NavigationManagerEventListener navigationManagerEventListener =
             new NavigationManager.NavigationManagerEventListener() {

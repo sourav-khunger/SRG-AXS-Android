@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 import com.unipos.axslite.ApiService.ApiService;
 import com.unipos.axslite.ApiService.ApiUtils;
@@ -81,10 +82,10 @@ public class SyncRemoteServerService extends Service {
         // call your rest service here
         try {
             // pulling data from server
-                pullData();
+            pullData();
 
             // pushing local changes to server
-                pushData();
+            pushData();
 
         } catch (Throwable throwable) {
             Log.d(TAG, "doWork: " + throwable.getMessage());
@@ -96,15 +97,15 @@ public class SyncRemoteServerService extends Service {
     private void pullData() {
         //mTaskInfoRepository.deleteAll();
 
-        if(mTaskInfoRepository.isEmptyTask()) {
+        if (mTaskInfoRepository.isEmptyTask()) {
             String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
             LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
             String token = loginResponse.getToken();
 
             Date date = new Date();
-            String curDate= new SimpleDateFormat("yyyy-MM-dd").format(date);
+            String curDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
             String selectedDate = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Constants.PREF_KEY_SELECTED_DATE, curDate);
-            String compId = ""+loginResponse.getDriverInfo().getCompanyId();
+            String compId = "" + loginResponse.getDriverInfo().getCompanyId();
             // compId = "34";
 
             apiService.getTaskList(compId, selectedDate, Constants.AUTHORIZATION_TOKEN + token).enqueue(new Callback<TaskInfoResponse>() {
@@ -114,7 +115,6 @@ public class SyncRemoteServerService extends Service {
                     if (response.code() == 200) {
                         Log.d(TAG, "size: " + response.body().getListOfTaskInfo().size());
                         saveTaskInfoListToLocalDB(response.body().getListOfTaskInfo());
-
                     } else {
                         Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
                     }
@@ -149,8 +149,8 @@ public class SyncRemoteServerService extends Service {
             apiService.updateTaskInfo(mTaskInfoEntityList.get(i), Constants.AUTHORIZATION_TOKEN + token).enqueue(new Callback<TaskInfoUpdateResponse>() {
                 @Override
                 public void onResponse(Call<TaskInfoUpdateResponse> call, Response<TaskInfoUpdateResponse> response) {
-                    try{
-                        if(response.code()==200) {
+                    try {
+                        if (response.code() == 200) {
                             TaskInfoUpdateResponse mTaskInfoUpdateResponse = response.body();
                             Log.d(TAG, "onResponse: " + response.body());
                             TaskInfoEntity mTaskInfoEntity = mTaskInfoRepository.getTaskInfoWithId(Long.toString(mTaskInfoUpdateResponse.getTaskId()));
@@ -161,9 +161,9 @@ public class SyncRemoteServerService extends Service {
                             mTaskInfoRepository.update(mTaskInfoEntity);
 
                         } else {
-                            Log.d(TAG, "onResponse: " );
+                            Log.d(TAG, "onResponse: ");
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

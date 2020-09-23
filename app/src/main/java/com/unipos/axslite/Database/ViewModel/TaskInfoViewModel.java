@@ -63,6 +63,7 @@ public class TaskInfoViewModel extends AndroidViewModel {
     public LiveData<List<TaskInfoGroupByLocationKey>> getTaskInfoSearchByWorkStatusGroupByLocationKeys(String workStatus) {
         return taskInfoRepository.getTaskInfoSearchByWorkStatusGroupByLocationKeys(workStatus);
     }
+
     public LiveData<List<TaskInfoEntity>> getTaskInfoByLocationKey(String locationKey) {
         Log.d("view model", "getTaskInfoByLocationKey: " + locationKey);
         return taskInfoRepository.getTaskInfoByLocationKey(locationKey);

@@ -117,6 +117,9 @@ public class ScreenSlidePagerActivity extends AppCompatActivity implements Navig
         String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
         LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
         navigationViewModel.setDriver(loginResponse.getDriverInfo());
+        if(PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREF_KEY_SELECTED_DATE, "")!=null){
+
+        }
     }
 
 
@@ -142,6 +145,25 @@ public class ScreenSlidePagerActivity extends AppCompatActivity implements Navig
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case R.id.changeDateOption:
+                if (mTaskInfoRepository.getTaskInfoByRecordStatus(Constants.MODIFIED).size() > 0) {
+                    Toast.makeText(getApplicationContext(), "Local Data is not synced with server yet! Please try after some time.", Toast.LENGTH_LONG).show();
+                } else {
+
+                    mTaskInfoRepository.deleteAll();
+                    showDialog(999);
+                }
+
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
