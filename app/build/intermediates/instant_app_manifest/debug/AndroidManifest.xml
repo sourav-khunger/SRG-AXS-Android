@@ -113,6 +113,7 @@
         <activity android:name="com.unipos.axslite.UpdateDebug.ScannerActivity" />
         <activity android:name="com.unipos.axslite.Activity.TaskInfoUpdateActivity" />
         <activity android:name="com.unipos.axslite.Activity.ShowListOfTaskGroupByLocationKeyActivity" />
+        <activity android:name="com.unipos.axslite.Activity.ShowPackageDetailsActivity" />
         <activity
             android:name="com.unipos.axslite.Activity.ScreenSlidePagerActivity"
             android:theme="@style/AppTheme.NoActionBar" />

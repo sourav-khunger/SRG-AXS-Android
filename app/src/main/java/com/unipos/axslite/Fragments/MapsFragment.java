@@ -16,6 +16,7 @@ import android.graphics.Color;
 import android.graphics.PointF;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +34,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.here.android.mpa.common.ApplicationContext;
 import com.here.android.mpa.common.GeoCoordinate;
 import com.here.android.mpa.common.Image;
+import com.here.android.mpa.common.MapEngine;
 import com.here.android.mpa.common.OnEngineInitListener;
 import com.here.android.mpa.common.PositioningManager;
 import com.here.android.mpa.common.ViewObject;
@@ -42,9 +46,12 @@ import com.here.android.mpa.mapping.AndroidXMapFragment;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapCircle;
 import com.here.android.mpa.mapping.MapGesture;
+import com.here.android.mpa.mapping.MapLabeledMarker;
 import com.here.android.mpa.mapping.MapMarker;
 import com.here.android.mpa.mapping.MapObject;
+import com.here.android.mpa.mapping.MapOverlayType;
 import com.here.android.mpa.mapping.MapRoute;
+import com.here.android.mpa.mapping.MapView;
 import com.here.android.mpa.routing.CoreRouter;
 import com.here.android.mpa.routing.Route;
 import com.here.android.mpa.routing.RouteOptions;
@@ -56,14 +63,16 @@ import com.here.android.mpa.routing.RoutingError;
 import com.unipos.axslite.BackgroudService.Workers.LocationService;
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
 import com.unipos.axslite.Database.Repository.TaskInfoRepository;
+import com.unipos.axslite.POJO.LoginResponse;
 import com.unipos.axslite.R;
+import com.unipos.axslite.Utils.Constants;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsFragment extends Fragment {
+public class MapsFragment extends Fragment implements OnEngineInitListener {
     private static final String TAG = MapsFragment.class.getSimpleName();
 
     private AndroidXMapFragment m_mapFragment;
@@ -83,12 +92,10 @@ public class MapsFragment extends Fragment {
     MapRoute mapRoute;
     private GeoCoordinate geoCoordinate;
     List<TaskInfoEntity> taskInfoEntities = new ArrayList<>();
-
-    Spinner routeSpinner;
-    ArrayList<String> routeSelectionList = new ArrayList<>();
     private TaskInfoRepository mTaskInfoRepository;
     private TextView markerTxt;
     ImageView centerMap;
+    MapView mapView;
 
     @Override
     public void onAttach(Activity activity) {
@@ -101,6 +108,13 @@ public class MapsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        ApplicationContext appContext = new ApplicationContext(m_activity.getApplicationContext());
+        MapEngine.getInstance().init(appContext, this::onEngineInitializationCompleted);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -108,18 +122,17 @@ public class MapsFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_maps, container, false);
         initUI(view);
-        m_mapFragment = new AndroidXMapFragment();
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.simpleFrameLayout, m_mapFragment).commit();
+//        m_mapFragment = new AndroidXMapFragment();
+//        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mapfragment1, m_mapFragment).commit();
 
-        initMapFragment();
+//        initMapFragment();
         return view;
     }
 
     void initUI(View v) {
 //        m_naviControlButton = (Button) m_activity.findViewById(R.id.naviCtrlButton);
+        mapView = v.findViewById(R.id.here_map);
         centerMap = v.findViewById(R.id.centerMap);
-        routeSpinner = v.findViewById(R.id.routeSpinner);
-        markerTxt = v.findViewById(R.id.markerTxt);
 
         mTaskInfoRepository = new TaskInfoRepository(getActivity().getApplication());
         taskInfoEntities = mTaskInfoRepository.getTaskInfos1();
@@ -133,7 +146,7 @@ public class MapsFragment extends Fragment {
         centerMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                m_map.setZoomLevel(13.3, Map.Animation.BOW);
+                m_map.setZoomLevel(13, Map.Animation.BOW);
                 m_map.setCenter(PositioningManager.getInstance().getLastKnownPosition().getCoordinate(),
                         Map.Animation.BOW);
             }
@@ -145,77 +158,6 @@ public class MapsFragment extends Fragment {
 
     private AndroidXMapFragment getMapFragment() {
         return (AndroidXMapFragment) m_activity.getSupportFragmentManager().findFragmentById(R.id.mapfragment1);
-    }
-
-    private void initMapFragment() {
-        /* Locate the mapFragment UI element */
-        m_mapFragment = getMapFragment();
-
-        // This will use external storage to save map cache data, it is also possible to set
-        // private app's path
-        String path = new File(m_activity.getExternalFilesDir(null), ".here-map-data")
-                .getAbsolutePath();
-        // This method will throw IllegalArgumentException if provided path is not writable
-        com.here.android.mpa.common.MapSettings.setDiskCacheRootPath(path);
-
-        if (m_mapFragment != null) {
-            /* Initialize the AndroidXMapFragment, results will be given via the called back. */
-            m_mapFragment.init(new OnEngineInitListener() {
-                @RequiresApi(api = Build.VERSION_CODES.O)
-                @Override
-                public void onEngineInitializationCompleted(Error error) {
-
-                    if (error == Error.NONE) {
-                        /*
-                         * If no error returned from map fragment initialization, the map will be
-                         * rendered on screen at this moment.Further actions on map can be provided
-                         * by calling Map APIs.
-                         */
-                        m_map = m_mapFragment.getMap();
-
-
-                        /*
-                         * Set the map center to the 4350 Still Creek Dr Burnaby BC (no animation).
-                         */
-                        geoCoordinate = new GeoCoordinate(LocationService.latitude, LocationService.longitude);
-                        geoCoordinate = PositioningManager.getInstance().getLastKnownPosition().getCoordinate();
-                        m_map.setCenter(geoCoordinate,
-                                Map.Animation.BOW);
-
-                        /* Set the zoom level to the average between min and max zoom level. */
-                        m_map.setZoomLevel(15);
-
-                        m_activity.supportInvalidateOptionsMenu();
-                        m_mapFragment.getMapGesture().addOnGestureListener(onGestureListener, 0, false);
-//                        m_map =
-                        /*MapPolyline mapPolyline =*/
-                        createPolyline();
-//                        m_map.addMapObject(mapPolyline);
-                        /*
-                         * Set up a handler for handling MapMarker drag events.
-                         */
-
-                        m_mapFragment.setMapMarkerDragListener(new OnDragListenerHandler());
-
-                    } else {
-                        Log.e(this.getClass().toString(), "onEngineInitializationCompleted: " +
-                                "ERROR=" + error.getDetails(), error.getThrowable());
-                        new AlertDialog.Builder(m_activity).setMessage(
-                                "Error : " + error.name() + "\n\n" + error.getDetails())
-                                .setTitle(R.string.engine_init_error)
-                                .setNegativeButton(android.R.string.cancel,
-                                        new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(
-                                                    DialogInterface dialog,
-                                                    int which) {
-                                                m_activity.finish();
-                                            }
-                                        }).create().show();
-                    }
-                }
-            });
-        }
     }
 
 
@@ -321,30 +263,29 @@ public class MapsFragment extends Fragment {
             double longi = Double.parseDouble(taskInfoEntities.get(i).getLongitude());
             double lat = Double.parseDouble(taskInfoEntities.get(i).getLatitude());
             coordinates.add(new GeoCoordinate(lat, longi));
-            Log.e(TAG, "createPolyline: " + coordinates.get(i));
+//            Log.e(TAG, "createPolyline: " + coordinates.get(i));
         }
 //        coordinates.add(new GeoCoordinate(29.9753092, 77.571972));
 //        coordinates.add(new GeoCoordinate(29.9685473, 77.5644495));
 //        coordinates.add(new GeoCoordinate(29.9623858, 77.5483282));
 //        coordinates.add(new GeoCoordinate(29.9701266, 77.5698228));
 
-//        GeoPolyline geoPolyline;
         /* Initialize a CoreRouter */
-        CoreRouter coreRouter = new CoreRouter();
+        /*CoreRouter coreRouter = new CoreRouter();
 
-        /* Initialize a RoutePlan */
+         *//* Initialize a RoutePlan *//*
         RoutePlan routePlan = new RoutePlan();
         RouteOptions routeOptions = new RouteOptions();
-        /* Other transport modes are also available e.g Pedestrian */
+        *//* Other transport modes are also available e.g Pedestrian *//*
         routeOptions.setTransportMode(RouteOptions.TransportMode.CAR);
-        /* Disable highway in this route. */
+        *//* Disable highway in this route. *//*
         routeOptions.setHighwaysAllowed(false);
-        /* Calculate the shortest route available. */
+        *//* Calculate the shortest route available. *//*
         routeOptions.setRouteType(RouteOptions.Type.SHORTEST);
-        /* Calculate 1 route. */
+        *//* Calculate 1 route. *//*
         routeOptions.setRouteCount(1);
-        /* Finally set the route option */
-        routePlan.setRouteOptions(routeOptions);
+        *//* Finally set the route option *//*
+        routePlan.setRouteOptions(routeOptions);*/
         Image image = new Image();
         try {
             image.setImageResource(R.drawable.pin);
@@ -355,9 +296,11 @@ public class MapsFragment extends Fragment {
         for (int i = 0; i < coordinates.size(); i++) {
 
 //            RouteWaypoint destination = ;
-            routePlan.addWaypoint(new RouteWaypoint(coordinates.get(i)));
+//            routePlan.addWaypoint(new RouteWaypoint(coordinates.get(i)));
 
-            MapMarker defaultMarker = new MapMarker(coordinates.get(i), image);
+            MapLabeledMarker defaultMarker = new MapLabeledMarker(coordinates.get(i), image);
+            defaultMarker.setLabelText("eng", "" + (i + 1));
+            defaultMarker.setFontScalingFactor(4f);
             defaultMarker.setAnchorPoint(new PointF(image.getWidth() / 2, image.getHeight()));
             defaultMarker.setCoordinate(coordinates.get(i));
             defaultMarker.setTitle(taskInfoEntities.get(i).getName());
@@ -367,36 +310,107 @@ public class MapsFragment extends Fragment {
 
         }
 
-        /* Add both waypoints to the route plan */
-//        try {
-//            geoPolyline = new GeoPolyline(coordinates);
+//        coreRouter.calculateRoute(coordinates, routeOptions, new Router.Listener<List<RouteResult>, RoutingError>() {
+//            @Override
+//            public void onProgress(int i) {
 //
-//        } catch (ExceptionInInitializerError e) {
-//            // Less than two vertices.
-//            e.printStackTrace();
-//            return null;
-//        }
+//            }
 //
-//        int widthInPixels = 20;
-////        Color lineColor = new Color((short) 0x00, (short) 0x90, (short) 0x8A, (short) 0xA0);
-//        MapPolyline mapPolyline = new MapPolyline(geoPolyline);
-//        mapPolyline.setLineColor(generateColor());
-//        mapPolyline.setLineWidth(widthInPixels);
-        coreRouter.calculateRoute(coordinates, routeOptions, new Router.Listener<List<RouteResult>, RoutingError>() {
-            @Override
-            public void onProgress(int i) {
+//            @Override
+//            public void onCalculateRouteFinished(@Nullable List<RouteResult> routeResults, @NonNull RoutingError routingError) {
+//                if (routingError == RoutingError.NONE) {
+////                    m_route = routeResults.get(0).getRoute();
+////                    mapRoute = new MapRoute(m_route);
+////                    m_map.addMapObject(mapRoute);
+//                }
+//            }
+//        });
+    }
+
+    @Override
+    public void onResume() {
+        mapView.onResume();
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+//        mapView.;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    @Override
+    public void onEngineInitializationCompleted(Error error) {
+        if (error == Error.NONE) {
+            /*
+             * If no error returned from map fragment initialization, the map will be
+             * rendered on screen at this moment.Further actions on map can be provided
+             * by calling Map APIs.
+             */
+            m_map = new Map();
+
+            /*
+             * Set the map center to the 4350 Still Creek Dr Burnaby BC (no animation).
+             */
+            mapView.setMap(m_map);
+            geoCoordinate = new GeoCoordinate(LocationService.latitude, LocationService.longitude);
+            geoCoordinate = PositioningManager.getInstance().getLastKnownPosition().getCoordinate();
+            m_map.setCenter(geoCoordinate,
+                    Map.Animation.BOW);
+            m_map.setCenter(geoCoordinate,
+                    Map.Animation.BOW);
+            /* Set the zoom level to the average between min and max zoom level. */
+            m_map.setZoomLevel(13.6);
+
+            m_activity.supportInvalidateOptionsMenu();
+            mapView.getMapGesture().addOnGestureListener(onGestureListener, 0, false);
+//                        m_map =
+            /*MapPolyline mapPolyline =*/
+            String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
+            LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
+            int isOnduty = loginResponse.getDriverInfo().getOnDuty();
+
+            if (isOnduty == 1) {
+                createPolyline();
+            } else {
 
             }
+//                        m_map.addMapObject(mapPolyline);
+            /*
+             * Set up a handler for handling MapMarker drag events.
+             */
 
-            @Override
-            public void onCalculateRouteFinished(@Nullable List<RouteResult> routeResults, @NonNull RoutingError routingError) {
-                if (routingError == RoutingError.NONE) {
-                    m_route = routeResults.get(0).getRoute();
-                    mapRoute = new MapRoute(m_route);
-                    m_map.addMapObject(mapRoute);
-                }
-            }
-        });
+            mapView.setMapMarkerDragListener(new OnDragListenerHandler());
+
+        } else {
+            Log.e(this.getClass().toString(), "onEngineInitializationCompleted: " +
+                    "ERROR=" + error.getDetails(), error.getThrowable());
+            new AlertDialog.Builder(m_activity).setMessage(
+                    "Error : " + error.name() + "\n\n" + error.getDetails())
+                    .setTitle(R.string.engine_init_error)
+                    .setNegativeButton(android.R.string.cancel,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(
+                                        DialogInterface dialog,
+                                        int which) {
+                                    m_activity.finish();
+                                }
+                            }).create().show();
+        }
     }
 
 
@@ -425,4 +439,76 @@ public class MapsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
+
+    private void initMapFragment() {
+        /* Locate the mapFragment UI element */
+        m_mapFragment = getMapFragment();
+
+        // This will use external storage to save map cache data, it is also possible to set
+        // private app's path
+        String path = new File(m_activity.getExternalFilesDir(null), ".here-map-data")
+                .getAbsolutePath();
+        // This method will throw IllegalArgumentException if provided path is not writable
+        com.here.android.mpa.common.MapSettings.setDiskCacheRootPath(path);
+
+        if (m_mapFragment != null) {
+            /* Initialize the AndroidXMapFragment, results will be given via the called back. */
+            m_mapFragment.init(new OnEngineInitListener() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
+                @Override
+                public void onEngineInitializationCompleted(Error error) {
+
+                    if (error == Error.NONE) {
+                        /*
+                         * If no error returned from map fragment initialization, the map will be
+                         * rendered on screen at this moment.Further actions on map can be provided
+                         * by calling Map APIs.
+                         */
+                        m_map = m_mapFragment.getMap();
+
+
+                        /*
+                         * Set the map center to the 4350 Still Creek Dr Burnaby BC (no animation).
+                         */
+                        geoCoordinate = new GeoCoordinate(LocationService.latitude, LocationService.longitude);
+                        geoCoordinate = PositioningManager.getInstance().getLastKnownPosition().getCoordinate();
+                        m_map.setCenter(geoCoordinate,
+                                Map.Animation.BOW);
+
+                        /* Set the zoom level to the average between min and max zoom level. */
+                        m_map.setZoomLevel(14);
+
+                        m_activity.supportInvalidateOptionsMenu();
+                        m_mapFragment.getMapGesture().addOnGestureListener(onGestureListener, 0, false);
+//                        m_map =
+                        /*MapPolyline mapPolyline =*/
+                        createPolyline();
+//                        m_map.addMapObject(mapPolyline);
+                        /*
+                         * Set up a handler for handling MapMarker drag events.
+                         */
+
+                        m_mapFragment.setMapMarkerDragListener(new OnDragListenerHandler());
+
+                    } else {
+                        Log.e(this.getClass().toString(), "onEngineInitializationCompleted: " +
+                                "ERROR=" + error.getDetails(), error.getThrowable());
+                        new AlertDialog.Builder(m_activity).setMessage(
+                                "Error : " + error.name() + "\n\n" + error.getDetails())
+                                .setTitle(R.string.engine_init_error)
+                                .setNegativeButton(android.R.string.cancel,
+                                        new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(
+                                                    DialogInterface dialog,
+                                                    int which) {
+                                                m_activity.finish();
+                                            }
+                                        }).create().show();
+                    }
+                }
+            });
+        }
+    }
+
 }

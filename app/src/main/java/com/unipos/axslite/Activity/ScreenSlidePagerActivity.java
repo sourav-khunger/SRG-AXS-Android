@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +46,7 @@ import com.unipos.axslite.POJO.LoginResponse;
 import com.unipos.axslite.R;
 import com.unipos.axslite.UpdateDebug.MenuActivity;
 import com.unipos.axslite.Utils.Constants;
+import com.unipos.axslite.Utils.CustomViewPager;
 import com.unipos.axslite.ui.NavigationViewModel;
 
 import java.text.SimpleDateFormat;
@@ -55,7 +58,7 @@ public class ScreenSlidePagerActivity extends AppCompatActivity implements Navig
     private NavigationViewModel navigationViewModel;
     private DrawerLayout drawerLayout;
     TabLayoutPagerAdapter pagerAdapter;
-    ViewPager viewPager;
+    CustomViewPager viewPager;
     TabLayout tabLayout;
     private TextView driverNameNavText;
     private TextView driverCompanyNavText;
@@ -64,6 +67,7 @@ public class ScreenSlidePagerActivity extends AppCompatActivity implements Navig
     private Calendar mCalender;
     private int year, month, date;
     private DatePickerDialog.OnDateSetListener mDateListener;
+    LoginResponse loginResponse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,19 +93,60 @@ public class ScreenSlidePagerActivity extends AppCompatActivity implements Navig
         pagerAdapter = new TabLayoutPagerAdapter(getSupportFragmentManager());
         viewPager = findViewById(R.id.pager);
         tabLayout = findViewById(R.id.tab_layout_main);
-        tabLayout.setupWithViewPager(viewPager);
-        viewPager.setAdapter(pagerAdapter);
 
+        viewPager.setSwipeable(false);
+//        tabLayout.setupWithViewPager(viewPager);
+//        viewPager.setAdapter(pagerAdapter);
         mTaskInfoRepository = new TaskInfoRepository((Application) getApplicationContext());
 //        mTaskInfoRepository.deleteAll();
 
         init();
+        if (PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(Constants.PREF_KEY_LOGIN_RESPONSE, "") != null) {
+
+            String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
+            loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
+            int isOnduty = loginResponse.getDriverInfo().getOnDuty();
+
+            if (isOnduty == 0) {
+                showDialog();
+            } else {
+
+            }
+        }
     }
+
+    void showDialog() {
+        Dialog dialog = new Dialog(this, R.style.MyDialogTheme);
+        dialog.setContentView(R.layout.login_check_dialog);
+        dialog.setCancelable(false);
+        Button closeButton = dialog.findViewById(R.id.closeButton);
+        Button loginButton = dialog.findViewById(R.id.loginButton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ScreenSlidePagerActivity.this, ChooseCompanyActivity.class));
+                dialog.dismiss();
+
+            }
+        });
+        dialog.show();
+
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        tabLayout.setupWithViewPager(viewPager);
+        viewPager.setAdapter(pagerAdapter);
         addDetailToNavDrawer();
     }
 
@@ -117,7 +162,7 @@ public class ScreenSlidePagerActivity extends AppCompatActivity implements Navig
         String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
         LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
         navigationViewModel.setDriver(loginResponse.getDriverInfo());
-        if(PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREF_KEY_SELECTED_DATE, "")!=null){
+        if (PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREF_KEY_SELECTED_DATE, "") != null) {
 
         }
     }

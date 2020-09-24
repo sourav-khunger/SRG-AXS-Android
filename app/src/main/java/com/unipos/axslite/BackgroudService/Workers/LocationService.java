@@ -27,8 +27,7 @@ import java.util.TimeZone;
  * Created by zubaer on 4/22/18.
  */
 
-public class LocationService extends Service
-{
+public class LocationService extends Service {
     private static final int TWO_MINUTES = 1000 * 60 * 1;
     private LocationManager locationManager;
     private MyLocationListener listener;
@@ -39,8 +38,7 @@ public class LocationService extends Service
     public static double latitude, longitude;
 
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         super.onCreate();
 
         id_imei = FetchIMEInumber();
@@ -60,18 +58,17 @@ public class LocationService extends Service
 
     @SuppressLint("MissingPermission")
     @Override
-    public void onStart(Intent intent, int startId)
-    {
+    public void onStart(Intent intent, int startId) {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         listener = new MyLocationListener();
 
 
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        if(location == null) {
+        if (location == null) {
             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         }
 
-        if(location != null) {
+        if (location != null) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
         }
@@ -81,8 +78,7 @@ public class LocationService extends Service
     }
 
     @Override
-    public IBinder onBind(Intent intent)
-    {
+    public IBinder onBind(Intent intent) {
         return null;
     }
 
@@ -129,8 +125,9 @@ public class LocationService extends Service
     }
 
 
-
-    /** Checks whether two providers are the same */
+    /**
+     * Checks whether two providers are the same
+     */
     private boolean isSameProvider(String provider1, String provider2) {
         if (provider1 == null) {
             return provider2 == null;
@@ -139,13 +136,13 @@ public class LocationService extends Service
     }
 
 
-
     @Override
     public void onDestroy() {
         // handler.removeCallbacks(sendUpdatesToUI);
         super.onDestroy();
         Log.v("STOP_SERVICE", "DONE");
-        locationManager.removeUpdates(listener);
+        if (locationManager != null)
+            locationManager.removeUpdates(listener);
     }
 
     /*public static Thread performOnBackgroundThread(final Runnable runnable) {
@@ -162,12 +159,10 @@ public class LocationService extends Service
         return t;
     }*/
 
-    public class MyLocationListener implements LocationListener
-    {
+    public class MyLocationListener implements LocationListener {
 
-        public void onLocationChanged(final Location loc)
-        {
-            if(isBetterLocation(loc, previousBestLocation)) {
+        public void onLocationChanged(final Location loc) {
+            if (isBetterLocation(loc, previousBestLocation)) {
 
                 LocationService.latitude = loc.getLatitude();
                 LocationService.longitude = loc.getLongitude();
@@ -179,20 +174,17 @@ public class LocationService extends Service
             }
         }
 
-        public void onProviderDisabled(String provider)
-        {
-            Toast.makeText( getApplicationContext(), "Gps Disabled", Toast.LENGTH_SHORT ).show();
+        public void onProviderDisabled(String provider) {
+            Toast.makeText(getApplicationContext(), "Gps Disabled", Toast.LENGTH_SHORT).show();
         }
 
 
-        public void onProviderEnabled(String provider)
-        {
-            Toast.makeText( getApplicationContext(), "Gps Enabled", Toast.LENGTH_SHORT).show();
+        public void onProviderEnabled(String provider) {
+            Toast.makeText(getApplicationContext(), "Gps Enabled", Toast.LENGTH_SHORT).show();
         }
 
 
-        public void onStatusChanged(String provider, int status, Bundle extras)
-        {
+        public void onStatusChanged(String provider, int status, Bundle extras) {
 
         }
     }
@@ -228,29 +220,35 @@ public class LocationService extends Service
         double lonn = loc.getLongitude();
 
         String NS = "";
-        if(latt > 0) NS = "N";
-        else { NS = "S"; latt = -1 * latt; }
+        if (latt > 0) NS = "N";
+        else {
+            NS = "S";
+            latt = -1 * latt;
+        }
 
         String EW = "";
-        if(latt > 0) EW = "E";
-        else { EW = "W"; lonn = -1 * lonn; }
+        if (latt > 0) EW = "E";
+        else {
+            EW = "W";
+            lonn = -1 * lonn;
+        }
 
-        float speed =(loc.getSpeed()*3600)/1000; // converting from m/s to km/h
+        float speed = (loc.getSpeed() * 3600) / 1000; // converting from m/s to km/h
         float ang = loc.getBearing();
 
 
-        String  ctimedate = convertTimeWithTimeZome(loc.getTime());
-        return  "*TS01," + id_imei + "," + ctimedate + ","
+        String ctimedate = convertTimeWithTimeZome(loc.getTime());
+        return "*TS01," + id_imei + "," + ctimedate + ","
                 + "GPS:" + "3;" + NS + latt + ";" + EW + lonn + ";" + speed + ";" + ang + ";1" + ",EVT:1#";
     }
 
-    public String convertTime(long time){
+    public String convertTime(long time) {
         Date date = new Date(time);
         Format format = new SimpleDateFormat("HHmmssddMMyy");
         return format.format(date);
     }
 
-    public String convertTimeWithTimeZome(long time)    {
+    public String convertTimeWithTimeZome(long time) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone("GMT"));
         cal.setTimeInMillis(time);
@@ -267,7 +265,7 @@ public class LocationService extends Service
 
         String day = String.format("%02d", cal.get(Calendar.DAY_OF_MONTH));
 
-        return hour+min+sec+day+month+year;
+        return hour + min + sec + day + month + year;
 
     }
 

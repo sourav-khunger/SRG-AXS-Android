@@ -2141,6 +2141,7 @@ id easeInOut
 id easeOut
 id edit_query
 id emailButton
+id emptyTxt
 id end
 id endCallBtn
 id end_padder
@@ -2183,6 +2184,7 @@ id groups
 id guideline
 id header
 id header_title
+id here_map
 id hideable
 id highest
 id home
@@ -2230,6 +2232,7 @@ id linear
 id listMode
 id listScannedPackages
 id list_item
+id loginButton
 id loginlogoutButton
 id logo
 id lowest
@@ -2409,7 +2412,6 @@ id search_src_text
 id search_voice_btn
 id select_dialog_listview
 id selected
-id selectedDate
 id selection_type
 id selfDispatchButton
 id sendButton
@@ -2443,7 +2445,6 @@ id signature_pad_description
 id signature_pad_title
 id signature_text
 id signature_time
-id simpleFrameLayout
 id sin
 id skipCollapsed
 id slide
@@ -2663,6 +2664,7 @@ layout activity_self_dispatch
 layout activity_shipment
 layout activity_show_list_of_task_group_by_location_key
 layout activity_show_list_of_task_group_by_location_key_2
+layout activity_show_package
 layout activity_show_preview_img
 layout activity_signaturepad
 layout activity_task_info_update
@@ -2700,6 +2702,7 @@ layout fragment_to_do_task_list
 layout item_default
 layout layout_body
 layout layout_focus_marker
+layout login_check_dialog
 layout marker_dialog
 layout material_chip_input_combo
 layout material_clock_display

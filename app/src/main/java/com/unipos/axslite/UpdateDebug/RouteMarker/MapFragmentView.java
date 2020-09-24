@@ -162,7 +162,7 @@ public class MapFragmentView {
                 if (m_mapFragment != null && m_map != null) {
                     if (i == 0) {
                         m_map.setZoomLevel(13.3, Map.Animation.BOW);
-                        m_map.setCenter(m_route.getDestination(), Map.Animation.BOW);
+                        m_map.setCenter(PositioningManager.getInstance().getLastKnownPosition().getCoordinate(), Map.Animation.BOW);
                         markerTxt.setVisibility(View.GONE);
                     }
                     if (i > 1) {
@@ -271,7 +271,6 @@ public class MapFragmentView {
             });
         }
     }
-
 
 
     private MapGesture.OnGestureListener onGestureListener = new MapGesture.OnGestureListener() {
@@ -486,6 +485,7 @@ public class MapFragmentView {
                     .getCoordinate());
         }
     }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     int generateColor() {
         Random random = new Random();

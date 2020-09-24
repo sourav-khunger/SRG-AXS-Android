@@ -21,7 +21,7 @@ import java.util.List;
 
 public class RouteFragment extends Fragment {
 
-    Button showRoute;
+    Button showRoute, filterTaskList;
     Spinner routeSpinner;
     ArrayList<String> routeSelectionList = new ArrayList<>();
     ArrayList<String> stringArrayList = new ArrayList<>();
@@ -62,11 +62,18 @@ public class RouteFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        filterTaskList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().finish();
+            }
+        });
         return view;
     }
 
     private void initUI(View view) {
         routeSpinner = view.findViewById(R.id.routeSpinner);
         showRoute = view.findViewById(R.id.showRoute);
+        filterTaskList = view.findViewById(R.id.filterTaskList);
     }
 }

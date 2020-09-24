@@ -99,6 +99,7 @@ public class MapFragmentView {
     private AndroidXMapFragment m_mapFragment;
     private AppCompatActivity m_activity;
     private Button m_naviControlButton, m_arrivedButton;
+    boolean isArrived = false;
     TextView distanceTxt, speedTxt, turnTxt, nxtDisTxt;
     ImageView turnIV, compass;
     private Map m_map;
@@ -641,6 +642,10 @@ public class MapFragmentView {
                             // start navigation simulation travelling at 13 meters per second
                             navigationManager.startNavigation(m_route);
 
+
+//                            locationProvider = new LocationProvider(getMapFragment().getContext());
+//                            locationProvider.start();
+
                         } else {
                             Toast.makeText(m_activity,
                                     "Error:route calculation returned error code: " + routingError,
@@ -762,6 +767,18 @@ public class MapFragmentView {
                 }
             }
         });
+
+        if (m_route == null) {
+            createRoute();
+        } else {
+            m_navigationManager.stop();
+            /*
+             * Restore the map orientation to show entire route on screen
+             */
+            m_map.zoomTo(m_geoBoundingBox, Map.Animation.BOW, 0f);
+            m_naviControlButton.setText(R.string.start_navi);
+            m_route = null;
+        }
         compass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -776,33 +793,36 @@ public class MapFragmentView {
             @Override
             public void onClick(View view) {
 
+                if (isArrived) {
+                    AlertDialog alert;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(m_activity);
+                    builder.setMessage("You have reached your destination.")
+                            .setCancelable(false)
+                            .setTitle("Arrived!")
+                            .setPositiveButton("Yes ! ",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            TaskInfoRepository mTaskInfoRepository = new TaskInfoRepository((Application) m_activity.getApplicationContext());
+                                            String curDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+                                            mTaskInfoRepository.updateLocation(m_taskInfoGroupByLocationKey.getLocationKey(), curDateTime);
 
-                AlertDialog alert;
-                AlertDialog.Builder builder = new AlertDialog.Builder(m_activity);
-                builder.setMessage("You have reached your destination.")
-                        .setCancelable(false)
-                        .setTitle("Arrived!")
-                        .setPositiveButton("Yes ! ",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        TaskInfoRepository mTaskInfoRepository = new TaskInfoRepository((Application) m_activity.getApplicationContext());
-                                        String curDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-                                        mTaskInfoRepository.updateLocation(m_taskInfoGroupByLocationKey.getLocationKey(), curDateTime);
+                                            Intent intent = new Intent(m_activity, ShowListOfTaskGroupByLocationKeyActivity.class);
+                                            m_activity.startActivity(intent);
+                                            m_activity.finish();
+                                        }
+                                    })
+                            .setNegativeButton("Not yet",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int id) {
+                                            // cancel the dialog box
+                                            dialog.cancel();
+                                        }
+                                    });
+                    alert = builder.create();
+                    alert.show();
+                } else
+                    Toast.makeText(m_activity, "You haven't reached yet!", Toast.LENGTH_SHORT).show();
 
-                                        Intent intent = new Intent(m_activity, ShowListOfTaskGroupByLocationKeyActivity.class);
-                                        m_activity.startActivity(intent);
-                                        m_activity.finish();
-                                    }
-                                })
-                        .setNegativeButton("Not yet",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // cancel the dialog box
-                                        dialog.cancel();
-                                    }
-                                });
-                alert = builder.create();
-                alert.show();
             }
         });
     }
@@ -887,8 +907,8 @@ public class MapFragmentView {
 
 // if user wants to start real navigation, submit calculated route
 // for more information on calculating a route, see the "Directions" section
-        NavigationManager.Error error = navigationManager.startNavigation(m_route);
-        Log.e(TAG, "startNavigation: ." + error.toString());
+//        NavigationManager.Error error = navigationManager.simulate(m_route, 30);
+//        Log.e(TAG, "startNavigation: ." + error.toString());
         /*
          * NavigationManager contains a number of listeners which we can use to monitor the
          * navigation status and getting relevant instructions.In this example, we will add 2
@@ -1000,7 +1020,12 @@ public class MapFragmentView {
 
         @Override
         public void onEnded(NavigationManager.NavigationMode navigationMode) {
-            Toast.makeText(m_activity, navigationMode + " was ended", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(m_activity, navigationMode + " was ended", Toast.LENGTH_SHORT).show();
+            m_arrivedButton.setEnabled(true);
+            speedTxt.setText("-");
+            distanceTxt.setText("-");
+            nxtDisTxt.setText("-");
+            turnTxt.setText("Reached");
             stopForegroundService();
         }
 
@@ -1010,6 +1035,7 @@ public class MapFragmentView {
                     .MapUpdateMode.ROADVIEW)) {
                 m_map.setTilt(70);
             }
+
 //            Toast.makeText(m_activity, "Map update mode is changed to " + mapUpdateMode,
 //                    Toast.LENGTH_SHORT).show();
         }
@@ -1022,8 +1048,8 @@ public class MapFragmentView {
 
         @Override
         public void onCountryInfo(String s, String s1) {
-            Toast.makeText(m_activity, "Country info updated from " + s + " to " + s1,
-                    Toast.LENGTH_SHORT).show();
+//            Toast.makeText(m_activity, "Country info updated from " + s + " to " + s1,
+//                    Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -1044,7 +1070,7 @@ public class MapFragmentView {
 
                 int currentSpeedLimitTransformed = 0;
                 int currentSpeed = meterPerSecToKmPerHour(mgp.getSpeed());
-                if (currentSpeed > 300) {
+                if (currentSpeed < 300) {
                     speedTxt.setText(currentSpeed + "Km/H");
 
                 } else {
@@ -1055,10 +1081,12 @@ public class MapFragmentView {
                     double currentSpeedLimit = mgp.getRoadElement().getSpeedLimit();
                     currentSpeedLimitTransformed = meterPerSecToKmPerHour(currentSpeedLimit);
                 }
+//                if()
+                m_navigationManager.setMapUpdateMode(NavigationManager.MapUpdateMode.ROADVIEW);
 
                 Log.e(TAG, "onPositionUpdated: " + currentSpeed);
-                Log.e(TAG, "onPositionUpdated: currentSpeedLimitTransformed " + currentSpeedLimitTransformed);
-                speedTxt.setText(currentSpeed + "Km/H");
+//                Log.e(TAG, "onPositionUpdated: currentSpeedLimitTransformed " + currentSpeedLimitTransformed);
+//                speedTxt.setText(currentSpeed + "Km/H");
 //                updateCurrentSpeedView(currentSpeed, currentSpeedLimitTransformed);
 //                updateCurrentSpeedLimitView(currentSpeedLimitTransformed);
 

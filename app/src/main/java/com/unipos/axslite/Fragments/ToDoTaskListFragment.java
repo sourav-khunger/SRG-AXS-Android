@@ -1,5 +1,6 @@
 package com.unipos.axslite.Fragments;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,7 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.unipos.axslite.Activity.ChooseCompanyActivity;
 import com.unipos.axslite.Activity.ShowListOfTaskGroupByLocationKeyActivity;
+import com.unipos.axslite.Activity.ShowPackageDetailsActivity;
 import com.unipos.axslite.Adapter.SelfDispatchListAdapter;
 import com.unipos.axslite.Adapter.ToDoTaskListAdapter;
 import com.unipos.axslite.ApiService.ApiService;
@@ -36,6 +40,8 @@ import com.unipos.axslite.here.turn.HereTurnNavActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -56,7 +62,7 @@ public class ToDoTaskListFragment extends Fragment {
     private ToDoTaskListAdapter adapter;
     private TaskInfoRepository mTaskInfoRepository;
     List<TaskInfo> taskInfoEntities;
-    TextView selectedDate;
+    TextView emptyTxt;
     ApiService apiService;
 
     public ToDoTaskListFragment() {
@@ -78,8 +84,8 @@ public class ToDoTaskListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_to_do_task_list, container, false);
-        selectedDate = view.findViewById(R.id.selectedDate);
-        recyclerView = (RecyclerView) view.findViewById(R.id.to_do_recycler_view);
+        emptyTxt = view.findViewById(R.id.emptyTxt);
+        recyclerView = view.findViewById(R.id.to_do_recycler_view);
         recyclerView.setHasFixedSize(true);
 
         layoutManager = new LinearLayoutManager(getActivity());
@@ -90,16 +96,120 @@ public class ToDoTaskListFragment extends Fragment {
 //        selectedDate.setText();
 //        if (listOfTaskInfoGroupByLocationKeys.size() > 0) {
 //        taskInfoEntities = mTaskInfoRepository.getTaskInfos1();
+        String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
+        LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
+        int isOnduty = loginResponse.getDriverInfo().getOnDuty();
 
+        if (isOnduty == 1) {
+            getTasks();
+        } else {
 
-//        pullData();
-        getTasks();
+        }
 
 //        } else {
 //        }
 
 
         return view;
+    }
+
+
+    void getTasks() {
+        adapter = new ToDoTaskListAdapter(listOfTaskInfoGroupByLocationKeys, getActivity().getApplication(), listOfTaskInfo);
+        adapter.setOnItemClickListener(new ToDoTaskListAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                TaskInfoGroupByLocationKey taskInfoGroupByLocationKey = listOfTaskInfoGroupByLocationKeys.get(position);
+                String taskInfoString = new Gson().toJson(taskInfoGroupByLocationKey);
+                TaskInfoEntity taskInfo = listOfTaskInfo.get(position);
+                String taskInfoStr = new Gson().toJson(taskInfo);
+                Log.e(TAG, "taskInfo: " + taskInfoStr);
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
+                        .putString(Constants.SELECTED_LOCATION, taskInfoString)
+                        .apply();
+                /*PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
+                        .putString(Constants.SELECTED_TASK, taskInfoString)
+                        .apply();*/
+
+
+                if (taskInfoGroupByLocationKey.getArrivalTime() == null || taskInfoGroupByLocationKey.getArrivalTime().equals("")) {
+                    Intent intent = new Intent(getActivity(), ShowPackageDetailsActivity.class);
+                    intent.putExtra("task", taskInfoStr);
+                    startActivity(intent);
+
+                } else {
+                    Intent intent = new Intent(getActivity(), ShowListOfTaskGroupByLocationKeyActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        taskInfoViewModel = new ViewModelProvider(getActivity()).get(TaskInfoViewModel.class);
+        try {
+            String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
+            Log.d(TAG, "onCreateView: " + jsonLoginResponse);
+            LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
+
+            taskInfoViewModel.getTaskInfoList().observe(getActivity(), new Observer<List<TaskInfoEntity>>() {
+                @Override
+                public void onChanged(List<TaskInfoEntity> taskInfoEntities) {
+                    listOfTaskInfo.clear();
+                    listOfTaskInfo.addAll(taskInfoEntities);
+                    Collections.sort(listOfTaskInfo, new Comparator<TaskInfoEntity>() {
+                        public int compare(TaskInfoEntity obj1, TaskInfoEntity obj2) {
+                            // ## Ascending order
+                            return Integer.valueOf(obj1.getSeqNo()).compareTo(obj2.getSeqNo());// To compare string values
+                            // return Integer.valueOf(obj1.empId).compareTo(Integer.valueOf(obj2.empId)); // To compare integer values
+
+                            // ## Descending order
+                            // return obj2.firstName.compareToIgnoreCase(obj1.firstName); // To compare string values
+                            // return Integer.valueOf(obj2.empId).compareTo(Integer.valueOf(obj1.empId)); // To compare integer values
+                        }
+                    });
+                }
+            });
+
+            taskInfoViewModel.getTaskInfoGroupByLocationKeys().observe(getActivity(), new Observer<List<TaskInfoGroupByLocationKey>>() {
+                @Override
+                public void onChanged(List<TaskInfoGroupByLocationKey> taskInfoGroupByLocationKeys) {
+                    listOfTaskInfoGroupByLocationKeys.clear();
+                    listOfTaskInfoGroupByLocationKeys.addAll(taskInfoGroupByLocationKeys);
+                    if (listOfTaskInfoGroupByLocationKeys.size() == 0) {
+                        emptyTxt.setVisibility(View.VISIBLE);
+                    } else {
+                        emptyTxt.setVisibility(View.VISIBLE);
+
+                    }
+//                    listOfTaskInfoGroupByLocationKeys.addAll(taskInfoViewModel.getTaskInfoGroupByLocationKeys().getValue().);
+//                    Log.d(TAG, "onChanged: " + taskInfoViewModel.getTaskInfoGroupByLocationKeys().getValue().size());
+                    adapter.notifyDataSetChanged();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    void showDialog() {
+        Dialog dialog = new Dialog(getContext(), R.style.MyDialogTheme);
+        dialog.setContentView(R.layout.login_check_dialog);
+        Button closeButton = dialog.findViewById(R.id.closeButton);
+        Button loginButton = dialog.findViewById(R.id.loginButton);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getContext(), ChooseCompanyActivity.class));
+            }
+        });
+        dialog.show();
+
     }
 
     private void pullData() {
@@ -134,65 +244,5 @@ public class ToDoTaskListFragment extends Fragment {
                 Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    void getTasks() {
-        adapter = new ToDoTaskListAdapter(listOfTaskInfoGroupByLocationKeys, getActivity().getApplication(), listOfTaskInfo);
-        adapter.setOnItemClickListener(new ToDoTaskListAdapter.OnItemLongClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
-                TaskInfoGroupByLocationKey taskInfoGroupByLocationKey = listOfTaskInfoGroupByLocationKeys.get(position);
-                String taskInfoString = new Gson().toJson(taskInfoGroupByLocationKey);
-                TaskInfoEntity taskInfo = listOfTaskInfo.get(position);
-                String taskInfoStr = new Gson().toJson(taskInfo);
-                Log.e(TAG, "taskInfo: " + taskInfoStr);
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
-                        .putString(Constants.SELECTED_LOCATION, taskInfoString)
-                        .apply();
-                /*PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
-                        .putString(Constants.SELECTED_TASK, taskInfoString)
-                        .apply();*/
-
-                if (taskInfoGroupByLocationKey.getArrivalTime() == null || taskInfoGroupByLocationKey.getArrivalTime().equals("")) {
-                    Intent intent = new Intent(getActivity(), HereTurnNavActivity.class);
-                    intent.putExtra("task", taskInfoStr);
-                    startActivity(intent);
-
-                } else {
-                    Intent intent = new Intent(getActivity(), ShowListOfTaskGroupByLocationKeyActivity.class);
-                    startActivity(intent);
-                }
-            }
-        });
-        recyclerView.setAdapter(adapter);
-        taskInfoViewModel = new ViewModelProvider(getActivity()).get(TaskInfoViewModel.class);
-        try {
-            String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
-            Log.d(TAG, "onCreateView: " + jsonLoginResponse);
-            LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
-
-            taskInfoViewModel.getTaskInfoList().observe(getActivity(), new Observer<List<TaskInfoEntity>>() {
-                @Override
-                public void onChanged(List<TaskInfoEntity> taskInfoEntities) {
-                    listOfTaskInfo.clear();
-                    listOfTaskInfo.addAll(taskInfoEntities);
-
-                }
-            });
-
-            taskInfoViewModel.getTaskInfoGroupByLocationKeys().observe(getActivity(), new Observer<List<TaskInfoGroupByLocationKey>>() {
-                @Override
-                public void onChanged(List<TaskInfoGroupByLocationKey> taskInfoGroupByLocationKeys) {
-                    listOfTaskInfoGroupByLocationKeys.clear();
-                    listOfTaskInfoGroupByLocationKeys.addAll(taskInfoGroupByLocationKeys);
-//                    listOfTaskInfoGroupByLocationKeys.addAll(taskInfoViewModel.getTaskInfoGroupByLocationKeys().getValue().);
-//                    Log.d(TAG, "onChanged: " + taskInfoViewModel.getTaskInfoGroupByLocationKeys().getValue().size());
-                    adapter.notifyDataSetChanged();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 }

@@ -57,7 +57,8 @@
                 android:maxLines="1"
                 android:text="100 City Centre Dr, Mississauga, ON L5B 2C9, Canada"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/primaryDarkColor" />
+                android:textColor="@color/primaryDarkColor"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tvTaskAddress"
@@ -82,8 +83,9 @@
                 android:layout_height="wrap_content"
                 android:text="1 Parcel 2 Delivery"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textStyle="bold"
 
-                android:textStyle="bold" />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tvQuantity1"

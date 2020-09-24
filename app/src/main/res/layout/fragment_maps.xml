@@ -5,31 +5,31 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".Fragments.MapsFragment">
-    <FrameLayout
-        android:id="@+id/simpleFrameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <fragment
-            android:id="@+id/mapfragment1"
-            class="com.here.android.mpa.mapping.AndroidXMapFragment"
+
+
+        <com.here.android.mpa.mapping.MapView
+            android:id="@+id/here_map"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
-
         <ImageView
             android:id="@+id/centerMap"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:layout_alignParentRight="true"
             android:layout_margin="10dp"
-            android:src="@drawable/com"
-            android:visibility="gone" />
+            android:src="@drawable/com" />
+        <!-- <fragment
+             android:id="@+id/mapfragment1"
+             class="com.here.android.mpa.mapping.AndroidXMapFragment"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent" />-->
 
     </RelativeLayout>
 

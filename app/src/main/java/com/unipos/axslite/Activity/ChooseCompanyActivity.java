@@ -70,7 +70,12 @@ public class ChooseCompanyActivity extends AppCompatActivity implements View.OnC
 
         if (onDuty == 0) {
             tvLoggedOnCompany.setText(Constants.LOGGED_OFF);
+            btnLogOff.setVisibility(View.GONE);
+            btnLogOn.setVisibility(View.VISIBLE);
         } else {
+
+            btnLogOff.setVisibility(View.VISIBLE);
+            btnLogOn.setVisibility(View.GONE);
             spinCompanyChoose.setSelection(mAdapter.getPosition(companyName));
             tvLoggedOnCompany.setText(Constants.LOGGED_ON + companyName);
         }

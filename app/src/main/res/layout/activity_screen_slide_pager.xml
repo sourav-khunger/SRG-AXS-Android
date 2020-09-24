@@ -21,16 +21,17 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-        <androidx.viewpager.widget.ViewPager
+        <com.unipos.axslite.Utils.CustomViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout_main"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             </com.google.android.material.tabs.TabLayout>
-        </androidx.viewpager.widget.ViewPager>
+        </com.unipos.axslite.Utils.CustomViewPager>
 
     </LinearLayout>
 

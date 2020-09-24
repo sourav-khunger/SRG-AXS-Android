@@ -60,7 +60,7 @@ public class SyncRemoteServerService extends Service {
         mTaskInfoUpdateResponseList = new ArrayList<TaskInfoUpdateResponse>();
         apiService = ApiUtils.getAPIService();
 
-        Toast.makeText(getApplicationContext(), "Background Service Started.", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "Background Service Started.", Toast.LENGTH_SHORT).show();
     }
 
     @Override

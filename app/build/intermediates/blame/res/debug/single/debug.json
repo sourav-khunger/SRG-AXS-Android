@@ -128,12 +128,12 @@
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\back.png"
     },
     {
-        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_signaturepad.xml.flat",
-        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\activity_signaturepad.xml"
-    },
-    {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_background.xml.flat",
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\background.xml"
+    },
+    {
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_signaturepad.xml.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\activity_signaturepad.xml"
     },
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_location.png.flat",
@@ -242,6 +242,10 @@
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-xxxhdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\mipmap-xxxhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_login_check_dialog.xml.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\login_check_dialog.xml"
     },
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_baseline_exit_to_app_24.xml.flat",
@@ -358,6 +362,10 @@
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_map_route.xml.flat",
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\activity_map_route.xml"
+    },
+    {
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_show_package.xml.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\activity_show_package.xml"
     },
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_camkit.xml.flat",

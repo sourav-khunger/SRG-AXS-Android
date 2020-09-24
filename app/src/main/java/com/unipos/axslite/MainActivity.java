@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements LifecycleOwner {
                         NavigationViewModel navigationViewModel = new ViewModelProvider(MainActivity.this).get(NavigationViewModel.class);
                         navigationViewModel.setDriver(loginResponse.getDriverInfo());
 
-                        Toast.makeText(MainActivity.this, "" + response.body().getStatus(), Toast.LENGTH_LONG).show();
+//                        Toast.makeText(MainActivity.this, "" + response.body().getStatus(), Toast.LENGTH_LONG).show();
 
 
                         if (loginResponse.getDriverInfo().getOnDuty() == 1) {

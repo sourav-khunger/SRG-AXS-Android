@@ -66,10 +66,10 @@ public class ToDoTaskListAdapter extends RecyclerView.Adapter<ToDoTaskListAdapte
 
         holder.tvTaskAddress.setText(address);
         holder.tvPostalCode.setText(postalCode);
-        if (listsOfTaskInfoEntities.size()>0) {
+        /*if (listsOfTaskInfoEntities.size()>0) {
             holder.tvUserName.setText(listsOfTaskInfoEntities.get(position).getName());
             holder.tvBarcode.setText("Barcode No. " + listsOfTaskInfoEntities.get(position).getBarcode());
-        }
+        }*/
 
 
         List<TaskInfoEntity> completedTasks = mTaskInfoRepository.getTaskInfoCompleted(listOfTaskInfoGroupByLocationKeys.get(position).getLocationKey());
