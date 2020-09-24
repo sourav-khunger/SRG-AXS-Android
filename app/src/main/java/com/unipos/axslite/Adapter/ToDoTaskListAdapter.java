@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ToDoTaskListAdapter extends RecyclerView.Adapter<ToDoTaskListAdapter.ToDoTaskListViewHolder> {
 
-    List<TaskInfo> listsOfTaskInfoEntities;
+    List<TaskInfoEntity> listsOfTaskInfoEntities;
     private List<TaskInfoGroupByLocationKey> listOfTaskInfoGroupByLocationKeys;
     private String TAG = "adapter";
     private OnItemLongClickListener listener;
@@ -36,7 +36,7 @@ public class ToDoTaskListAdapter extends RecyclerView.Adapter<ToDoTaskListAdapte
     }
 
     public ToDoTaskListAdapter(List<TaskInfoGroupByLocationKey> listOfTaskInfoGroupByLocationKeys,
-                               Application application, List<TaskInfo> listsOfTaskInfoEntities) {
+                               Application application, List<TaskInfoEntity> listsOfTaskInfoEntities) {
         this.listOfTaskInfoGroupByLocationKeys = listOfTaskInfoGroupByLocationKeys;
         this.listsOfTaskInfoEntities = listsOfTaskInfoEntities;
         mTaskInfoRepository = new TaskInfoRepository(application);
@@ -66,7 +66,7 @@ public class ToDoTaskListAdapter extends RecyclerView.Adapter<ToDoTaskListAdapte
 
         holder.tvTaskAddress.setText(address);
         holder.tvPostalCode.setText(postalCode);
-        if (listsOfTaskInfoEntities != null) {
+        if (listsOfTaskInfoEntities.size()>0) {
             holder.tvUserName.setText(listsOfTaskInfoEntities.get(position).getName());
             holder.tvBarcode.setText("Barcode No. " + listsOfTaskInfoEntities.get(position).getBarcode());
         }
