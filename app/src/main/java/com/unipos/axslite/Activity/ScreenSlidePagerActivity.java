@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -49,6 +50,10 @@ import com.unipos.axslite.Utils.Constants;
 import com.unipos.axslite.Utils.CustomViewPager;
 import com.unipos.axslite.ui.NavigationViewModel;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -114,7 +119,10 @@ public class ScreenSlidePagerActivity extends AppCompatActivity implements Navig
 
             }
         }
+
+//        Log.e(TAG, "onCreate: "+ writeToSD() );
     }
+
 
     void showDialog() {
         Dialog dialog = new Dialog(this, R.style.MyDialogTheme);
