@@ -14,10 +14,12 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.unipos.axslite.ApiService.ApiService;
 import com.unipos.axslite.ApiService.ApiUtils;
+import com.unipos.axslite.CoverterPOJOToEntity.RunInfoToRunInfoEntity;
 import com.unipos.axslite.CoverterPOJOToEntity.TaskInfoToTaskInfoEntity;
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
 import com.unipos.axslite.Database.Repository.TaskInfoRepository;
 import com.unipos.axslite.POJO.LoginResponse;
+import com.unipos.axslite.POJO.RunInfo;
 import com.unipos.axslite.POJO.TaskInfo;
 import com.unipos.axslite.POJO.TaskInfoResponse;
 import com.unipos.axslite.POJO.TaskInfoUpdateResponse;
@@ -114,7 +116,8 @@ public class SyncRemoteServerService extends Service {
                     Log.d(TAG, "onResponse: ");
                     if (response.code() == 200) {
                         Log.d(TAG, "size: " + response.body().getListOfTaskInfo().size());
-                        saveTaskInfoListToLocalDB(response.body().getListOfTaskInfo());
+                        Log.e(TAG, "RUN size: " + response.body().getListOfRunList().size());
+                        saveTaskInfoListToLocalDB(response.body().getListOfTaskInfo(), response.body().getListOfRunList());
                     } else {
                         Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG).show();
                     }
@@ -130,11 +133,17 @@ public class SyncRemoteServerService extends Service {
         }
     }
 
-    private void saveTaskInfoListToLocalDB(ArrayList<TaskInfo> listOfTaskInfo) {
+    private void saveTaskInfoListToLocalDB(ArrayList<TaskInfo> listOfTaskInfo, ArrayList<RunInfo> listfOfRunInfo) {
         mTaskInfoRepository.deleteAll();
+        mTaskInfoRepository.deleteAllRunList();
+        for (RunInfo runInfo : listfOfRunInfo) {
+            Log.e(TAG, "saveTaskInfoListToLocalDB: " + runInfo.toString());
+            mTaskInfoRepository.insert(RunInfoToRunInfoEntity.convertRunInfoToRunInfoEntity(runInfo));
+        }
         for (TaskInfo taskInfo : listOfTaskInfo) {
             mTaskInfoRepository.insert(TaskInfoToTaskInfoEntity.convertTaskInfoToTaskInfoEntity(taskInfo));
         }
+
     }
 
     private void pushData() {

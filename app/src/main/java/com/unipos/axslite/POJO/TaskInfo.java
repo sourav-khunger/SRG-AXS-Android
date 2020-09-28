@@ -21,6 +21,9 @@ public class TaskInfo implements Serializable {
     @SerializedName(value = "seqNo")
     private int seqNo;
 
+    @SerializedName(value = "batchId")
+    private String batchId;
+
     @SerializedName(value = "name")
     private String name;
 
@@ -35,7 +38,6 @@ public class TaskInfo implements Serializable {
 
     @SerializedName(value = "city")
     public String city;
-
 
     @SerializedName(value = "email")
     private String email;
@@ -163,6 +165,14 @@ public class TaskInfo implements Serializable {
 
     }
 
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
+    }
 
     public long getTaskId() {
         return taskId;

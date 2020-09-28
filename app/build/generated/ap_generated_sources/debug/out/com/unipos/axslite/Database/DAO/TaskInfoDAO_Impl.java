@@ -39,7 +39,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
     this.__insertionAdapterOfTaskInfoEntity = new EntityInsertionAdapter<TaskInfoEntity>(__db) {
       @Override
       public String createQuery() {
-        return "INSERT OR REPLACE INTO `taskInfoTable` (`taskId`,`taskType`,`appId`,`seqNo`,`name`,`address`,`apptNo`,`postalCode`,`city`,`email`,`phoneNo`,`latitude`,`longitude`,`barcode`,`agent`,`manifest`,`reffNo`,`quantity`,`weight`,`amount`,`currency`,`serviceLevel`,`instructions`,`workStatus`,`arrivalTime`,`completeTime`,`dataId`,`stopId`,`dataEntered`,`statusId`,`reasonId`,`qtyEntered`,`weightEntered`,`imageTaken`,`imagePath`,`areaType`,`driverComment`,`driverNotice`,`cashCollect`,`consolicatedId`,`waitingTime`,`cod`,`disAmt`,`accessorial`,`codCurrency`,`mileage`,`locationKey`,`recordStatus`,`signature`,`signatureName`,`signatureTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        return "INSERT OR REPLACE INTO `taskInfoTable` (`taskId`,`taskType`,`appId`,`seqNo`,`batchId`,`name`,`address`,`apptNo`,`postalCode`,`city`,`email`,`phoneNo`,`latitude`,`longitude`,`barcode`,`agent`,`manifest`,`reffNo`,`quantity`,`weight`,`amount`,`currency`,`serviceLevel`,`instructions`,`workStatus`,`arrivalTime`,`completeTime`,`dataId`,`stopId`,`dataEntered`,`statusId`,`reasonId`,`qtyEntered`,`weightEntered`,`imageTaken`,`imagePath`,`areaType`,`driverComment`,`driverNotice`,`cashCollect`,`consolicatedId`,`waitingTime`,`cod`,`disAmt`,`accessorial`,`codCurrency`,`mileage`,`locationKey`,`recordStatus`,`signature`,`signatureName`,`signatureTime`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
       }
 
       @Override
@@ -52,188 +52,193 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         }
         stmt.bindLong(3, value.getAppId());
         stmt.bindLong(4, value.getSeqNo());
-        if (value.getName() == null) {
+        if (value.getBatchId() == null) {
           stmt.bindNull(5);
         } else {
-          stmt.bindString(5, value.getName());
+          stmt.bindString(5, value.getBatchId());
         }
-        if (value.getAddress() == null) {
+        if (value.getName() == null) {
           stmt.bindNull(6);
         } else {
-          stmt.bindString(6, value.getAddress());
+          stmt.bindString(6, value.getName());
         }
-        if (value.getApptNo() == null) {
+        if (value.getAddress() == null) {
           stmt.bindNull(7);
         } else {
-          stmt.bindString(7, value.getApptNo());
+          stmt.bindString(7, value.getAddress());
         }
-        if (value.getPostalCode() == null) {
+        if (value.getApptNo() == null) {
           stmt.bindNull(8);
         } else {
-          stmt.bindString(8, value.getPostalCode());
+          stmt.bindString(8, value.getApptNo());
         }
-        if (value.city == null) {
+        if (value.getPostalCode() == null) {
           stmt.bindNull(9);
         } else {
-          stmt.bindString(9, value.city);
+          stmt.bindString(9, value.getPostalCode());
         }
-        if (value.getEmail() == null) {
+        if (value.city == null) {
           stmt.bindNull(10);
         } else {
-          stmt.bindString(10, value.getEmail());
+          stmt.bindString(10, value.city);
         }
-        if (value.getPhoneNo() == null) {
+        if (value.getEmail() == null) {
           stmt.bindNull(11);
         } else {
-          stmt.bindString(11, value.getPhoneNo());
+          stmt.bindString(11, value.getEmail());
         }
-        if (value.getLatitude() == null) {
+        if (value.getPhoneNo() == null) {
           stmt.bindNull(12);
         } else {
-          stmt.bindString(12, value.getLatitude());
+          stmt.bindString(12, value.getPhoneNo());
         }
-        if (value.getLongitude() == null) {
+        if (value.getLatitude() == null) {
           stmt.bindNull(13);
         } else {
-          stmt.bindString(13, value.getLongitude());
+          stmt.bindString(13, value.getLatitude());
         }
-        if (value.getBarcode() == null) {
+        if (value.getLongitude() == null) {
           stmt.bindNull(14);
         } else {
-          stmt.bindString(14, value.getBarcode());
+          stmt.bindString(14, value.getLongitude());
         }
-        if (value.getAgent() == null) {
+        if (value.getBarcode() == null) {
           stmt.bindNull(15);
         } else {
-          stmt.bindString(15, value.getAgent());
+          stmt.bindString(15, value.getBarcode());
         }
-        if (value.getManifest() == null) {
+        if (value.getAgent() == null) {
           stmt.bindNull(16);
         } else {
-          stmt.bindString(16, value.getManifest());
+          stmt.bindString(16, value.getAgent());
         }
-        if (value.getReffNo() == null) {
+        if (value.getManifest() == null) {
           stmt.bindNull(17);
         } else {
-          stmt.bindString(17, value.getReffNo());
+          stmt.bindString(17, value.getManifest());
         }
-        stmt.bindLong(18, value.getQuantity());
-        if (value.getWeight() == null) {
-          stmt.bindNull(19);
+        if (value.getReffNo() == null) {
+          stmt.bindNull(18);
         } else {
-          stmt.bindString(19, value.getWeight());
+          stmt.bindString(18, value.getReffNo());
         }
-        if (value.getAmount() == null) {
+        stmt.bindLong(19, value.getQuantity());
+        if (value.getWeight() == null) {
           stmt.bindNull(20);
         } else {
-          stmt.bindString(20, value.getAmount());
+          stmt.bindString(20, value.getWeight());
         }
-        if (value.getCurrency() == null) {
+        if (value.getAmount() == null) {
           stmt.bindNull(21);
         } else {
-          stmt.bindString(21, value.getCurrency());
+          stmt.bindString(21, value.getAmount());
         }
-        if (value.getServiceLevel() == null) {
+        if (value.getCurrency() == null) {
           stmt.bindNull(22);
         } else {
-          stmt.bindString(22, value.getServiceLevel());
+          stmt.bindString(22, value.getCurrency());
         }
-        if (value.getInstructions() == null) {
+        if (value.getServiceLevel() == null) {
           stmt.bindNull(23);
         } else {
-          stmt.bindString(23, value.getInstructions());
+          stmt.bindString(23, value.getServiceLevel());
         }
-        if (value.getWorkStatus() == null) {
+        if (value.getInstructions() == null) {
           stmt.bindNull(24);
         } else {
-          stmt.bindString(24, value.getWorkStatus());
+          stmt.bindString(24, value.getInstructions());
         }
-        if (value.getArrivalTime() == null) {
+        if (value.getWorkStatus() == null) {
           stmt.bindNull(25);
         } else {
-          stmt.bindString(25, value.getArrivalTime());
+          stmt.bindString(25, value.getWorkStatus());
         }
-        if (value.getCompleteTime() == null) {
+        if (value.getArrivalTime() == null) {
           stmt.bindNull(26);
         } else {
-          stmt.bindString(26, value.getCompleteTime());
+          stmt.bindString(26, value.getArrivalTime());
         }
-        stmt.bindLong(27, value.getDataId());
-        stmt.bindLong(28, value.getStopId());
+        if (value.getCompleteTime() == null) {
+          stmt.bindNull(27);
+        } else {
+          stmt.bindString(27, value.getCompleteTime());
+        }
+        stmt.bindLong(28, value.getDataId());
+        stmt.bindLong(29, value.getStopId());
         if (value.getDataEntered() == null) {
-          stmt.bindNull(29);
+          stmt.bindNull(30);
         } else {
-          stmt.bindString(29, value.getDataEntered());
+          stmt.bindString(30, value.getDataEntered());
         }
-        stmt.bindLong(30, value.getStatusId());
-        stmt.bindLong(31, value.getReasonId());
-        stmt.bindLong(32, value.getQtyEntered());
-        stmt.bindDouble(33, value.getWeightEntered());
-        stmt.bindLong(34, value.getImageTaken());
+        stmt.bindLong(31, value.getStatusId());
+        stmt.bindLong(32, value.getReasonId());
+        stmt.bindLong(33, value.getQtyEntered());
+        stmt.bindDouble(34, value.getWeightEntered());
+        stmt.bindLong(35, value.getImageTaken());
         if (value.getImagePath() == null) {
-          stmt.bindNull(35);
-        } else {
-          stmt.bindString(35, value.getImagePath());
-        }
-        if (value.getAreaType() == null) {
           stmt.bindNull(36);
         } else {
-          stmt.bindString(36, value.getAreaType());
+          stmt.bindString(36, value.getImagePath());
         }
-        if (value.getDriverComment() == null) {
+        if (value.getAreaType() == null) {
           stmt.bindNull(37);
         } else {
-          stmt.bindString(37, value.getDriverComment());
+          stmt.bindString(37, value.getAreaType());
         }
-        if (value.getDriverNotice() == null) {
+        if (value.getDriverComment() == null) {
           stmt.bindNull(38);
         } else {
-          stmt.bindString(38, value.getDriverNotice());
+          stmt.bindString(38, value.getDriverComment());
         }
-        if (value.getCashCollect() == null) {
+        if (value.getDriverNotice() == null) {
           stmt.bindNull(39);
         } else {
-          stmt.bindString(39, value.getCashCollect());
+          stmt.bindString(39, value.getDriverNotice());
         }
-        stmt.bindLong(40, value.getConsolicatedId());
-        stmt.bindDouble(41, value.getWaitingTime());
-        stmt.bindDouble(42, value.getCod());
-        if (value.getDisAmt() == null) {
-          stmt.bindNull(43);
+        if (value.getCashCollect() == null) {
+          stmt.bindNull(40);
         } else {
-          stmt.bindString(43, value.getDisAmt());
+          stmt.bindString(40, value.getCashCollect());
         }
-        if (value.getAccessorial() == null) {
+        stmt.bindLong(41, value.getConsolicatedId());
+        stmt.bindDouble(42, value.getWaitingTime());
+        stmt.bindDouble(43, value.getCod());
+        if (value.getDisAmt() == null) {
           stmt.bindNull(44);
         } else {
-          stmt.bindString(44, value.getAccessorial());
+          stmt.bindString(44, value.getDisAmt());
         }
-        if (value.getCodCurrency() == null) {
+        if (value.getAccessorial() == null) {
           stmt.bindNull(45);
         } else {
-          stmt.bindString(45, value.getCodCurrency());
+          stmt.bindString(45, value.getAccessorial());
         }
-        stmt.bindDouble(46, value.getMileage());
+        if (value.getCodCurrency() == null) {
+          stmt.bindNull(46);
+        } else {
+          stmt.bindString(46, value.getCodCurrency());
+        }
+        stmt.bindDouble(47, value.getMileage());
         if (value.getLocationKey() == null) {
-          stmt.bindNull(47);
+          stmt.bindNull(48);
         } else {
-          stmt.bindString(47, value.getLocationKey());
+          stmt.bindString(48, value.getLocationKey());
         }
-        stmt.bindLong(48, value.getRecordStatus());
+        stmt.bindLong(49, value.getRecordStatus());
         if (value.getSignature() == null) {
-          stmt.bindNull(49);
-        } else {
-          stmt.bindString(49, value.getSignature());
-        }
-        if (value.getSignatureName() == null) {
           stmt.bindNull(50);
         } else {
-          stmt.bindString(50, value.getSignatureName());
+          stmt.bindString(50, value.getSignature());
         }
-        if (value.getSignatureTime() == null) {
+        if (value.getSignatureName() == null) {
           stmt.bindNull(51);
         } else {
-          stmt.bindString(51, value.getSignatureTime());
+          stmt.bindString(51, value.getSignatureName());
+        }
+        if (value.getSignatureTime() == null) {
+          stmt.bindNull(52);
+        } else {
+          stmt.bindString(52, value.getSignatureTime());
         }
       }
     };
@@ -251,7 +256,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
     this.__updateAdapterOfTaskInfoEntity = new EntityDeletionOrUpdateAdapter<TaskInfoEntity>(__db) {
       @Override
       public String createQuery() {
-        return "UPDATE OR ABORT `taskInfoTable` SET `taskId` = ?,`taskType` = ?,`appId` = ?,`seqNo` = ?,`name` = ?,`address` = ?,`apptNo` = ?,`postalCode` = ?,`city` = ?,`email` = ?,`phoneNo` = ?,`latitude` = ?,`longitude` = ?,`barcode` = ?,`agent` = ?,`manifest` = ?,`reffNo` = ?,`quantity` = ?,`weight` = ?,`amount` = ?,`currency` = ?,`serviceLevel` = ?,`instructions` = ?,`workStatus` = ?,`arrivalTime` = ?,`completeTime` = ?,`dataId` = ?,`stopId` = ?,`dataEntered` = ?,`statusId` = ?,`reasonId` = ?,`qtyEntered` = ?,`weightEntered` = ?,`imageTaken` = ?,`imagePath` = ?,`areaType` = ?,`driverComment` = ?,`driverNotice` = ?,`cashCollect` = ?,`consolicatedId` = ?,`waitingTime` = ?,`cod` = ?,`disAmt` = ?,`accessorial` = ?,`codCurrency` = ?,`mileage` = ?,`locationKey` = ?,`recordStatus` = ?,`signature` = ?,`signatureName` = ?,`signatureTime` = ? WHERE `taskId` = ?";
+        return "UPDATE OR ABORT `taskInfoTable` SET `taskId` = ?,`taskType` = ?,`appId` = ?,`seqNo` = ?,`batchId` = ?,`name` = ?,`address` = ?,`apptNo` = ?,`postalCode` = ?,`city` = ?,`email` = ?,`phoneNo` = ?,`latitude` = ?,`longitude` = ?,`barcode` = ?,`agent` = ?,`manifest` = ?,`reffNo` = ?,`quantity` = ?,`weight` = ?,`amount` = ?,`currency` = ?,`serviceLevel` = ?,`instructions` = ?,`workStatus` = ?,`arrivalTime` = ?,`completeTime` = ?,`dataId` = ?,`stopId` = ?,`dataEntered` = ?,`statusId` = ?,`reasonId` = ?,`qtyEntered` = ?,`weightEntered` = ?,`imageTaken` = ?,`imagePath` = ?,`areaType` = ?,`driverComment` = ?,`driverNotice` = ?,`cashCollect` = ?,`consolicatedId` = ?,`waitingTime` = ?,`cod` = ?,`disAmt` = ?,`accessorial` = ?,`codCurrency` = ?,`mileage` = ?,`locationKey` = ?,`recordStatus` = ?,`signature` = ?,`signatureName` = ?,`signatureTime` = ? WHERE `taskId` = ?";
       }
 
       @Override
@@ -264,190 +269,195 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         }
         stmt.bindLong(3, value.getAppId());
         stmt.bindLong(4, value.getSeqNo());
-        if (value.getName() == null) {
+        if (value.getBatchId() == null) {
           stmt.bindNull(5);
         } else {
-          stmt.bindString(5, value.getName());
+          stmt.bindString(5, value.getBatchId());
         }
-        if (value.getAddress() == null) {
+        if (value.getName() == null) {
           stmt.bindNull(6);
         } else {
-          stmt.bindString(6, value.getAddress());
+          stmt.bindString(6, value.getName());
         }
-        if (value.getApptNo() == null) {
+        if (value.getAddress() == null) {
           stmt.bindNull(7);
         } else {
-          stmt.bindString(7, value.getApptNo());
+          stmt.bindString(7, value.getAddress());
         }
-        if (value.getPostalCode() == null) {
+        if (value.getApptNo() == null) {
           stmt.bindNull(8);
         } else {
-          stmt.bindString(8, value.getPostalCode());
+          stmt.bindString(8, value.getApptNo());
         }
-        if (value.city == null) {
+        if (value.getPostalCode() == null) {
           stmt.bindNull(9);
         } else {
-          stmt.bindString(9, value.city);
+          stmt.bindString(9, value.getPostalCode());
         }
-        if (value.getEmail() == null) {
+        if (value.city == null) {
           stmt.bindNull(10);
         } else {
-          stmt.bindString(10, value.getEmail());
+          stmt.bindString(10, value.city);
         }
-        if (value.getPhoneNo() == null) {
+        if (value.getEmail() == null) {
           stmt.bindNull(11);
         } else {
-          stmt.bindString(11, value.getPhoneNo());
+          stmt.bindString(11, value.getEmail());
         }
-        if (value.getLatitude() == null) {
+        if (value.getPhoneNo() == null) {
           stmt.bindNull(12);
         } else {
-          stmt.bindString(12, value.getLatitude());
+          stmt.bindString(12, value.getPhoneNo());
         }
-        if (value.getLongitude() == null) {
+        if (value.getLatitude() == null) {
           stmt.bindNull(13);
         } else {
-          stmt.bindString(13, value.getLongitude());
+          stmt.bindString(13, value.getLatitude());
         }
-        if (value.getBarcode() == null) {
+        if (value.getLongitude() == null) {
           stmt.bindNull(14);
         } else {
-          stmt.bindString(14, value.getBarcode());
+          stmt.bindString(14, value.getLongitude());
         }
-        if (value.getAgent() == null) {
+        if (value.getBarcode() == null) {
           stmt.bindNull(15);
         } else {
-          stmt.bindString(15, value.getAgent());
+          stmt.bindString(15, value.getBarcode());
         }
-        if (value.getManifest() == null) {
+        if (value.getAgent() == null) {
           stmt.bindNull(16);
         } else {
-          stmt.bindString(16, value.getManifest());
+          stmt.bindString(16, value.getAgent());
         }
-        if (value.getReffNo() == null) {
+        if (value.getManifest() == null) {
           stmt.bindNull(17);
         } else {
-          stmt.bindString(17, value.getReffNo());
+          stmt.bindString(17, value.getManifest());
         }
-        stmt.bindLong(18, value.getQuantity());
-        if (value.getWeight() == null) {
-          stmt.bindNull(19);
+        if (value.getReffNo() == null) {
+          stmt.bindNull(18);
         } else {
-          stmt.bindString(19, value.getWeight());
+          stmt.bindString(18, value.getReffNo());
         }
-        if (value.getAmount() == null) {
+        stmt.bindLong(19, value.getQuantity());
+        if (value.getWeight() == null) {
           stmt.bindNull(20);
         } else {
-          stmt.bindString(20, value.getAmount());
+          stmt.bindString(20, value.getWeight());
         }
-        if (value.getCurrency() == null) {
+        if (value.getAmount() == null) {
           stmt.bindNull(21);
         } else {
-          stmt.bindString(21, value.getCurrency());
+          stmt.bindString(21, value.getAmount());
         }
-        if (value.getServiceLevel() == null) {
+        if (value.getCurrency() == null) {
           stmt.bindNull(22);
         } else {
-          stmt.bindString(22, value.getServiceLevel());
+          stmt.bindString(22, value.getCurrency());
         }
-        if (value.getInstructions() == null) {
+        if (value.getServiceLevel() == null) {
           stmt.bindNull(23);
         } else {
-          stmt.bindString(23, value.getInstructions());
+          stmt.bindString(23, value.getServiceLevel());
         }
-        if (value.getWorkStatus() == null) {
+        if (value.getInstructions() == null) {
           stmt.bindNull(24);
         } else {
-          stmt.bindString(24, value.getWorkStatus());
+          stmt.bindString(24, value.getInstructions());
         }
-        if (value.getArrivalTime() == null) {
+        if (value.getWorkStatus() == null) {
           stmt.bindNull(25);
         } else {
-          stmt.bindString(25, value.getArrivalTime());
+          stmt.bindString(25, value.getWorkStatus());
         }
-        if (value.getCompleteTime() == null) {
+        if (value.getArrivalTime() == null) {
           stmt.bindNull(26);
         } else {
-          stmt.bindString(26, value.getCompleteTime());
+          stmt.bindString(26, value.getArrivalTime());
         }
-        stmt.bindLong(27, value.getDataId());
-        stmt.bindLong(28, value.getStopId());
+        if (value.getCompleteTime() == null) {
+          stmt.bindNull(27);
+        } else {
+          stmt.bindString(27, value.getCompleteTime());
+        }
+        stmt.bindLong(28, value.getDataId());
+        stmt.bindLong(29, value.getStopId());
         if (value.getDataEntered() == null) {
-          stmt.bindNull(29);
+          stmt.bindNull(30);
         } else {
-          stmt.bindString(29, value.getDataEntered());
+          stmt.bindString(30, value.getDataEntered());
         }
-        stmt.bindLong(30, value.getStatusId());
-        stmt.bindLong(31, value.getReasonId());
-        stmt.bindLong(32, value.getQtyEntered());
-        stmt.bindDouble(33, value.getWeightEntered());
-        stmt.bindLong(34, value.getImageTaken());
+        stmt.bindLong(31, value.getStatusId());
+        stmt.bindLong(32, value.getReasonId());
+        stmt.bindLong(33, value.getQtyEntered());
+        stmt.bindDouble(34, value.getWeightEntered());
+        stmt.bindLong(35, value.getImageTaken());
         if (value.getImagePath() == null) {
-          stmt.bindNull(35);
-        } else {
-          stmt.bindString(35, value.getImagePath());
-        }
-        if (value.getAreaType() == null) {
           stmt.bindNull(36);
         } else {
-          stmt.bindString(36, value.getAreaType());
+          stmt.bindString(36, value.getImagePath());
         }
-        if (value.getDriverComment() == null) {
+        if (value.getAreaType() == null) {
           stmt.bindNull(37);
         } else {
-          stmt.bindString(37, value.getDriverComment());
+          stmt.bindString(37, value.getAreaType());
         }
-        if (value.getDriverNotice() == null) {
+        if (value.getDriverComment() == null) {
           stmt.bindNull(38);
         } else {
-          stmt.bindString(38, value.getDriverNotice());
+          stmt.bindString(38, value.getDriverComment());
         }
-        if (value.getCashCollect() == null) {
+        if (value.getDriverNotice() == null) {
           stmt.bindNull(39);
         } else {
-          stmt.bindString(39, value.getCashCollect());
+          stmt.bindString(39, value.getDriverNotice());
         }
-        stmt.bindLong(40, value.getConsolicatedId());
-        stmt.bindDouble(41, value.getWaitingTime());
-        stmt.bindDouble(42, value.getCod());
-        if (value.getDisAmt() == null) {
-          stmt.bindNull(43);
+        if (value.getCashCollect() == null) {
+          stmt.bindNull(40);
         } else {
-          stmt.bindString(43, value.getDisAmt());
+          stmt.bindString(40, value.getCashCollect());
         }
-        if (value.getAccessorial() == null) {
+        stmt.bindLong(41, value.getConsolicatedId());
+        stmt.bindDouble(42, value.getWaitingTime());
+        stmt.bindDouble(43, value.getCod());
+        if (value.getDisAmt() == null) {
           stmt.bindNull(44);
         } else {
-          stmt.bindString(44, value.getAccessorial());
+          stmt.bindString(44, value.getDisAmt());
         }
-        if (value.getCodCurrency() == null) {
+        if (value.getAccessorial() == null) {
           stmt.bindNull(45);
         } else {
-          stmt.bindString(45, value.getCodCurrency());
+          stmt.bindString(45, value.getAccessorial());
         }
-        stmt.bindDouble(46, value.getMileage());
+        if (value.getCodCurrency() == null) {
+          stmt.bindNull(46);
+        } else {
+          stmt.bindString(46, value.getCodCurrency());
+        }
+        stmt.bindDouble(47, value.getMileage());
         if (value.getLocationKey() == null) {
-          stmt.bindNull(47);
+          stmt.bindNull(48);
         } else {
-          stmt.bindString(47, value.getLocationKey());
+          stmt.bindString(48, value.getLocationKey());
         }
-        stmt.bindLong(48, value.getRecordStatus());
+        stmt.bindLong(49, value.getRecordStatus());
         if (value.getSignature() == null) {
-          stmt.bindNull(49);
-        } else {
-          stmt.bindString(49, value.getSignature());
-        }
-        if (value.getSignatureName() == null) {
           stmt.bindNull(50);
         } else {
-          stmt.bindString(50, value.getSignatureName());
+          stmt.bindString(50, value.getSignature());
         }
-        if (value.getSignatureTime() == null) {
+        if (value.getSignatureName() == null) {
           stmt.bindNull(51);
         } else {
-          stmt.bindString(51, value.getSignatureTime());
+          stmt.bindString(51, value.getSignatureName());
         }
-        stmt.bindLong(52, value.getTaskId());
+        if (value.getSignatureTime() == null) {
+          stmt.bindNull(52);
+        } else {
+          stmt.bindString(52, value.getSignatureTime());
+        }
+        stmt.bindLong(53, value.getTaskId());
       }
     };
     this.__preparedStmtOfDeleteAll = new SharedSQLiteStatement(__db) {
@@ -555,6 +565,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
           final int _cursorIndexOfTaskType = CursorUtil.getColumnIndexOrThrow(_cursor, "taskType");
           final int _cursorIndexOfAppId = CursorUtil.getColumnIndexOrThrow(_cursor, "appId");
           final int _cursorIndexOfSeqNo = CursorUtil.getColumnIndexOrThrow(_cursor, "seqNo");
+          final int _cursorIndexOfBatchId = CursorUtil.getColumnIndexOrThrow(_cursor, "batchId");
           final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
           final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
           final int _cursorIndexOfApptNo = CursorUtil.getColumnIndexOrThrow(_cursor, "apptNo");
@@ -613,6 +624,8 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
             _tmpAppId = _cursor.getInt(_cursorIndexOfAppId);
             final int _tmpSeqNo;
             _tmpSeqNo = _cursor.getInt(_cursorIndexOfSeqNo);
+            final String _tmpBatchId;
+            _tmpBatchId = _cursor.getString(_cursorIndexOfBatchId);
             final String _tmpName;
             _tmpName = _cursor.getString(_cursorIndexOfName);
             final String _tmpAddress;
@@ -697,7 +710,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
             _tmpCodCurrency = _cursor.getString(_cursorIndexOfCodCurrency);
             final double _tmpMileage;
             _tmpMileage = _cursor.getDouble(_cursorIndexOfMileage);
-            _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo);
+            _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo,_tmpBatchId);
             final String _tmpLocationKey;
             _tmpLocationKey = _cursor.getString(_cursorIndexOfLocationKey);
             _item.setLocationKey(_tmpLocationKey);
@@ -739,6 +752,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
       final int _cursorIndexOfTaskType = CursorUtil.getColumnIndexOrThrow(_cursor, "taskType");
       final int _cursorIndexOfAppId = CursorUtil.getColumnIndexOrThrow(_cursor, "appId");
       final int _cursorIndexOfSeqNo = CursorUtil.getColumnIndexOrThrow(_cursor, "seqNo");
+      final int _cursorIndexOfBatchId = CursorUtil.getColumnIndexOrThrow(_cursor, "batchId");
       final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
       final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
       final int _cursorIndexOfApptNo = CursorUtil.getColumnIndexOrThrow(_cursor, "apptNo");
@@ -797,6 +811,8 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         _tmpAppId = _cursor.getInt(_cursorIndexOfAppId);
         final int _tmpSeqNo;
         _tmpSeqNo = _cursor.getInt(_cursorIndexOfSeqNo);
+        final String _tmpBatchId;
+        _tmpBatchId = _cursor.getString(_cursorIndexOfBatchId);
         final String _tmpName;
         _tmpName = _cursor.getString(_cursorIndexOfName);
         final String _tmpAddress;
@@ -881,7 +897,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         _tmpCodCurrency = _cursor.getString(_cursorIndexOfCodCurrency);
         final double _tmpMileage;
         _tmpMileage = _cursor.getDouble(_cursorIndexOfMileage);
-        _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo);
+        _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo,_tmpBatchId);
         final String _tmpLocationKey;
         _tmpLocationKey = _cursor.getString(_cursorIndexOfLocationKey);
         _item.setLocationKey(_tmpLocationKey);
@@ -923,6 +939,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
       final int _cursorIndexOfTaskType = CursorUtil.getColumnIndexOrThrow(_cursor, "taskType");
       final int _cursorIndexOfAppId = CursorUtil.getColumnIndexOrThrow(_cursor, "appId");
       final int _cursorIndexOfSeqNo = CursorUtil.getColumnIndexOrThrow(_cursor, "seqNo");
+      final int _cursorIndexOfBatchId = CursorUtil.getColumnIndexOrThrow(_cursor, "batchId");
       final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
       final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
       final int _cursorIndexOfApptNo = CursorUtil.getColumnIndexOrThrow(_cursor, "apptNo");
@@ -980,6 +997,8 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         _tmpAppId = _cursor.getInt(_cursorIndexOfAppId);
         final int _tmpSeqNo;
         _tmpSeqNo = _cursor.getInt(_cursorIndexOfSeqNo);
+        final String _tmpBatchId;
+        _tmpBatchId = _cursor.getString(_cursorIndexOfBatchId);
         final String _tmpName;
         _tmpName = _cursor.getString(_cursorIndexOfName);
         final String _tmpAddress;
@@ -1064,7 +1083,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         _tmpCodCurrency = _cursor.getString(_cursorIndexOfCodCurrency);
         final double _tmpMileage;
         _tmpMileage = _cursor.getDouble(_cursorIndexOfMileage);
-        _result = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo);
+        _result = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo,_tmpBatchId);
         final String _tmpLocationKey;
         _tmpLocationKey = _cursor.getString(_cursorIndexOfLocationKey);
         _result.setLocationKey(_tmpLocationKey);
@@ -1088,6 +1107,64 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
       _cursor.close();
       _statement.release();
     }
+  }
+
+  @Override
+  public LiveData<List<TaskInfoGroupByLocationKey>> getTaskInfoByBatchId(final String batchId) {
+    final String _sql = "Select address, postalCode, city, locationKey, COUNT(*) as groupCount, latitude, longitude, MAX(arrivalTime) as arrivalTime  from taskInfoTable where batchId= ? GROUP BY locationKey ORDER BY seqNo ";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    if (batchId == null) {
+      _statement.bindNull(_argIndex);
+    } else {
+      _statement.bindString(_argIndex, batchId);
+    }
+    return __db.getInvalidationTracker().createLiveData(new String[]{"taskInfoTable"}, false, new Callable<List<TaskInfoGroupByLocationKey>>() {
+      @Override
+      public List<TaskInfoGroupByLocationKey> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
+          final int _cursorIndexOfPostalCode = CursorUtil.getColumnIndexOrThrow(_cursor, "postalCode");
+          final int _cursorIndexOfCity = CursorUtil.getColumnIndexOrThrow(_cursor, "city");
+          final int _cursorIndexOfLocationKey = CursorUtil.getColumnIndexOrThrow(_cursor, "locationKey");
+          final int _cursorIndexOfGroupCount = CursorUtil.getColumnIndexOrThrow(_cursor, "groupCount");
+          final int _cursorIndexOfLatitude = CursorUtil.getColumnIndexOrThrow(_cursor, "latitude");
+          final int _cursorIndexOfLongitude = CursorUtil.getColumnIndexOrThrow(_cursor, "longitude");
+          final int _cursorIndexOfArrivalTime = CursorUtil.getColumnIndexOrThrow(_cursor, "arrivalTime");
+          final List<TaskInfoGroupByLocationKey> _result = new ArrayList<TaskInfoGroupByLocationKey>(_cursor.getCount());
+          while(_cursor.moveToNext()) {
+            final TaskInfoGroupByLocationKey _item;
+            _item = new TaskInfoGroupByLocationKey();
+            _item.address = _cursor.getString(_cursorIndexOfAddress);
+            _item.postalCode = _cursor.getString(_cursorIndexOfPostalCode);
+            _item.city = _cursor.getString(_cursorIndexOfCity);
+            final String _tmpLocationKey;
+            _tmpLocationKey = _cursor.getString(_cursorIndexOfLocationKey);
+            _item.setLocationKey(_tmpLocationKey);
+            _item.groupCount = _cursor.getInt(_cursorIndexOfGroupCount);
+            final String _tmpLatitude;
+            _tmpLatitude = _cursor.getString(_cursorIndexOfLatitude);
+            _item.setLatitude(_tmpLatitude);
+            final String _tmpLongitude;
+            _tmpLongitude = _cursor.getString(_cursorIndexOfLongitude);
+            _item.setLongitude(_tmpLongitude);
+            final String _tmpArrivalTime;
+            _tmpArrivalTime = _cursor.getString(_cursorIndexOfArrivalTime);
+            _item.setArrivalTime(_tmpArrivalTime);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+        }
+      }
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
   }
 
   @Override
@@ -1219,6 +1296,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
           final int _cursorIndexOfTaskType = CursorUtil.getColumnIndexOrThrow(_cursor, "taskType");
           final int _cursorIndexOfAppId = CursorUtil.getColumnIndexOrThrow(_cursor, "appId");
           final int _cursorIndexOfSeqNo = CursorUtil.getColumnIndexOrThrow(_cursor, "seqNo");
+          final int _cursorIndexOfBatchId = CursorUtil.getColumnIndexOrThrow(_cursor, "batchId");
           final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
           final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
           final int _cursorIndexOfApptNo = CursorUtil.getColumnIndexOrThrow(_cursor, "apptNo");
@@ -1277,6 +1355,8 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
             _tmpAppId = _cursor.getInt(_cursorIndexOfAppId);
             final int _tmpSeqNo;
             _tmpSeqNo = _cursor.getInt(_cursorIndexOfSeqNo);
+            final String _tmpBatchId;
+            _tmpBatchId = _cursor.getString(_cursorIndexOfBatchId);
             final String _tmpName;
             _tmpName = _cursor.getString(_cursorIndexOfName);
             final String _tmpAddress;
@@ -1361,7 +1441,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
             _tmpCodCurrency = _cursor.getString(_cursorIndexOfCodCurrency);
             final double _tmpMileage;
             _tmpMileage = _cursor.getDouble(_cursorIndexOfMileage);
-            _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo);
+            _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo,_tmpBatchId);
             final String _tmpLocationKey;
             _tmpLocationKey = _cursor.getString(_cursorIndexOfLocationKey);
             _item.setLocationKey(_tmpLocationKey);
@@ -1405,6 +1485,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
       final int _cursorIndexOfTaskType = CursorUtil.getColumnIndexOrThrow(_cursor, "taskType");
       final int _cursorIndexOfAppId = CursorUtil.getColumnIndexOrThrow(_cursor, "appId");
       final int _cursorIndexOfSeqNo = CursorUtil.getColumnIndexOrThrow(_cursor, "seqNo");
+      final int _cursorIndexOfBatchId = CursorUtil.getColumnIndexOrThrow(_cursor, "batchId");
       final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
       final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
       final int _cursorIndexOfApptNo = CursorUtil.getColumnIndexOrThrow(_cursor, "apptNo");
@@ -1463,6 +1544,8 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         _tmpAppId = _cursor.getInt(_cursorIndexOfAppId);
         final int _tmpSeqNo;
         _tmpSeqNo = _cursor.getInt(_cursorIndexOfSeqNo);
+        final String _tmpBatchId;
+        _tmpBatchId = _cursor.getString(_cursorIndexOfBatchId);
         final String _tmpName;
         _tmpName = _cursor.getString(_cursorIndexOfName);
         final String _tmpAddress;
@@ -1547,7 +1630,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         _tmpCodCurrency = _cursor.getString(_cursorIndexOfCodCurrency);
         final double _tmpMileage;
         _tmpMileage = _cursor.getDouble(_cursorIndexOfMileage);
-        _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo);
+        _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo,_tmpBatchId);
         final String _tmpLocationKey;
         _tmpLocationKey = _cursor.getString(_cursorIndexOfLocationKey);
         _item.setLocationKey(_tmpLocationKey);
@@ -1596,6 +1679,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
       final int _cursorIndexOfTaskType = CursorUtil.getColumnIndexOrThrow(_cursor, "taskType");
       final int _cursorIndexOfAppId = CursorUtil.getColumnIndexOrThrow(_cursor, "appId");
       final int _cursorIndexOfSeqNo = CursorUtil.getColumnIndexOrThrow(_cursor, "seqNo");
+      final int _cursorIndexOfBatchId = CursorUtil.getColumnIndexOrThrow(_cursor, "batchId");
       final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
       final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
       final int _cursorIndexOfApptNo = CursorUtil.getColumnIndexOrThrow(_cursor, "apptNo");
@@ -1654,6 +1738,8 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         _tmpAppId = _cursor.getInt(_cursorIndexOfAppId);
         final int _tmpSeqNo;
         _tmpSeqNo = _cursor.getInt(_cursorIndexOfSeqNo);
+        final String _tmpBatchId;
+        _tmpBatchId = _cursor.getString(_cursorIndexOfBatchId);
         final String _tmpName;
         _tmpName = _cursor.getString(_cursorIndexOfName);
         final String _tmpAddress;
@@ -1738,7 +1824,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         _tmpCodCurrency = _cursor.getString(_cursorIndexOfCodCurrency);
         final double _tmpMileage;
         _tmpMileage = _cursor.getDouble(_cursorIndexOfMileage);
-        _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo);
+        _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo,_tmpBatchId);
         final String _tmpLocationKey;
         _tmpLocationKey = _cursor.getString(_cursorIndexOfLocationKey);
         _item.setLocationKey(_tmpLocationKey);
@@ -1774,6 +1860,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
       final int _cursorIndexOfTaskType = CursorUtil.getColumnIndexOrThrow(_cursor, "taskType");
       final int _cursorIndexOfAppId = CursorUtil.getColumnIndexOrThrow(_cursor, "appId");
       final int _cursorIndexOfSeqNo = CursorUtil.getColumnIndexOrThrow(_cursor, "seqNo");
+      final int _cursorIndexOfBatchId = CursorUtil.getColumnIndexOrThrow(_cursor, "batchId");
       final int _cursorIndexOfName = CursorUtil.getColumnIndexOrThrow(_cursor, "name");
       final int _cursorIndexOfAddress = CursorUtil.getColumnIndexOrThrow(_cursor, "address");
       final int _cursorIndexOfApptNo = CursorUtil.getColumnIndexOrThrow(_cursor, "apptNo");
@@ -1832,6 +1919,8 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         _tmpAppId = _cursor.getInt(_cursorIndexOfAppId);
         final int _tmpSeqNo;
         _tmpSeqNo = _cursor.getInt(_cursorIndexOfSeqNo);
+        final String _tmpBatchId;
+        _tmpBatchId = _cursor.getString(_cursorIndexOfBatchId);
         final String _tmpName;
         _tmpName = _cursor.getString(_cursorIndexOfName);
         final String _tmpAddress;
@@ -1916,7 +2005,7 @@ public final class TaskInfoDAO_Impl implements TaskInfoDAO {
         _tmpCodCurrency = _cursor.getString(_cursorIndexOfCodCurrency);
         final double _tmpMileage;
         _tmpMileage = _cursor.getDouble(_cursorIndexOfMileage);
-        _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo);
+        _item = new TaskInfoEntity(_tmpTaskId,_tmpTaskType,_tmpAppId,_tmpName,_tmpAddress,_tmpApptNo,_tmpPostalCode,_tmpCity,_tmpEmail,_tmpPhoneNo,_tmpLatitude,_tmpLongitude,_tmpBarcode,_tmpAgent,_tmpManifest,_tmpReffNo,_tmpQuantity,_tmpWeight,_tmpAmount,_tmpCurrency,_tmpServiceLevel,_tmpInstructions,_tmpWorkStatus,_tmpArrivalTime,_tmpCompleteTime,_tmpDataId,_tmpStopId,_tmpDataEntered,_tmpStatusId,_tmpReasonId,_tmpQtyEntered,_tmpWeightEntered,_tmpImageTaken,_tmpImagePath,_tmpAreaType,_tmpDriverComment,_tmpDriverNotice,_tmpCashCollect,_tmpConsolicatedId,_tmpWaitingTime,_tmpCod,_tmpDisAmt,_tmpAccessorial,_tmpCodCurrency,_tmpMileage,_tmpSeqNo,_tmpBatchId);
         final String _tmpLocationKey;
         _tmpLocationKey = _cursor.getString(_cursorIndexOfLocationKey);
         _item.setLocationKey(_tmpLocationKey);

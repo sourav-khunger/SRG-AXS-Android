@@ -12,23 +12,31 @@ import androidx.sqlite.db.SupportSQLiteOpenHelper;
 
 import com.unipos.axslite.Database.DAO.DriverInfoDAO;
 import com.unipos.axslite.Database.DAO.ReasonDAO;
+import com.unipos.axslite.Database.DAO.RunInfoDAO;
 import com.unipos.axslite.Database.DAO.StatusDAO;
 import com.unipos.axslite.Database.DAO.TaskInfoDAO;
 import com.unipos.axslite.Database.Entities.DriverInfoEntity;
 import com.unipos.axslite.Database.Entities.ReasonEntity;
+import com.unipos.axslite.Database.Entities.RunInfoEntity;
 import com.unipos.axslite.Database.Entities.StatusEntity;
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@androidx.room.Database(entities = {DriverInfoEntity.class, TaskInfoEntity.class, StatusEntity.class, ReasonEntity.class}, version = 1,exportSchema = false)
+@androidx.room.Database(entities = {DriverInfoEntity.class, TaskInfoEntity.class, RunInfoEntity.class, StatusEntity.class, ReasonEntity.class}, version = 1, exportSchema = false)
 public abstract class Database extends RoomDatabase {
 
-    public abstract DriverInfoDAO  driverInfoDAO();
-    public abstract TaskInfoDAO  taskInfoDAO();
+    public abstract DriverInfoDAO driverInfoDAO();
+
+    public abstract TaskInfoDAO taskInfoDAO();
+
+    public abstract RunInfoDAO runInfoDAO();
+
     public abstract StatusDAO statusDAO();
+
     public abstract ReasonDAO reasonDAO();
+
     public static volatile Database INSTANCE;
     public static final int NUMBER_OF_THREADS = 4;
     public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
@@ -47,8 +55,9 @@ public abstract class Database extends RoomDatabase {
                 public void run() {
                     DriverInfoDAO driverInfoDAO = INSTANCE.driverInfoDAO();
                     TaskInfoDAO taskInfoDAO = INSTANCE.taskInfoDAO();
+                    RunInfoDAO runInfoDAO = INSTANCE.runInfoDAO();
                     StatusDAO statusDAO = INSTANCE.statusDAO();
-                    ReasonDAO reasonDAO  = INSTANCE.reasonDAO();
+                    ReasonDAO reasonDAO = INSTANCE.reasonDAO();
                     driverInfoDAO.deleteDriverInfos();
                     statusDAO.deleteAllStatuses();
                     reasonDAO.deleteAllReasons();
@@ -62,11 +71,11 @@ public abstract class Database extends RoomDatabase {
         }
     };
 
-    public static Database getDatabase(final Context context){
-        if (INSTANCE == null){
-            synchronized (Database.class){
-                if (INSTANCE == null){
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),Database.class,"driver_detail_database").addCallback(sDatabaseCallback).allowMainThreadQueries().build();
+    public static Database getDatabase(final Context context) {
+        if (INSTANCE == null) {
+            synchronized (Database.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), Database.class, "driver_detail_database").addCallback(sDatabaseCallback).allowMainThreadQueries().build();
                 }
 
             }

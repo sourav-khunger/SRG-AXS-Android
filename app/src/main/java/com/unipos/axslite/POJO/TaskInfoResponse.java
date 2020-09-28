@@ -12,6 +12,8 @@ public class TaskInfoResponse implements Serializable {
 
     @SerializedName(value = "taskList")
     private ArrayList<TaskInfo> listOfTaskInfo;
+    @SerializedName(value = "runList")
+    private ArrayList<RunInfo> listOfRunList;
 
     public TaskInfoResponse() {
 
@@ -32,6 +34,14 @@ public class TaskInfoResponse implements Serializable {
 
     public ArrayList<TaskInfo> getListOfTaskInfo() {
         return listOfTaskInfo;
+    }
+
+    public ArrayList<RunInfo> getListOfRunList() {
+        return listOfRunList;
+    }
+
+    public void setListOfRunList(ArrayList<RunInfo> listOfRunList) {
+        this.listOfRunList = listOfRunList;
     }
 
     public void setListOfTaskInfo(ArrayList<TaskInfo> listOfTaskInfo) {

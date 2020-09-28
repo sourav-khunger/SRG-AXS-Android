@@ -36,9 +36,9 @@ public class ToDoTaskListAdapter extends RecyclerView.Adapter<ToDoTaskListAdapte
     }
 
     public ToDoTaskListAdapter(List<TaskInfoGroupByLocationKey> listOfTaskInfoGroupByLocationKeys,
-                               Application application, List<TaskInfoEntity> listsOfTaskInfoEntities) {
+                               Application application/*, List<TaskInfoEntity> listsOfTaskInfoEntities*/) {
         this.listOfTaskInfoGroupByLocationKeys = listOfTaskInfoGroupByLocationKeys;
-        this.listsOfTaskInfoEntities = listsOfTaskInfoEntities;
+//        this.listsOfTaskInfoEntities = listsOfTaskInfoEntities;
         mTaskInfoRepository = new TaskInfoRepository(application);
     }
 

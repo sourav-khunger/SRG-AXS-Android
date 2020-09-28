@@ -13,6 +13,7 @@ import androidx.work.WorkManager;
 
 import com.unipos.axslite.BackgroudService.ConstraintsForService.NetworkConstraint;
 import com.unipos.axslite.BackgroudService.Workers.UpdateRemoteDatabaseWorker;
+import com.unipos.axslite.Database.Entities.RunInfoEntity;
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
 import com.unipos.axslite.Database.Repository.TaskInfoRepository;
 import com.unipos.axslite.POJO.TaskInfoGroupByLocationKey;
@@ -38,6 +39,10 @@ public class TaskInfoViewModel extends AndroidViewModel {
         return taskInfoRepository.getTaskInfos();
     }
 
+    public LiveData<List<RunInfoEntity>> getRunInfoList() {
+        return taskInfoRepository.getRunInfos();
+    }
+
     public TaskInfoEntity getTaskInfo(String taskId) {
         return (TaskInfoEntity) taskInfoRepository.getTaskInfoWithId(taskId);
     }
@@ -58,6 +63,10 @@ public class TaskInfoViewModel extends AndroidViewModel {
 
     public LiveData<List<TaskInfoGroupByLocationKey>> getTaskInfoGroupByLocationKeys() {
         return taskInfoRepository.getTaskInfoGroupByLocationKeys();
+    }
+
+    public LiveData<List<TaskInfoGroupByLocationKey>> getTaskInfoGroupByBatchId(String batchId) {
+        return taskInfoRepository.getTaskInfoByBatchId(batchId);
     }
 
     public LiveData<List<TaskInfoGroupByLocationKey>> getTaskInfoSearchByWorkStatusGroupByLocationKeys(String workStatus) {

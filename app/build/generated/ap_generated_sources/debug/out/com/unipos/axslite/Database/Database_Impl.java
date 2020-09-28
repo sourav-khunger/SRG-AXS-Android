@@ -18,6 +18,8 @@ import com.unipos.axslite.Database.DAO.DriverInfoDAO;
 import com.unipos.axslite.Database.DAO.DriverInfoDAO_Impl;
 import com.unipos.axslite.Database.DAO.ReasonDAO;
 import com.unipos.axslite.Database.DAO.ReasonDAO_Impl;
+import com.unipos.axslite.Database.DAO.RunInfoDAO;
+import com.unipos.axslite.Database.DAO.RunInfoDAO_Impl;
 import com.unipos.axslite.Database.DAO.StatusDAO;
 import com.unipos.axslite.Database.DAO.StatusDAO_Impl;
 import com.unipos.axslite.Database.DAO.TaskInfoDAO;
@@ -35,6 +37,8 @@ public final class Database_Impl extends Database {
 
   private volatile TaskInfoDAO _taskInfoDAO;
 
+  private volatile RunInfoDAO _runInfoDAO;
+
   private volatile StatusDAO _statusDAO;
 
   private volatile ReasonDAO _reasonDAO;
@@ -45,17 +49,19 @@ public final class Database_Impl extends Database {
       @Override
       public void createAllTables(SupportSQLiteDatabase _db) {
         _db.execSQL("CREATE TABLE IF NOT EXISTS `driverInfoTable` (`imei` TEXT NOT NULL, `firstName` TEXT, `lastName` TEXT, `onDuty` INTEGER NOT NULL, `companyId` INTEGER NOT NULL, `companyName` TEXT, `enableGPS` INTEGER NOT NULL, `allowedCompanies` TEXT, PRIMARY KEY(`imei`))");
-        _db.execSQL("CREATE TABLE IF NOT EXISTS `taskInfoTable` (`taskId` INTEGER NOT NULL, `taskType` TEXT, `appId` INTEGER NOT NULL, `seqNo` INTEGER NOT NULL, `name` TEXT, `address` TEXT, `apptNo` TEXT, `postalCode` TEXT, `city` TEXT, `email` TEXT, `phoneNo` TEXT, `latitude` TEXT, `longitude` TEXT, `barcode` TEXT, `agent` TEXT, `manifest` TEXT, `reffNo` TEXT, `quantity` INTEGER NOT NULL, `weight` TEXT, `amount` TEXT, `currency` TEXT, `serviceLevel` TEXT, `instructions` TEXT, `workStatus` TEXT, `arrivalTime` TEXT, `completeTime` TEXT, `dataId` INTEGER NOT NULL, `stopId` INTEGER NOT NULL, `dataEntered` TEXT, `statusId` INTEGER NOT NULL, `reasonId` INTEGER NOT NULL, `qtyEntered` INTEGER NOT NULL, `weightEntered` REAL NOT NULL, `imageTaken` INTEGER NOT NULL, `imagePath` TEXT, `areaType` TEXT, `driverComment` TEXT, `driverNotice` TEXT, `cashCollect` TEXT, `consolicatedId` INTEGER NOT NULL, `waitingTime` REAL NOT NULL, `cod` REAL NOT NULL, `disAmt` TEXT, `accessorial` TEXT, `codCurrency` TEXT, `mileage` REAL NOT NULL, `locationKey` TEXT, `recordStatus` INTEGER NOT NULL, `signature` TEXT, `signatureName` TEXT, `signatureTime` TEXT, PRIMARY KEY(`taskId`))");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `taskInfoTable` (`taskId` INTEGER NOT NULL, `taskType` TEXT, `appId` INTEGER NOT NULL, `seqNo` INTEGER NOT NULL, `batchId` TEXT, `name` TEXT, `address` TEXT, `apptNo` TEXT, `postalCode` TEXT, `city` TEXT, `email` TEXT, `phoneNo` TEXT, `latitude` TEXT, `longitude` TEXT, `barcode` TEXT, `agent` TEXT, `manifest` TEXT, `reffNo` TEXT, `quantity` INTEGER NOT NULL, `weight` TEXT, `amount` TEXT, `currency` TEXT, `serviceLevel` TEXT, `instructions` TEXT, `workStatus` TEXT, `arrivalTime` TEXT, `completeTime` TEXT, `dataId` INTEGER NOT NULL, `stopId` INTEGER NOT NULL, `dataEntered` TEXT, `statusId` INTEGER NOT NULL, `reasonId` INTEGER NOT NULL, `qtyEntered` INTEGER NOT NULL, `weightEntered` REAL NOT NULL, `imageTaken` INTEGER NOT NULL, `imagePath` TEXT, `areaType` TEXT, `driverComment` TEXT, `driverNotice` TEXT, `cashCollect` TEXT, `consolicatedId` INTEGER NOT NULL, `waitingTime` REAL NOT NULL, `cod` REAL NOT NULL, `disAmt` TEXT, `accessorial` TEXT, `codCurrency` TEXT, `mileage` REAL NOT NULL, `locationKey` TEXT, `recordStatus` INTEGER NOT NULL, `signature` TEXT, `signatureName` TEXT, `signatureTime` TEXT, PRIMARY KEY(`taskId`))");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `runInfoTable` (`batchId` TEXT NOT NULL, `parcelCounts` INTEGER NOT NULL, `routeStarted` INTEGER NOT NULL, `runNo` INTEGER NOT NULL, PRIMARY KEY(`batchId`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS `statusTable` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `statusId` INTEGER NOT NULL, `statusName` TEXT, `shipmentType` TEXT, `statusRule` TEXT, `isException` INTEGER NOT NULL)");
         _db.execSQL("CREATE TABLE IF NOT EXISTS `reasonTable` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `reasonId` INTEGER NOT NULL, `statusId` INTEGER NOT NULL, `reasonName` TEXT, `reasonRule` TEXT)");
         _db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '42e8d1842a28ccb8d878e9610ef8e547')");
+        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4ae70e2c7d461f0c619a1be5f2e7ac53')");
       }
 
       @Override
       public void dropAllTables(SupportSQLiteDatabase _db) {
         _db.execSQL("DROP TABLE IF EXISTS `driverInfoTable`");
         _db.execSQL("DROP TABLE IF EXISTS `taskInfoTable`");
+        _db.execSQL("DROP TABLE IF EXISTS `runInfoTable`");
         _db.execSQL("DROP TABLE IF EXISTS `statusTable`");
         _db.execSQL("DROP TABLE IF EXISTS `reasonTable`");
         if (mCallbacks != null) {
@@ -114,11 +120,12 @@ public final class Database_Impl extends Database {
                   + " Expected:\n" + _infoDriverInfoTable + "\n"
                   + " Found:\n" + _existingDriverInfoTable);
         }
-        final HashMap<String, TableInfo.Column> _columnsTaskInfoTable = new HashMap<String, TableInfo.Column>(51);
+        final HashMap<String, TableInfo.Column> _columnsTaskInfoTable = new HashMap<String, TableInfo.Column>(52);
         _columnsTaskInfoTable.put("taskId", new TableInfo.Column("taskId", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("taskType", new TableInfo.Column("taskType", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("appId", new TableInfo.Column("appId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("seqNo", new TableInfo.Column("seqNo", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsTaskInfoTable.put("batchId", new TableInfo.Column("batchId", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("name", new TableInfo.Column("name", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("address", new TableInfo.Column("address", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("apptNo", new TableInfo.Column("apptNo", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
@@ -175,6 +182,20 @@ public final class Database_Impl extends Database {
                   + " Expected:\n" + _infoTaskInfoTable + "\n"
                   + " Found:\n" + _existingTaskInfoTable);
         }
+        final HashMap<String, TableInfo.Column> _columnsRunInfoTable = new HashMap<String, TableInfo.Column>(4);
+        _columnsRunInfoTable.put("batchId", new TableInfo.Column("batchId", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRunInfoTable.put("parcelCounts", new TableInfo.Column("parcelCounts", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRunInfoTable.put("routeStarted", new TableInfo.Column("routeStarted", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsRunInfoTable.put("runNo", new TableInfo.Column("runNo", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysRunInfoTable = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesRunInfoTable = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoRunInfoTable = new TableInfo("runInfoTable", _columnsRunInfoTable, _foreignKeysRunInfoTable, _indicesRunInfoTable);
+        final TableInfo _existingRunInfoTable = TableInfo.read(_db, "runInfoTable");
+        if (! _infoRunInfoTable.equals(_existingRunInfoTable)) {
+          return new RoomOpenHelper.ValidationResult(false, "runInfoTable(com.unipos.axslite.Database.Entities.RunInfoEntity).\n"
+                  + " Expected:\n" + _infoRunInfoTable + "\n"
+                  + " Found:\n" + _existingRunInfoTable);
+        }
         final HashMap<String, TableInfo.Column> _columnsStatusTable = new HashMap<String, TableInfo.Column>(6);
         _columnsStatusTable.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsStatusTable.put("statusId", new TableInfo.Column("statusId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
@@ -208,7 +229,7 @@ public final class Database_Impl extends Database {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "42e8d1842a28ccb8d878e9610ef8e547", "21cb4356005437610b83aceaaaee7eba");
+    }, "4ae70e2c7d461f0c619a1be5f2e7ac53", "b6e612a8aa86af436213a71d49f3325a");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(configuration.context)
         .name(configuration.name)
         .callback(_openCallback)
@@ -221,7 +242,7 @@ public final class Database_Impl extends Database {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "driverInfoTable","taskInfoTable","statusTable","reasonTable");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "driverInfoTable","taskInfoTable","runInfoTable","statusTable","reasonTable");
   }
 
   @Override
@@ -232,6 +253,7 @@ public final class Database_Impl extends Database {
       super.beginTransaction();
       _db.execSQL("DELETE FROM `driverInfoTable`");
       _db.execSQL("DELETE FROM `taskInfoTable`");
+      _db.execSQL("DELETE FROM `runInfoTable`");
       _db.execSQL("DELETE FROM `statusTable`");
       _db.execSQL("DELETE FROM `reasonTable`");
       super.setTransactionSuccessful();
@@ -268,6 +290,20 @@ public final class Database_Impl extends Database {
           _taskInfoDAO = new TaskInfoDAO_Impl(this);
         }
         return _taskInfoDAO;
+      }
+    }
+  }
+
+  @Override
+  public RunInfoDAO runInfoDAO() {
+    if (_runInfoDAO != null) {
+      return _runInfoDAO;
+    } else {
+      synchronized(this) {
+        if(_runInfoDAO == null) {
+          _runInfoDAO = new RunInfoDAO_Impl(this);
+        }
+        return _runInfoDAO;
       }
     }
   }

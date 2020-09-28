@@ -1,6 +1,7 @@
 package com.unipos.axslite.ApiService;
 
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
+import com.unipos.axslite.POJO.DriverDepartureResponse;
 import com.unipos.axslite.POJO.DriverLogDutyResponse;
 import com.unipos.axslite.POJO.LoginResponse;
 import com.unipos.axslite.POJO.StatusReasonResponse;
@@ -27,9 +28,15 @@ public interface ApiService {
     Call<TaskInfoUpdateResponse> updateTaskInfo(@Body TaskInfoEntity taskInfoEntity,
                                                 @Header("Authorization") String authorizationHeader);
 
+    @POST("confirm-dc-departure")
+    Call<DriverDepartureResponse> comfirmDCdeparture(
+            @Field("batchId") String batchId,
+            @Field("departureTime") String departureTime,
+            @Header("Authorization") String authorizationHeader);
+
     @POST("driver-logduty")
     @FormUrlEncoded
-    Call<DriverLogDutyResponse> driverLogDuty(@Field("companyId") String companyId, @Field("logStatus") String logStatus ,
+    Call<DriverLogDutyResponse> driverLogDuty(@Field("companyId") String companyId, @Field("logStatus") String logStatus,
                                               @Header("Authorization") String authorizationHeader);
 
     @GET("driver-tasklist")

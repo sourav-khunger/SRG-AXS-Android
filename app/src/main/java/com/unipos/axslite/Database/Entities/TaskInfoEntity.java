@@ -29,6 +29,11 @@ public class TaskInfoEntity implements Serializable {
     @ColumnInfo(name = "seqNo")
     private int seqNo;
 
+
+
+    @ColumnInfo(name = "batchId")
+    private String batchId;
+
     @ColumnInfo(name = "name")
     private String name;
 
@@ -170,11 +175,12 @@ public class TaskInfoEntity implements Serializable {
     @ColumnInfo(name = "signatureTime")
     private String signatureTime;
 
+
     public TaskInfoEntity(long taskId, String taskType, int appId, String name, String address, String apptNo, String postalCode, String city, String email, String phoneNo, String latitude, String longitude,
                           String barcode, String agent, String manifest, String reffNo, int quantity, String weight, String amount, String currency, String serviceLevel, String instructions, String workStatus,
                           String arrivalTime, String completeTime, long dataId, long stopId, String dataEntered, int statusId, int reasonId, int qtyEntered, double weightEntered, int imageTaken,
                           String imagePath, String areaType, String driverComment, String driverNotice, String cashCollect, int consolicatedId, double waitingTime, double cod, String disAmt, String accessorial, String codCurrency, double mileage,
-                          int seqNo) {
+                          int seqNo, String batchId) {
         this.taskId = taskId;
         this.taskType = taskType;
         this.appId = appId;
@@ -229,6 +235,7 @@ public class TaskInfoEntity implements Serializable {
         }
 
         this.recordStatus = 0;
+        this.batchId = batchId;
     }
 
     public long getTaskId() {
@@ -258,7 +265,13 @@ public class TaskInfoEntity implements Serializable {
     public String getName() {
         return name;
     }
+    public String getBatchId() {
+        return batchId;
+    }
 
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
+    }
     public void setName(String name) {
         this.name = name;
     }

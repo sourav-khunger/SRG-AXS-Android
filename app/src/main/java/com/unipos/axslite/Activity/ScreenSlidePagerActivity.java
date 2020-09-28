@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -41,11 +42,13 @@ import com.unipos.axslite.CoverterPOJOToEntity.DriverInfoToDriverInfoEntity;
 import com.unipos.axslite.Database.Entities.DriverInfoEntity;
 import com.unipos.axslite.Database.Repository.TaskInfoRepository;
 import com.unipos.axslite.Database.ViewModel.DriverInfoViewModel;
+import com.unipos.axslite.Fragments.ToDoTaskListFragment;
 import com.unipos.axslite.MainActivity;
 import com.unipos.axslite.POJO.DriverInfo;
 import com.unipos.axslite.POJO.LoginResponse;
 import com.unipos.axslite.R;
 import com.unipos.axslite.UpdateDebug.MenuActivity;
+import com.unipos.axslite.Utils.ActionBottomSheetDialog;
 import com.unipos.axslite.Utils.Constants;
 import com.unipos.axslite.Utils.CustomViewPager;
 import com.unipos.axslite.ui.NavigationViewModel;
@@ -58,7 +61,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 
-public class ScreenSlidePagerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class ScreenSlidePagerActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, ActionBottomSheetDialog.ItemClickListener {
 
     private NavigationViewModel navigationViewModel;
     private DrawerLayout drawerLayout;
@@ -73,6 +76,8 @@ public class ScreenSlidePagerActivity extends AppCompatActivity implements Navig
     private int year, month, date;
     private DatePickerDialog.OnDateSetListener mDateListener;
     LoginResponse loginResponse;
+    private ActionBottomSheetDialog actionBottomSheetDialog;
+    private ToDoTaskListFragment toDoListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +91,10 @@ public class ScreenSlidePagerActivity extends AppCompatActivity implements Navig
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
+        actionBottomSheetDialog = new ActionBottomSheetDialog();
+        toDoListFragment = new ToDoTaskListFragment();
+//        actionBottomSheetDialog.setOnClickListner(this);
+//        toDoListFragment(this);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         navigationViewModel = new ViewModelProvider(this).get(NavigationViewModel.class);
@@ -294,10 +302,26 @@ public class ScreenSlidePagerActivity extends AppCompatActivity implements Navig
     }
 
     @Override
+    public void onAttachFragment(@NonNull Fragment fragment) {
+        super.onAttachFragment(fragment);
+        if (fragment instanceof ActionBottomSheetDialog) {
+            this.actionBottomSheetDialog = (ActionBottomSheetDialog) fragment;
+        } else if (fragment instanceof ToDoTaskListFragment) {
+            this.toDoListFragment = (ToDoTaskListFragment) fragment;
+
+        }
+    }
+
+    @Override
     protected Dialog onCreateDialog(int id) {
         if (id == 999) {
             return new DatePickerDialog(this, mDateListener, year, month, date);
         }
         return super.onCreateDialog(id);
+    }
+
+    @Override
+    public void onItemClick(String item, int pos) {
+
     }
 }

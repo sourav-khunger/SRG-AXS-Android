@@ -8,6 +8,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import com.unipos.axslite.Database.Entities.RunInfoEntity;
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
 import com.unipos.axslite.POJO.TaskInfoGroupByLocationKey;
 
@@ -19,14 +20,20 @@ public interface TaskInfoDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(TaskInfoEntity... taskInfoEntity);
 
+
     @Query("Select * from taskInfoTable")
     LiveData<List<TaskInfoEntity>> getTaskInfoList();
+
 
     @Query("Select * from taskInfoTable")
     List<TaskInfoEntity> getTaskInfoList1();
 
     @Query("Select * from taskInfoTable where taskId= :taskId")
     TaskInfoEntity getTaskInfo(String taskId);
+
+    @Query("Select address, postalCode, city, locationKey, COUNT(*) as groupCount, latitude, longitude, MAX(arrivalTime) as arrivalTime  from taskInfoTable where batchId= :batchId GROUP BY locationKey ORDER BY seqNo ")
+//    @Query("Select * from taskInfoTable where )
+    LiveData<List<TaskInfoGroupByLocationKey>> getTaskInfoByBatchId(String batchId);
 
     @Delete
     void deleteTaskInfos(TaskInfoEntity... taskInfoEntities);
@@ -54,6 +61,7 @@ public interface TaskInfoDAO {
 
     @Query("DELETE FROM taskInfoTable")
     void deleteAll();
+
 
     @Query("UPDATE taskInfoTable SET arrivalTime = :arrivalTime where locationKey = :locationKey ")
     void updateLocation(String locationKey, String arrivalTime);
