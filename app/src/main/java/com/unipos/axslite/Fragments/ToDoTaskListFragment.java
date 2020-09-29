@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ import com.unipos.axslite.Database.Entities.RunInfoEntity;
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
 import com.unipos.axslite.Database.Repository.TaskInfoRepository;
 import com.unipos.axslite.Database.ViewModel.TaskInfoViewModel;
+import com.unipos.axslite.POJO.DriverDepartureResponse;
 import com.unipos.axslite.POJO.LoginResponse;
 import com.unipos.axslite.POJO.RunInfo;
 import com.unipos.axslite.POJO.TaskInfo;
@@ -45,6 +47,7 @@ import com.unipos.axslite.R;
 import com.unipos.axslite.Utils.ActionBottomSheetDialog;
 import com.unipos.axslite.Utils.BottomSheetListView;
 import com.unipos.axslite.Utils.Constants;
+import com.unipos.axslite.Utils.TimePicker24Hours;
 import com.unipos.axslite.here.turn.HereTurnNavActivity;
 
 import java.text.SimpleDateFormat;
@@ -81,6 +84,10 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
     RunTaskAdapter runTaskAdapter;
     private TextView bottomList;
     int positionOfRun = 0;
+    boolean isPending = false;
+    Button confirm_dcButton;
+    private String batchId = "";
+    Dialog dialog;
 
     public ToDoTaskListFragment() {
 
@@ -113,6 +120,7 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_to_do_task_list, container, false);
+        confirm_dcButton = view.findViewById(R.id.confirm_dcButton);
         bottomList = view.findViewById(R.id.bottomList);
         selectedRunTxt = view.findViewById(R.id.selectedRunTxt);
         layoutBottomSheet = view.findViewById(R.id.bottom_sheet);
@@ -129,8 +137,8 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
         recyclerView.setLayoutManager(layoutManager);
         mTaskInfoRepository = new TaskInfoRepository(getActivity().getApplication());
         apiService = ApiUtils.getAPIService();
-        ActionBottomSheetDialog openBottomSheet = ActionBottomSheetDialog.newInstance();
-        openBottomSheet.setOnClickListner(ToDoTaskListFragment.this::onItemClick);
+//        ActionBottomSheetDialog openBottomSheet = ActionBottomSheetDialog.newInstance();
+//        openBottomSheet.setOnClickListner(ToDoTaskListFragment.this::onItemClick);
 //        selectedDate.setText();
 //        if (listOfTaskInfoGroupByLocationKeys.size() > 0) {
 //        taskInfoEntities = mTaskInfoRepository.getTaskInfos1();
@@ -144,6 +152,33 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
         } else {
 
         }
+        selectedRunTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e(TAG, "onClick: " + sheetBehavior.getState());
+                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_HALF_EXPANDED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_HALF_EXPANDED);
+                }
+
+            }
+        });
+        confirm_dcButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (isPending) {
+                    Toast.makeText(getContext(), "Complete your pending Tasks first!", Toast.LENGTH_SHORT).show();
+                } else {
+                    showTimePicker();
+//                    confirmDeparture();
+                }
+            }
+        });
         /*bottomList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -187,14 +222,30 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
         return view;
     }
 
-    void showBottomListView() {
-        BottomSheetDialog dialog = new BottomSheetDialog(getContext());
-        dialog.setContentView(R.layout.bottom_sheet_view);
 
-        BottomSheetListView listView = (BottomSheetListView) dialog.findViewById(R.id.listViewBtmSheet);
-// apply some adapter - add some data to listview
+    void confirmDeparture(String time) {
+        String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
+        LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
+        String departureTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + " " + time;
 
-        dialog.show();
+        Log.e(TAG, "confirmDeparture: " + departureTime);
+        apiService.comfirmDCdeparture(batchId, departureTime, Constants.AUTHORIZATION_TOKEN + loginResponse.getToken()).enqueue(new Callback<DriverDepartureResponse>() {
+            @Override
+            public void onResponse(Call<DriverDepartureResponse> call, Response<DriverDepartureResponse> response) {
+                if (response.body().getStatus().equals("SUCCESS")) {
+                    Toast.makeText(getContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "" + response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+                dialog.dismiss();
+                Log.e(TAG, "onResponse: " + response.body().getMessage());
+            }
+
+            @Override
+            public void onFailure(Call<DriverDepartureResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
     }
 
     void getTasks() {
@@ -213,7 +264,6 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                 /*PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
                         .putString(Constants.SELECTED_TASK, taskInfoString)
                         .apply();*/
-
 
                 if (taskInfoGroupByLocationKey.getArrivalTime() == null || taskInfoGroupByLocationKey.getArrivalTime().equals("")) {
                     Intent intent = new Intent(getActivity(), ShowPackageDetailsActivity.class);
@@ -247,7 +297,7 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                         Log.e(TAG, "onChanged: " + runInfo.toString());
                     }
 //                    if (isSelected != 0) {
-//
+
 //                    } else {
 
 //                        selectedRunTxt.setText("Selected Run - Run #" + listOfRunInfo.get(0).getRunNo());
@@ -321,7 +371,6 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
             }
         });
         dialog.show();
-
     }
 
     private void pullData() {
@@ -347,7 +396,56 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                     runInfoList = response.body().getListOfRunList();
                     selectedRunTxt.setText("Selected Run - Run #" + runInfoList.get(0).getRunNo());
                     getTaskByLocationKeys(0);
+                    if (runInfoList.get(0).getRouteStarted() == 0) {
+                        confirm_dcButton.setVisibility(View.VISIBLE);
 
+                        for (int i = 0; i < taskInfoEntities.size(); i++) {
+                            if (!taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                isPending = false;
+                                batchId = runInfoList.get(0).getBatchId();
+
+                                break;
+                            }
+                        }
+                    }
+                    if (runInfoList.get(0).getRouteStarted() == 1) {
+                        confirm_dcButton.setVisibility(View.GONE);
+                        for (int i = 0; i < taskInfoEntities.size(); i++) {
+                            if (taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                isPending = true;
+                                batchId = runInfoList.get(0).getBatchId();
+
+                                break;
+                            }
+
+                        }
+                    }
+                    for (int index = 0; index < runInfoList.size(); index++) {
+                        if (runInfoList.get(index).getRouteStarted() == 0) {
+//                            confirm_dcButton.setVisibility(View.VISIBLE);
+
+                            for (int i = 0; i < taskInfoEntities.size(); i++) {
+                                if (!taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                    isPending = false;
+                                    batchId = runInfoList.get(0).getBatchId();
+
+                                    break;
+                                }
+                            }
+                        }
+                        if (runInfoList.get(index).getRouteStarted() == 1) {
+//                            confirm_dcButton.setVisibility(View.GONE);
+                            for (int i = 0; i < taskInfoEntities.size(); i++) {
+                                if (taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                    isPending = true;
+                                    batchId = runInfoList.get(0).getBatchId();
+
+                                    break;
+                                }
+
+                            }
+                        }
+                    }
                     runTaskAdapter = new RunTaskAdapter(runInfoList, getContext(), 0);
                     runTaskAdapter.setOnItemClickListener(new RunTaskAdapter.OnItemClickListener() {
                         @Override
@@ -356,6 +454,35 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                             sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                             runTaskAdapter.updatePosition(position);
                             runTaskAdapter.notifyDataSetChanged();
+                            getTaskByLocationKeys(position);
+
+                            if (runInfoList.get(position).getRouteStarted() == 0) {
+                                confirm_dcButton.setVisibility(View.VISIBLE);
+
+                                for (int i = 0; i < taskInfoEntities.size(); i++) {
+                                    if (!taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                        isPending = false;
+                                        batchId = runInfoList.get(position).getBatchId();
+
+                                        break;
+                                    }
+                                }
+                            }
+                            if (runInfoList.get(position).getRouteStarted() == 1) {
+                                confirm_dcButton.setVisibility(View.GONE);
+                                for (int i = 0; i < taskInfoEntities.size(); i++) {
+                                    if (taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                        isPending = true;
+                                        batchId = runInfoList.get(position).getBatchId();
+                                        break;
+                                    }
+                                    if (!taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                        isPending = false;
+                                        batchId = runInfoList.get(position).getBatchId();
+                                    }
+
+                                }
+                            }
 
 //                            Back up code
 //                            taskInfoViewModel.getTaskInfoGroupByBatchId(runInfoList.get(position).getBatchId()).observe(getActivity(), new Observer<List<TaskInfoGroupByLocationKey>>() {
@@ -388,6 +515,32 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
             public void onFailure(Call<TaskInfoResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
                 Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    void showTimePicker() {
+        dialog = new Dialog(getContext(), R.style.MyDialogTheme);
+        dialog.setContentView(R.layout.time_picker_dialog);
+        Button startDepartureButton = dialog.findViewById(R.id.startDepartureButton);
+        TimePicker24Hours picker24Hours = dialog.findViewById(R.id.timePicker24);
+        dialog.show();
+        final String[] time = {""};
+        time[0] = picker24Hours.getHour() + ":" + picker24Hours.getMinute() + ":00";
+        Log.e(TAG, "onTime: " + time[0]);
+
+        picker24Hours.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker timePicker, int i, int i1) {
+                time[0] = i + ":" + i1 + ":00";
+                Log.e(TAG, "onTimeChanged: " + time[0]);
+
+            }
+        });
+        startDepartureButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                confirmDeparture(time[0]);
             }
         });
     }

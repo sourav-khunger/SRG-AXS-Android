@@ -23,6 +23,8 @@ public class TaskInfo implements Serializable {
 
     @SerializedName(value = "batchId")
     private String batchId;
+    @SerializedName(value = "runNo")
+    private int runNo;
 
     @SerializedName(value = "name")
     private String name;
@@ -256,6 +258,14 @@ public class TaskInfo implements Serializable {
 
     public String getLongitude() {
         return longitude;
+    }
+
+    public int getRunNo() {
+        return runNo;
+    }
+
+    public void setRunNo(int runNo) {
+        this.runNo = runNo;
     }
 
     public void setLongitude(String longitude) {

@@ -2085,6 +2085,7 @@ id commentsEntered
 id comments_input_layout
 id compass
 id confirm_button
+id confirm_dcButton
 id container
 id content
 id contentPanel
@@ -2474,6 +2475,7 @@ id src_in
 id src_over
 id standard
 id start
+id startDepartureButton
 id startHorizontal
 id startVertical
 id state_aspect_ratio
@@ -2530,6 +2532,7 @@ id textinput_prefix_text
 id textinput_suffix_text
 id texture_view
 id time
+id timePicker24
 id timeTxt
 id title
 id titleDividerNoCustom
@@ -2800,6 +2803,7 @@ layout text_view_with_line_height_from_style
 layout text_view_with_theme_line_height
 layout text_view_without_line_height
 layout texture_view
+layout time_picker_dialog
 layout to_do_task_item2
 layout to_do_task_list_row
 layout toolbar

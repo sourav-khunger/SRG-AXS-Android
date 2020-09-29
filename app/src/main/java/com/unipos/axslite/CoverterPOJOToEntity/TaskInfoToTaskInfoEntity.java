@@ -11,7 +11,7 @@ public class  TaskInfoToTaskInfoEntity {
                 taskInfo.getReffNo(),taskInfo.getQuantity(),taskInfo.getWeight(),taskInfo.getAmount(),taskInfo.getCurrency(),taskInfo.getServiceLevel(),taskInfo.getInstructions(),taskInfo.getWorkStatus(),
                 taskInfo.getArrivalTime(),taskInfo.getCompleteTime(),taskInfo.getDataId(),taskInfo.getStopId(),taskInfo.getDataEntered(),taskInfo.getStatusId(),taskInfo.getReasonId(),taskInfo.getQtyEntered(),taskInfo.getWeightEntered(),
                 taskInfo.getImageTaken(),taskInfo.getImagePath(),taskInfo.getAreaType(),taskInfo.getDriverComment(),taskInfo.getDriverNotice(),taskInfo.getCashCollect(),taskInfo.getConsolicatedId(),taskInfo.getWaitingTime(),taskInfo.getCod(),
-                taskInfo.getDisAmt(),taskInfo.getAccessorial(),taskInfo.getCodCurrency(),taskInfo.getMileage(), taskInfo.getSeqNo(),taskInfo.getBatchId());
+                taskInfo.getDisAmt(),taskInfo.getAccessorial(),taskInfo.getCodCurrency(),taskInfo.getMileage(), taskInfo.getSeqNo(),taskInfo.getBatchId(),taskInfo.getRunNo());
         return taskInfoEntity;
     }
 }

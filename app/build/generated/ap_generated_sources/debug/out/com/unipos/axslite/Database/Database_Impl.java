@@ -49,12 +49,12 @@ public final class Database_Impl extends Database {
       @Override
       public void createAllTables(SupportSQLiteDatabase _db) {
         _db.execSQL("CREATE TABLE IF NOT EXISTS `driverInfoTable` (`imei` TEXT NOT NULL, `firstName` TEXT, `lastName` TEXT, `onDuty` INTEGER NOT NULL, `companyId` INTEGER NOT NULL, `companyName` TEXT, `enableGPS` INTEGER NOT NULL, `allowedCompanies` TEXT, PRIMARY KEY(`imei`))");
-        _db.execSQL("CREATE TABLE IF NOT EXISTS `taskInfoTable` (`taskId` INTEGER NOT NULL, `taskType` TEXT, `appId` INTEGER NOT NULL, `seqNo` INTEGER NOT NULL, `batchId` TEXT, `name` TEXT, `address` TEXT, `apptNo` TEXT, `postalCode` TEXT, `city` TEXT, `email` TEXT, `phoneNo` TEXT, `latitude` TEXT, `longitude` TEXT, `barcode` TEXT, `agent` TEXT, `manifest` TEXT, `reffNo` TEXT, `quantity` INTEGER NOT NULL, `weight` TEXT, `amount` TEXT, `currency` TEXT, `serviceLevel` TEXT, `instructions` TEXT, `workStatus` TEXT, `arrivalTime` TEXT, `completeTime` TEXT, `dataId` INTEGER NOT NULL, `stopId` INTEGER NOT NULL, `dataEntered` TEXT, `statusId` INTEGER NOT NULL, `reasonId` INTEGER NOT NULL, `qtyEntered` INTEGER NOT NULL, `weightEntered` REAL NOT NULL, `imageTaken` INTEGER NOT NULL, `imagePath` TEXT, `areaType` TEXT, `driverComment` TEXT, `driverNotice` TEXT, `cashCollect` TEXT, `consolicatedId` INTEGER NOT NULL, `waitingTime` REAL NOT NULL, `cod` REAL NOT NULL, `disAmt` TEXT, `accessorial` TEXT, `codCurrency` TEXT, `mileage` REAL NOT NULL, `locationKey` TEXT, `recordStatus` INTEGER NOT NULL, `signature` TEXT, `signatureName` TEXT, `signatureTime` TEXT, PRIMARY KEY(`taskId`))");
+        _db.execSQL("CREATE TABLE IF NOT EXISTS `taskInfoTable` (`taskId` INTEGER NOT NULL, `taskType` TEXT, `appId` INTEGER NOT NULL, `seqNo` INTEGER NOT NULL, `batchId` TEXT, `runNo` INTEGER NOT NULL, `name` TEXT, `address` TEXT, `apptNo` TEXT, `postalCode` TEXT, `city` TEXT, `email` TEXT, `phoneNo` TEXT, `latitude` TEXT, `longitude` TEXT, `barcode` TEXT, `agent` TEXT, `manifest` TEXT, `reffNo` TEXT, `quantity` INTEGER NOT NULL, `weight` TEXT, `amount` TEXT, `currency` TEXT, `serviceLevel` TEXT, `instructions` TEXT, `workStatus` TEXT, `arrivalTime` TEXT, `completeTime` TEXT, `dataId` INTEGER NOT NULL, `stopId` INTEGER NOT NULL, `dataEntered` TEXT, `statusId` INTEGER NOT NULL, `reasonId` INTEGER NOT NULL, `qtyEntered` INTEGER NOT NULL, `weightEntered` REAL NOT NULL, `imageTaken` INTEGER NOT NULL, `imagePath` TEXT, `areaType` TEXT, `driverComment` TEXT, `driverNotice` TEXT, `cashCollect` TEXT, `consolicatedId` INTEGER NOT NULL, `waitingTime` REAL NOT NULL, `cod` REAL NOT NULL, `disAmt` TEXT, `accessorial` TEXT, `codCurrency` TEXT, `mileage` REAL NOT NULL, `locationKey` TEXT, `recordStatus` INTEGER NOT NULL, `signature` TEXT, `signatureName` TEXT, `signatureTime` TEXT, PRIMARY KEY(`taskId`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS `runInfoTable` (`batchId` TEXT NOT NULL, `parcelCounts` INTEGER NOT NULL, `routeStarted` INTEGER NOT NULL, `runNo` INTEGER NOT NULL, PRIMARY KEY(`batchId`))");
         _db.execSQL("CREATE TABLE IF NOT EXISTS `statusTable` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `statusId` INTEGER NOT NULL, `statusName` TEXT, `shipmentType` TEXT, `statusRule` TEXT, `isException` INTEGER NOT NULL)");
         _db.execSQL("CREATE TABLE IF NOT EXISTS `reasonTable` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `reasonId` INTEGER NOT NULL, `statusId` INTEGER NOT NULL, `reasonName` TEXT, `reasonRule` TEXT)");
         _db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4ae70e2c7d461f0c619a1be5f2e7ac53')");
+        _db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fcc5cd80954d8948a23d1cc33f28c9a3')");
       }
 
       @Override
@@ -120,12 +120,13 @@ public final class Database_Impl extends Database {
                   + " Expected:\n" + _infoDriverInfoTable + "\n"
                   + " Found:\n" + _existingDriverInfoTable);
         }
-        final HashMap<String, TableInfo.Column> _columnsTaskInfoTable = new HashMap<String, TableInfo.Column>(52);
+        final HashMap<String, TableInfo.Column> _columnsTaskInfoTable = new HashMap<String, TableInfo.Column>(53);
         _columnsTaskInfoTable.put("taskId", new TableInfo.Column("taskId", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("taskType", new TableInfo.Column("taskType", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("appId", new TableInfo.Column("appId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("seqNo", new TableInfo.Column("seqNo", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("batchId", new TableInfo.Column("batchId", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsTaskInfoTable.put("runNo", new TableInfo.Column("runNo", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("name", new TableInfo.Column("name", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("address", new TableInfo.Column("address", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
         _columnsTaskInfoTable.put("apptNo", new TableInfo.Column("apptNo", "TEXT", false, 0, null, TableInfo.CREATED_FROM_ENTITY));
@@ -229,7 +230,7 @@ public final class Database_Impl extends Database {
         }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "4ae70e2c7d461f0c619a1be5f2e7ac53", "b6e612a8aa86af436213a71d49f3325a");
+    }, "fcc5cd80954d8948a23d1cc33f28c9a3", "ca51e508b12b390832fcc567aa89459f");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(configuration.context)
         .name(configuration.name)
         .callback(_openCallback)

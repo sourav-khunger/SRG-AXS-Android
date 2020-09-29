@@ -318,16 +318,6 @@ public class MapsFragment extends Fragment implements OnEngineInitListener {
      */
 
 
-    private static Bitmap getBitmap(PictureDrawable vectorDrawable) {
-        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        vectorDrawable.draw(canvas);
-        Log.e(TAG, "getBitmap: 1");
-        return bitmap;
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void createPolyline() {
         ArrayList<GeoCoordinate> coordinates = new ArrayList<>();
@@ -450,8 +440,18 @@ public class MapsFragment extends Fragment implements OnEngineInitListener {
             m_map = new Map();
 
             mapView.setMap(m_map);
-            geoCoordinate = new GeoCoordinate(LocationService.latitude, LocationService.longitude);
-            geoCoordinate = PositioningManager.getInstance().getLastKnownPosition().getCoordinate();
+            double longi, lat;
+            if (taskInfoEntities.size() > 0) {
+
+                longi = Double.parseDouble(taskInfoEntities.get(0).getLongitude());
+                lat = Double.parseDouble(taskInfoEntities.get(0).getLatitude());
+                geoCoordinate = new GeoCoordinate(lat, longi);
+
+            } else {
+                geoCoordinate = PositioningManager.getInstance().getLastKnownPosition().getCoordinate();
+
+            }
+
             m_map.setCenter(geoCoordinate,
                     Map.Animation.BOW);
             m_map.setCenter(geoCoordinate,

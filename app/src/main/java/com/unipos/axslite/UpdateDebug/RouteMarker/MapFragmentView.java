@@ -106,20 +106,18 @@ public class MapFragmentView {
     private Map m_map;
     private int mapMarkerCount = 0;
 
-    private final LinkedList<MapPolygon> m_polygons = new LinkedList<>();
-    private final LinkedList<MapPolyline> m_polylines = new LinkedList<>();
-    private final LinkedList<MapCircle> m_circles = new LinkedList<>();
-    private final LinkedList<MapMarker> m_map_markers = new LinkedList<>();
     MapPolyline addMapPolyline;
     private Route m_route;
     MapRoute mapRoute;
     private GeoCoordinate geoCoordinate;
     List<TaskInfoEntity> taskInfoEntities = new ArrayList<>();
+    List<GeoCoordinate> geoCoordinates = new ArrayList<>();
 
     Spinner routeSpinner;
     ArrayList<String> routeSelectionList = new ArrayList<>();
     private TaskInfoRepository mTaskInfoRepository;
     private TextView markerTxt;
+    List<String> routeNameList = new ArrayList<>();
     ImageView centerMap;
 //    private Scen mapScene;
 
@@ -153,7 +151,13 @@ public class MapFragmentView {
             routeSelectionList.add(" " + (i + 1) + ". " + taskInfoEntities.get(i).getName());
         }*/
 
-        ArrayAdapter arrayAdapter = new ArrayAdapter(m_activity, android.R.layout.simple_spinner_dropdown_item, routeSelectionList);
+        routeNameList.add("   Show All");
+        routeNameList.add("   Show DC");
+        for (int i = 0; i < routeSelectionList.size(); i++) {
+            routeNameList.add(" " + (i + 1) + ". " + routeSelectionList.get(i));
+        }
+
+        ArrayAdapter arrayAdapter = new ArrayAdapter(m_activity, android.R.layout.simple_spinner_dropdown_item, routeNameList);
         routeSpinner.setAdapter(arrayAdapter);
 
         routeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -169,9 +173,9 @@ public class MapFragmentView {
                         markerTxt.setVisibility(View.VISIBLE);
                         i = i - 2;
                         m_map.setZoomLevel(14.6, Map.Animation.BOW);
-                        double lat = Double.parseDouble(taskInfoEntities.get(i).getLatitude());
-                        double longi = Double.parseDouble(taskInfoEntities.get(i).getLongitude());
-                        m_map.setCenter(new GeoCoordinate(lat, longi),
+//                        double lat = Double.parseDouble(taskInfoEntities.get(i).getLatitude());
+//                        double longi = Double.parseDouble(taskInfoEntities.get(i).getLongitude());
+                        m_map.setCenter(geoCoordinates.get(i)/*new GeoCoordinate(lat, longi)*/,
                                 Map.Animation.BOW);
                         markerTxt.setText(taskInfoEntities.get(i).getName());
                     }
@@ -368,26 +372,24 @@ public class MapFragmentView {
     /**
      * create a MapCircle and add the MapCircle to active map view.
      */
-    private void addCircleObject() {
-        // create a MapCircle centered at current location with radius 400
-        MapCircle circle = new MapCircle(400.0, m_map.getCenter());
-        circle.setLineColor(Color.BLUE);
-        circle.setFillColor(Color.GRAY);
-        circle.setLineWidth(12);
-        m_map.addMapObject(circle);
 
-        m_circles.add(circle);
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void createPolyline() {
         ArrayList<GeoCoordinate> coordinates = new ArrayList<>();
-        for (int i = 0; i < taskInfoEntities.size(); i++) {
-            double longi = Double.parseDouble(taskInfoEntities.get(i).getLongitude());
-            double lat = Double.parseDouble(taskInfoEntities.get(i).getLatitude());
-            coordinates.add(new GeoCoordinate(lat, longi));
-            Log.e(TAG, "createPolyline: " + coordinates.get(i));
+        for (int a = 0; a < routeNameList.size(); a++) {
+            for (int i = 0; i < taskInfoEntities.size(); i++) {
+                if (routeNameList.get(a).contains(taskInfoEntities.get(i).getName())) {
+
+                    double longi = Double.parseDouble(taskInfoEntities.get(i).getLongitude());
+                    double lat = Double.parseDouble(taskInfoEntities.get(i).getLatitude());
+                    coordinates.add(new GeoCoordinate(lat, longi));
+//                    Log.e(TAG, "createPolyline: " + coordinates.get(i));
+
+                }
+            }
         }
+        geoCoordinates.addAll(coordinates);
 //        coordinates.add(new GeoCoordinate(29.9753092, 77.571972));
 //        coordinates.add(new GeoCoordinate(29.9685473, 77.5644495));
 //        coordinates.add(new GeoCoordinate(29.9623858, 77.5483282));
@@ -425,7 +427,7 @@ public class MapFragmentView {
             MapMarker defaultMarker = new MapMarker(coordinates.get(i), image);
             defaultMarker.setAnchorPoint(new PointF(image.getWidth() / 2, image.getHeight()));
             defaultMarker.setCoordinate(coordinates.get(i));
-            defaultMarker.setTitle(taskInfoEntities.get(i).getName());
+            defaultMarker.setTitle(routeNameList.get(i));
             defaultMarker.setVisible(true);
 
             m_map.addMapObject(defaultMarker);

@@ -30,9 +30,11 @@ public class TaskInfoEntity implements Serializable {
     private int seqNo;
 
 
-
     @ColumnInfo(name = "batchId")
     private String batchId;
+
+    @ColumnInfo(name = "runNo")
+    private int runNo;
 
     @ColumnInfo(name = "name")
     private String name;
@@ -180,7 +182,7 @@ public class TaskInfoEntity implements Serializable {
                           String barcode, String agent, String manifest, String reffNo, int quantity, String weight, String amount, String currency, String serviceLevel, String instructions, String workStatus,
                           String arrivalTime, String completeTime, long dataId, long stopId, String dataEntered, int statusId, int reasonId, int qtyEntered, double weightEntered, int imageTaken,
                           String imagePath, String areaType, String driverComment, String driverNotice, String cashCollect, int consolicatedId, double waitingTime, double cod, String disAmt, String accessorial, String codCurrency, double mileage,
-                          int seqNo, String batchId) {
+                          int seqNo, String batchId, int runNo) {
         this.taskId = taskId;
         this.taskType = taskType;
         this.appId = appId;
@@ -236,6 +238,15 @@ public class TaskInfoEntity implements Serializable {
 
         this.recordStatus = 0;
         this.batchId = batchId;
+        this.runNo = runNo;
+    }
+
+    public int getRunNo() {
+        return runNo;
+    }
+
+    public void setRunNo(int runNo) {
+        this.runNo = runNo;
     }
 
     public long getTaskId() {
@@ -265,6 +276,7 @@ public class TaskInfoEntity implements Serializable {
     public String getName() {
         return name;
     }
+
     public String getBatchId() {
         return batchId;
     }
@@ -272,6 +284,7 @@ public class TaskInfoEntity implements Serializable {
     public void setBatchId(String batchId) {
         this.batchId = batchId;
     }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -659,6 +672,8 @@ public class TaskInfoEntity implements Serializable {
                 ", taskType='" + taskType + '\'' +
                 ", appId=" + appId +
                 ", seqNo=" + seqNo +
+                ", batchId=" + batchId +
+                ", runNo=" + runNo +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", apptNo='" + apptNo + '\'' +

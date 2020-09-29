@@ -56,12 +56,12 @@
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\fragment_selfdispatch.xml"
     },
     {
-        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_menu.xml.flat",
-        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\fragment_menu.xml"
-    },
-    {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_menu.xml.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\fragment_menu.xml"
     },
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_shipment_reason_fragment.xml.flat",
@@ -132,16 +132,16 @@
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\back.png"
     },
     {
-        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_background.xml.flat",
-        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\background.xml"
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_location.png.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\location.png"
     },
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_signaturepad.xml.flat",
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\activity_signaturepad.xml"
     },
     {
-        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_location.png.flat",
-        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\location.png"
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_background.xml.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\background.xml"
     },
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_content_delivery_to.xml.flat",
@@ -338,6 +338,10 @@
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_closed_cardboard_box_32.xml.flat",
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\ic_closed_cardboard_box_32.xml"
+    },
+    {
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_time_picker_dialog.xml.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\time_picker_dialog.xml"
     },
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher.xml.flat",
