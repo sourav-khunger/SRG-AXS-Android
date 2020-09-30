@@ -29,6 +29,7 @@ import com.unipos.axslite.Activity.ChooseCompanyActivity;
 import com.unipos.axslite.Activity.ShowListOfTaskGroupByLocationKeyActivity;
 import com.unipos.axslite.Activity.ShowPackageDetailsActivity;
 import com.unipos.axslite.Adapter.RunTaskAdapter;
+import com.unipos.axslite.Adapter.RunTaskEntityAdapter;
 import com.unipos.axslite.Adapter.SelfDispatchListAdapter;
 import com.unipos.axslite.Adapter.ToDoTaskListAdapter;
 import com.unipos.axslite.ApiService.ApiService;
@@ -82,6 +83,7 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
     LinearLayout layoutBottomSheet;
     private int isSelected = 0;
     RunTaskAdapter runTaskAdapter;
+    RunTaskEntityAdapter runTaskEntityAdapter;
     private TextView bottomList;
     int positionOfRun = 0;
     boolean isPending = false;
@@ -303,6 +305,49 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
 //                        selectedRunTxt.setText("Selected Run - Run #" + listOfRunInfo.get(0).getRunNo());
                     if (runInfoEntities.size() == 0) {
                         Log.e(TAG, "onChanged: TRY Again!");
+                    } else {
+                        runTaskEntityAdapter = new RunTaskEntityAdapter(runInfoEntities, getContext(), 0);
+                        runTaskEntityAdapter.setOnItemClickListener(new RunTaskEntityAdapter.OnItemClickListener() {
+                            @Override
+                            public void onGetRunPosition(int position) {
+                                selectedRunTxt.setText("Selected Run - Run #" + runInfoList.get(position).getRunNo());
+                                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                                runTaskEntityAdapter.updatePosition(position);
+                                runTaskEntityAdapter.notifyDataSetChanged();
+                                getTaskByLocationKeys(position);
+
+                                if (runInfoEntities.get(position).getRouteStarted() == 0) {
+                                    confirm_dcButton.setVisibility(View.VISIBLE);
+
+                                    for (int i = 0; i < taskInfoEntities.size(); i++) {
+                                        if (!taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                            isPending = false;
+                                            batchId = runInfoEntities.get(position).getBatchId();
+
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (runInfoEntities.get(position).getRouteStarted() == 1) {
+                                    confirm_dcButton.setVisibility(View.GONE);
+                                    for (int i = 0; i < taskInfoEntities.size(); i++) {
+                                        if (taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                            isPending = true;
+                                            batchId = runInfoEntities.get(position).getBatchId();
+                                            break;
+                                        }
+                                        if (!taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                            isPending = false;
+                                            batchId = runInfoEntities.get(position).getBatchId();
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        });
+
+                        listViewBtmSheet.setAdapter(runTaskEntityAdapter);
                     }
 //                    }
                 }
@@ -315,8 +360,9 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                     listOfTaskInfoGroupByLocationKeys.addAll(taskInfoGroupByLocationKeys);
                     if (listOfTaskInfoGroupByLocationKeys.size() == 0) {
                         emptyTxt.setVisibility(View.VISIBLE);
+                        confirm_dcButton.setVisibility(View.GONE);
                     } else {
-                        emptyTxt.setVisibility(View.VISIBLE);
+                        emptyTxt.setVisibility(View.GONE);
 
                     }
                     pullData();
@@ -383,10 +429,12 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
         String curDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
         String selectedDate = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_SELECTED_DATE, curDate);
        */
+        String selectedDate = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_SELECTED_DATE, "");
+
         String compId = "" + loginResponse.getDriverInfo().getCompanyId();
         // compId = "34";
 
-        apiService.getTaskList(compId, PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_SELECTED_DATE, ""), Constants.AUTHORIZATION_TOKEN + token).enqueue(new Callback<TaskInfoResponse>() {
+        apiService.getTaskList(compId, selectedDate, Constants.AUTHORIZATION_TOKEN + token).enqueue(new Callback<TaskInfoResponse>() {
             @Override
             public void onResponse(Call<TaskInfoResponse> call, Response<TaskInfoResponse> response) {
                 Log.d(TAG, "onResponse: ");
@@ -394,30 +442,33 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                     Log.e(TAG, "size: AccessLITE " + response.body().getListOfTaskInfo().size());
                     taskInfoEntities = response.body().getListOfTaskInfo();
                     runInfoList = response.body().getListOfRunList();
-                    selectedRunTxt.setText("Selected Run - Run #" + runInfoList.get(0).getRunNo());
-                    getTaskByLocationKeys(0);
-                    if (runInfoList.get(0).getRouteStarted() == 0) {
-                        confirm_dcButton.setVisibility(View.VISIBLE);
 
-                        for (int i = 0; i < taskInfoEntities.size(); i++) {
-                            if (!taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
-                                isPending = false;
-                                batchId = runInfoList.get(0).getBatchId();
+                    if (runInfoList.size() > 0) {
+                        getTaskByLocationKeys(0);
+                        selectedRunTxt.setText("Selected Run - Run #" + runInfoList.get(0).getRunNo());
+                        if (runInfoList.get(0).getRouteStarted() == 0) {
+                            confirm_dcButton.setVisibility(View.VISIBLE);
 
-                                break;
+                            for (int i = 0; i < taskInfoEntities.size(); i++) {
+                                if (!taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                    isPending = false;
+                                    batchId = runInfoList.get(0).getBatchId();
+
+                                    break;
+                                }
                             }
                         }
-                    }
-                    if (runInfoList.get(0).getRouteStarted() == 1) {
-                        confirm_dcButton.setVisibility(View.GONE);
-                        for (int i = 0; i < taskInfoEntities.size(); i++) {
-                            if (taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
-                                isPending = true;
-                                batchId = runInfoList.get(0).getBatchId();
+                        if (runInfoList.get(0).getRouteStarted() == 1) {
+                            confirm_dcButton.setVisibility(View.GONE);
+                            for (int i = 0; i < taskInfoEntities.size(); i++) {
+                                if (taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
+                                    isPending = true;
+                                    batchId = runInfoList.get(0).getBatchId();
 
-                                break;
+                                    break;
+                                }
+
                             }
-
                         }
                     }
                     for (int index = 0; index < runInfoList.size(); index++) {
