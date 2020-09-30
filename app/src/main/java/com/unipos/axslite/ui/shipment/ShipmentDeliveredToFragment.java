@@ -1,7 +1,5 @@
 package com.unipos.axslite.ui.shipment;
 
-import androidx.lifecycle.ViewModelProviders;
-
 import android.app.Application;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +23,7 @@ import com.unipos.axslite.Database.Repository.ShipmentStatusRepository;
 import com.unipos.axslite.Database.Repository.TaskInfoRepository;
 import com.unipos.axslite.R;
 import com.unipos.axslite.Utils.Constants;
+import com.unipos.axslite.ui.shipment.ViewModel.ShipmentDeliveredToViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

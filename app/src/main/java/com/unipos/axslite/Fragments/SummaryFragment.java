@@ -32,6 +32,7 @@ public class SummaryFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    ArrayList<ProgressSegment> progressSegments = new ArrayList<>();
 
     public SummaryFragment() {
         // Required empty public constructor
@@ -60,17 +61,29 @@ public class SummaryFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_summary, container, false);
-        ArrayList<ProgressSegment> progressSegments = new ArrayList<>();
-        int[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.GRAY, Color.YELLOW};
-        for (int i = 0; i < 5; i++) {
-            ProgressSegment progressSegment = new ProgressSegment(Parcel.obtain());
-            progressSegment.name = "progress" + i;
-            progressSegment.progress = (i + 3) * 10;
-            progressSegment.color = colors[i];
-            progressSegments.add(progressSegment);
-        }
+
         CustomSeekBar customSeekBar = view.findViewById(R.id.custom);
+        getSummaryData(0);
         customSeekBar.setProgressSegments(progressSegments);
         return view;
+    }
+
+    void getSummaryData(int i) {
+        int[] colors = {Color.GRAY, Color.RED, Color.WHITE};
+//        for (int i = 0; i < 3; i++) {
+            ProgressSegment progressSegment = new ProgressSegment(Parcel.obtain());
+            progressSegment.name = "progress" + i;
+            if (i == 0) {
+                progressSegment.progress = (i + 1) * 10;
+            }
+            if (i == 1) {
+//                progressSegment.progress = (i + 0) * 10;
+            }
+            if (i == 2) {
+                progressSegment.progress = (i + 12) * 10;
+            }
+            progressSegment.color = colors[i];
+            progressSegments.add(progressSegment);
+//        }
     }
 }

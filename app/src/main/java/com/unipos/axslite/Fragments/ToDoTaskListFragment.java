@@ -1,6 +1,8 @@
 package com.unipos.axslite.Fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -26,6 +28,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.gson.Gson;
 import com.unipos.axslite.Activity.ChooseCompanyActivity;
+import com.unipos.axslite.Activity.ScreenSlidePagerActivity;
 import com.unipos.axslite.Activity.ShowListOfTaskGroupByLocationKeyActivity;
 import com.unipos.axslite.Activity.ShowPackageDetailsActivity;
 import com.unipos.axslite.Adapter.RunTaskAdapter;
@@ -90,6 +93,7 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
     Button confirm_dcButton;
     private String batchId = "";
     Dialog dialog;
+    ScreenSlidePagerActivity activity;
 
     public ToDoTaskListFragment() {
 
@@ -250,6 +254,18 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
         });
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            this.activity = (ScreenSlidePagerActivity) activity;
+
+        } catch (ClassCastException e) {
+            throw new RuntimeException(activity.toString()
+                    + " must implement ItemClickListener");
+        }
+    }
+
     void getTasks() {
         adapter = new ToDoTaskListAdapter(listOfTaskInfoGroupByLocationKeys, getActivity().getApplication()/*, listOfTaskInfo*/);
         adapter.setOnItemClickListener(new ToDoTaskListAdapter.OnItemLongClickListener() {
@@ -301,10 +317,16 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
 //                    if (isSelected != 0) {
 
 //                    } else {
-
 //                        selectedRunTxt.setText("Selected Run - Run #" + listOfRunInfo.get(0).getRunNo());
                     if (runInfoEntities.size() == 0) {
                         Log.e(TAG, "onChanged: TRY Again!");
+                        confirm_dcButton.setVisibility(View.GONE);
+                        runTaskEntityAdapter = new RunTaskEntityAdapter(runInfoEntities, getContext(), 0);
+                        runTaskEntityAdapter.notifyDataSetChanged();
+                        if (runTaskAdapter != null) {
+                            runTaskAdapter = new RunTaskAdapter(runInfoList, getContext(), 0);
+                            runTaskAdapter.notifyDataSetChanged();
+                        }
                     } else {
                         runTaskEntityAdapter = new RunTaskEntityAdapter(runInfoEntities, getContext(), 0);
                         runTaskEntityAdapter.setOnItemClickListener(new RunTaskEntityAdapter.OnItemClickListener() {
@@ -353,7 +375,7 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                 }
             });
 //            }
-            taskInfoViewModel.getTaskInfoGroupByLocationKeys().observe(getActivity(), new Observer<List<TaskInfoGroupByLocationKey>>() {
+            taskInfoViewModel.getTaskInfoGroupByLocationKeys().observe(activity, new Observer<List<TaskInfoGroupByLocationKey>>() {
                 @Override
                 public void onChanged(List<TaskInfoGroupByLocationKey> taskInfoGroupByLocationKeys) {
                     listOfTaskInfoGroupByLocationKeys.clear();
@@ -422,14 +444,14 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
     private void pullData() {
         //mTaskInfoRepository.deleteAll();
 
-        String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
+        String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(activity).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
         LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
         String token = loginResponse.getToken();
        /* Date date = new Date();
         String curDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
         String selectedDate = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_SELECTED_DATE, curDate);
        */
-        String selectedDate = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_SELECTED_DATE, "");
+        String selectedDate = PreferenceManager.getDefaultSharedPreferences(activity).getString(Constants.PREF_KEY_SELECTED_DATE, "");
 
         String compId = "" + loginResponse.getDriverInfo().getCompanyId();
         // compId = "34";
@@ -490,7 +512,6 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                                 if (taskInfoEntities.get(i).getWorkStatus().equals("pending")) {
                                     isPending = true;
                                     batchId = runInfoList.get(0).getBatchId();
-
                                     break;
                                 }
 
@@ -597,7 +618,7 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
     }
 
     void getTaskByLocationKeys(int position) {
-        taskInfoViewModel.getTaskInfoGroupByBatchId(runInfoList.get(position).getBatchId()).observe(getActivity(), new Observer<List<TaskInfoGroupByLocationKey>>() {
+        taskInfoViewModel.getTaskInfoGroupByBatchId(runInfoList.get(position).getBatchId()).observe(activity, new Observer<List<TaskInfoGroupByLocationKey>>() {
             @Override
             public void onChanged(List<TaskInfoGroupByLocationKey> taskInfoGroupByLocationKeys) {
                 listOfTaskInfoGroupByLocationKeys.clear();

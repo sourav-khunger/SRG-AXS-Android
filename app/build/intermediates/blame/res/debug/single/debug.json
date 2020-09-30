@@ -84,6 +84,10 @@
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\ic_baseline_place_primary_light_32.xml"
     },
     {
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_box_bg.xml.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\box_bg.xml"
+    },
+    {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_show_list_of_task_group_by_location_key_2.xml.flat",
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\activity_show_list_of_task_group_by_location_key_2.xml"
     },
@@ -158,6 +162,10 @@
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_baseline_place_32_primary.xml.flat",
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\ic_baseline_place_32_primary.xml"
+    },
+    {
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_arrow_right_24.xml.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\ic_arrow_right_24.xml"
     },
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_activity_choose_company.xml.flat",

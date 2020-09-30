@@ -2,7 +2,6 @@ package com.unipos.axslite.ui.shipment;
 
 import androidx.lifecycle.ViewModelProviders;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +21,8 @@ import com.unipos.axslite.Database.Entities.ReasonEntity;
 import com.unipos.axslite.Database.Entities.StatusEntity;
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
 import com.unipos.axslite.Database.Repository.ShipmentStatusRepository;
-import com.unipos.axslite.POJO.TaskInfo;
 import com.unipos.axslite.R;
+import com.unipos.axslite.ui.shipment.ViewModel.ShipmentRecipientViewModel;
 
 public class ShipmentRecipientFragment extends Fragment {
 

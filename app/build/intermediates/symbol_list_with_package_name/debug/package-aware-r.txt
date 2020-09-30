@@ -1798,6 +1798,7 @@ drawable avd_show_password
 drawable axs_logo
 drawable back
 drawable background
+drawable box_bg
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -1845,6 +1846,7 @@ drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
 drawable gps_position
 drawable grid
+drawable ic_arrow_right_24
 drawable ic_baseline_exit_to_app_24
 drawable ic_baseline_menu_24
 drawable ic_baseline_person_outline_24
@@ -2522,6 +2524,11 @@ id test_radiobutton_android_button_tint
 id test_radiobutton_app_button_tint
 id text
 id text2
+id textCount
+id textCountDeliver
+id textCountPickUp
+id textCountProblems
+id textCountToDo
 id textEnd
 id textSpacerNoButtons
 id textSpacerNoTitle

@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.github.gcacace.signaturepad.views.SignaturePad;
 import com.unipos.axslite.Activity.ShipmentActivity;
 import com.unipos.axslite.R;
+import com.unipos.axslite.ui.shipment.ViewModel.ShipmentSignatureViewModel;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
