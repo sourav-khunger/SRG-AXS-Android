@@ -2109,6 +2109,7 @@ id coordinator
 id cos
 id custom
 id customPanel
+id customSeekBar
 id cut
 id dark
 id dataBinding

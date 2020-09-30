@@ -71,9 +71,17 @@ public class ShipmentStatusFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
+                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
+                            .putString(Constants.DELIVERY_STATUS, "completed")
+                            .apply();
+                    Log.e("TAG", "onCheckedChanged: Successful");
                     shipmentStatusRadioGroup.removeAllViews();
                     addShipmentStatus(view, 0);
                 } else {
+                    Log.e("TAG", "onCheckedChanged: Unsuccessful");
+                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
+                            .putString(Constants.DELIVERY_STATUS, "problem")
+                            .apply();
                     shipmentStatusRadioGroup.removeAllViews();
                     addShipmentStatus(view, 1);
                 }

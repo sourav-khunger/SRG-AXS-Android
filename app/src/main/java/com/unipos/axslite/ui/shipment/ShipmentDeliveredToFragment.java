@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,8 +61,8 @@ public class ShipmentDeliveredToFragment extends Fragment {
         ReasonEntity reason = shipmentStatusRepository.getReason(ShipmentActivity.selectedTask.getReasonId());
 
         String shAllInfo = "";
-        if(status != null) shAllInfo +=  "\n" + status.getStatusName();
-        if(reason != null) shAllInfo +=  "\n" + reason.getReasonName();
+        if (status != null) shAllInfo += "\n" + status.getStatusName();
+        if (reason != null) shAllInfo += "\n" + reason.getReasonName();
 
         String shipHistTask = shAllInfo + "\nProbil # " + thetask.getBarcode();
         shipHistTask += "\nReff # " + thetask.getReffNo();
@@ -90,9 +91,16 @@ public class ShipmentDeliveredToFragment extends Fragment {
 
         TaskInfoRepository mTaskInfoRepository = new TaskInfoRepository((Application) getActivity().getApplicationContext());
         Date date = new Date();
-        String curDateTime= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+        String curDateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+        String status = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getString(Constants.DELIVERY_STATUS, "");
+        if (status.equals("")) {
+            ShipmentActivity.selectedTask.setWorkStatus("pending");
+
+        } else {
+            ShipmentActivity.selectedTask.setWorkStatus(status);
+        }
         ShipmentActivity.selectedTask.setCod(0);
-        ShipmentActivity.selectedTask.setWorkStatus(Constants.TASK_INFO_WORK_STATUS_COMPLETED);
         ShipmentActivity.selectedTask.setCompleteTime(curDateTime);
         ShipmentActivity.selectedTask.setRecordStatus(2);
         mTaskInfoRepository.update(ShipmentActivity.selectedTask);

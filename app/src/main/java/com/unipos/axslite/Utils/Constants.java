@@ -3,9 +3,12 @@ package com.unipos.axslite.Utils;
 
 public class Constants {
     public static final String PREF_KEY_LOGIN_RESPONSE = "com.unipos.axslite.loginResponse";
+    public static final String PREF_KEY_SELECTED_RUN = "com.unipos.axslite.RunInfoSelected";
+    public static final String SELECTED_BATCH_ID = "com.unipos.axslite.SelectedBatchId";
+    public static final String DELIVERY_STATUS = "com.unipos.axslite.DeliveryStatus";
     public static final String PREF_KEY_SELECTED_DATE = "com.unipos.axslite.Utils.loginResponse";
-    public static final String SELECTED_LOCATION= "com.unipos.axslite.selectedLocation";
-    public static final String SELECTED_TASK= "com.unipos.axslite.selectedTask";
+    public static final String SELECTED_LOCATION = "com.unipos.axslite.selectedLocation";
+    public static final String SELECTED_TASK = "com.unipos.axslite.selectedTask";
     public static final String COMPLETED_CHECK_RECVER = "com.unipos.axslite.completedcheckrecvr";
 
     public static final String TAG_SYNC_DATA = "TAG_SYNC_DATA";

@@ -67,7 +67,6 @@ public class RouteFragment extends Fragment {
 
 
         pullData();
-
 ////        stringArrayList.add("    Run No. 1  ");
 //        for (int i = 0; i < taskInfoEntities.size(); i++) {
 //
@@ -87,7 +86,7 @@ public class RouteFragment extends Fragment {
 //                        Log.e(TAG, "onItemClick: " + routeSelectionList.get(a));
                     }
                 }
-                Log.e(TAG, "onItemSelected: "+routeSelectionList.size() );
+                Log.e(TAG, "onItemSelected: " + routeSelectionList.size());
             }
 
             @Override
@@ -141,7 +140,13 @@ public class RouteFragment extends Fragment {
 
                     ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(),
                             android.R.layout.simple_spinner_dropdown_item, stringArrayList);
+
+
+                    String run = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                            .getString(Constants.PREF_KEY_SELECTED_RUN, "");
                     routeSpinner.setAdapter(arrayAdapter);
+                    routeSpinner.setSelection(Integer.parseInt(run));
+
 //                    getTasks();
                 } else {
                     Toast.makeText(getContext(), "error " + response.body().getStatus(), Toast.LENGTH_LONG).show();

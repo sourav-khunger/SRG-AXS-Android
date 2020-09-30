@@ -329,9 +329,33 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                         }
                     } else {
                         runTaskEntityAdapter = new RunTaskEntityAdapter(runInfoEntities, getContext(), 0);
+                        if (PreferenceManager.getDefaultSharedPreferences(activity)
+                                .getString(Constants.PREF_KEY_SELECTED_RUN, "") == null ||
+                                PreferenceManager.getDefaultSharedPreferences(activity)
+                                        .getString(Constants.PREF_KEY_SELECTED_RUN, "").equals("")) {
+                            PreferenceManager.getDefaultSharedPreferences(activity).edit()
+                                    .putString(Constants.PREF_KEY_SELECTED_RUN, "0")
+                                    .apply();
+                        }
+                        PreferenceManager.getDefaultSharedPreferences(activity).edit()
+                                .putString(Constants.SELECTED_BATCH_ID, runInfoEntities.get(0).getBatchId())
+                                .apply();
+                        String run = PreferenceManager.getDefaultSharedPreferences(activity)
+                                .getString(Constants.PREF_KEY_SELECTED_RUN, "");
+
+                        selectedRunTxt.setText("Selected Run - Run #" + listOfRunInfo.get(Integer.parseInt(run)).getRunNo());
+                        runTaskEntityAdapter.updatePosition(Integer.parseInt(run));
+
                         runTaskEntityAdapter.setOnItemClickListener(new RunTaskEntityAdapter.OnItemClickListener() {
                             @Override
                             public void onGetRunPosition(int position) {
+                                PreferenceManager.getDefaultSharedPreferences(activity).edit()
+                                        .putString(Constants.PREF_KEY_SELECTED_RUN, "" + position)
+                                        .apply();
+                                PreferenceManager.getDefaultSharedPreferences(activity).edit()
+                                        .putString(Constants.SELECTED_BATCH_ID, runInfoEntities.get(position).getBatchId())
+                                        .apply();
+
                                 selectedRunTxt.setText("Selected Run - Run #" + runInfoList.get(position).getRunNo());
                                 sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                                 runTaskEntityAdapter.updatePosition(position);
@@ -466,8 +490,16 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                     runInfoList = response.body().getListOfRunList();
 
                     if (runInfoList.size() > 0) {
+                        if (PreferenceManager.getDefaultSharedPreferences(activity)
+                                .getString(Constants.PREF_KEY_SELECTED_RUN, "") == null ||
+                                PreferenceManager.getDefaultSharedPreferences(activity)
+                                        .getString(Constants.PREF_KEY_SELECTED_RUN, "").equals("")) {
+                            PreferenceManager.getDefaultSharedPreferences(activity).edit()
+                                    .putString(Constants.PREF_KEY_SELECTED_RUN, "0")
+                                    .apply();
+                            selectedRunTxt.setText("Selected Run - Run #" + runInfoList.get(0).getRunNo());
+                        }
                         getTaskByLocationKeys(0);
-                        selectedRunTxt.setText("Selected Run - Run #" + runInfoList.get(0).getRunNo());
                         if (runInfoList.get(0).getRouteStarted() == 0) {
                             confirm_dcButton.setVisibility(View.VISIBLE);
 
@@ -519,15 +551,33 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                         }
                     }
                     runTaskAdapter = new RunTaskAdapter(runInfoList, getContext(), 0);
+
+                    PreferenceManager.getDefaultSharedPreferences(activity).edit()
+                            .putString(Constants.SELECTED_BATCH_ID, runInfoList.get(0).getBatchId())
+                            .apply();
+                    String run = PreferenceManager.getDefaultSharedPreferences(activity)
+                            .getString(Constants.PREF_KEY_SELECTED_RUN, "");
+
+                    selectedRunTxt.setText("Selected Run - Run #" + runInfoList.get(Integer.parseInt(run)).getRunNo());
+                    runTaskAdapter.updatePosition(Integer.parseInt(run));
+
                     runTaskAdapter.setOnItemClickListener(new RunTaskAdapter.OnItemClickListener() {
                         @Override
                         public void onGetRunPosition(int position) {
-                            selectedRunTxt.setText("Selected Run - Run #" + runInfoList.get(position).getRunNo());
+
+                            PreferenceManager.getDefaultSharedPreferences(activity).edit()
+                                    .putString(Constants.PREF_KEY_SELECTED_RUN, "" + position)
+                                    .apply();
+                            int run = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(activity)
+                                    .getString(Constants.PREF_KEY_SELECTED_RUN, ""));
+                            selectedRunTxt.setText("Selected Run - Run #" + runInfoList.get(run).getRunNo());
                             sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                            runTaskAdapter.updatePosition(position);
+                            runTaskAdapter.updatePosition(run);
                             runTaskAdapter.notifyDataSetChanged();
                             getTaskByLocationKeys(position);
-
+                            PreferenceManager.getDefaultSharedPreferences(activity).edit()
+                                    .putString(Constants.PREF_KEY_SELECTED_RUN, "" + position)
+                                    .apply();
                             if (runInfoList.get(position).getRouteStarted() == 0) {
                                 confirm_dcButton.setVisibility(View.VISIBLE);
 
@@ -573,6 +623,7 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
 //                                    adapter.notifyDataSetChanged();
 //                                }
 //                            });
+
                         }
                     });
 
@@ -648,7 +699,7 @@ public class ToDoTaskListFragment extends Fragment implements ActionBottomSheetD
                 if (listOfTaskInfoGroupByLocationKeys.size() == 0) {
                     emptyTxt.setVisibility(View.VISIBLE);
                 } else {
-                    emptyTxt.setVisibility(View.VISIBLE);
+                    emptyTxt.setVisibility(View.GONE);
                 }
 //                    listOfTaskInfoGroupByLocationKeys.addAll(taskInfoViewModel.getTaskInfoGroupByLocationKeys().getValue().);
 //                    Log.d(TAG, "onChanged: " + taskInfoViewModel.getTaskInfoGroupByLocationKeys().getValue().size());

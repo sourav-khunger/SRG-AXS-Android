@@ -32,13 +32,13 @@ public class ShipmentActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         String taskInfoStr = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.SELECTED_TASK, "");
-        Log.e("TAG", "onCreate: "+taskInfoStr );
+        Log.e("TAG", "onCreate: " + taskInfoStr);
         selectedTask = new Gson().fromJson(taskInfoStr, TaskInfoEntity.class);
 
-        if(selectedTask.getArrivalTime() == null || selectedTask.getArrivalTime().equals("")) {
+        if (selectedTask.getArrivalTime() == null || selectedTask.getArrivalTime().equals("")) {
 
             Date date = new Date();
-            String curDate= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+            String curDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
 
             selectedTask.setArrivalTime(curDate);
         }
