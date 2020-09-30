@@ -124,7 +124,10 @@ attr appBarLayoutStyle
 attr applyMotionScene
 attr arcMode
 attr argType
+attr arrowColor
 attr arrowHeadLength
+attr arrowLineHeight
+attr arrowLineWidth
 attr arrowShaftLength
 attr attributeName
 attr autoCompleteTextViewStyle
@@ -796,10 +799,13 @@ attr shapeAppearanceMediumComponent
 attr shapeAppearanceOverlay
 attr shapeAppearanceSmallComponent
 attr shouldScaleToFill
+attr showArrows
 attr showAsAction
 attr showDividers
+attr showDummyData
 attr showMotionSpec
 attr showPaths
+attr showProgressOnOnClick
 attr showText
 attr showTitle
 attr shrinkMotionSpec
@@ -922,12 +928,15 @@ attr textAppearanceSearchResultTitle
 attr textAppearanceSmallPopupMenu
 attr textAppearanceSubtitle1
 attr textAppearanceSubtitle2
+attr textColor
 attr textColorAlertDialogListItem
 attr textColorSearchUrl
 attr textEndPadding
 attr textInputLayoutFocusedRectEnabled
 attr textInputStyle
 attr textLocale
+attr textPadding
+attr textSize
 attr textStartPadding
 attr theme
 attr themeLineHeight
@@ -3755,6 +3764,7 @@ styleable ConstraintSet android_orientation android_id android_visibility androi
 styleable CoordinatorLayout keylines statusBarBackground
 styleable CoordinatorLayout_Layout android_layout_gravity layout_anchor layout_anchorGravity layout_behavior layout_dodgeInsetEdges layout_insetEdge layout_keyline
 styleable CustomAttribute attributeName customBoolean customColorDrawableValue customColorValue customDimension customFloatValue customIntegerValue customPixelDimension customStringValue
+styleable CustomSeekBar arrowColor arrowLineHeight arrowLineWidth borderColor borderWidth showArrows showDummyData showProgressOnOnClick showText textColor textPadding textSize
 styleable DialogFragmentNavigator android_name
 styleable DrawerArrowToggle arrowHeadLength arrowShaftLength barLength color drawableSize gapBetweenBars spinBars thickness
 styleable DrawerLayout elevation

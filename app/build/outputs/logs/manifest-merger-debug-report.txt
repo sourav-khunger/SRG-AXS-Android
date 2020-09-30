@@ -6,6 +6,7 @@ INJECTED from C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\Andro
 INJECTED from C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:2:1-123:12
 MERGED from [HERE-sdk.aar] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\595c4239535c10e9b98c7c762342f9e3\jetified-HERE-sdk\AndroidManifest.xml:2:1-17:12
 MERGED from [:AJVoIP] C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\AJVoIP\build\.transforms\bfdfbbaa4a739b37809b5d801e8716f7\jetified-AJVoIP\AndroidManifest.xml:2:1-81:12
+MERGED from [com.github.ranaparamveer:customSeekbarAndroid:1.0.1] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\8989ab3e31bf3303287527066e47ac7d\jetified-customSeekbarAndroid-1.0.1\AndroidManifest.xml:2:1-11:12
 MERGED from [com.github.skydoves:powerspinner:1.0.1] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\6b2e4d41c73d67c17c763440f875de7b\jetified-powerspinner-1.0.1\AndroidManifest.xml:2:1-11:12
 MERGED from [me.dm7.barcodescanner:zxing:1.9.13] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\426dccc59eb88cf5b4d757c88562401a\jetified-zxing-1.9.13\AndroidManifest.xml:2:1-13:12
 MERGED from [me.dm7.barcodescanner:zbar:1.9.13] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\de3e19018d697c5673967cb3e8402e80\jetified-zbar-1.9.13\AndroidManifest.xml:2:1-13:12
@@ -432,6 +433,8 @@ MERGED from [HERE-sdk.aar] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\
 MERGED from [HERE-sdk.aar] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\595c4239535c10e9b98c7c762342f9e3\jetified-HERE-sdk\AndroidManifest.xml:7:5-9:41
 MERGED from [:AJVoIP] C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\AJVoIP\build\.transforms\bfdfbbaa4a739b37809b5d801e8716f7\jetified-AJVoIP\AndroidManifest.xml:14:5-16:41
 MERGED from [:AJVoIP] C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\AJVoIP\build\.transforms\bfdfbbaa4a739b37809b5d801e8716f7\jetified-AJVoIP\AndroidManifest.xml:14:5-16:41
+MERGED from [com.github.ranaparamveer:customSeekbarAndroid:1.0.1] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\8989ab3e31bf3303287527066e47ac7d\jetified-customSeekbarAndroid-1.0.1\AndroidManifest.xml:7:5-9:41
+MERGED from [com.github.ranaparamveer:customSeekbarAndroid:1.0.1] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\8989ab3e31bf3303287527066e47ac7d\jetified-customSeekbarAndroid-1.0.1\AndroidManifest.xml:7:5-9:41
 MERGED from [com.github.skydoves:powerspinner:1.0.1] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\6b2e4d41c73d67c17c763440f875de7b\jetified-powerspinner-1.0.1\AndroidManifest.xml:7:5-9:41
 MERGED from [com.github.skydoves:powerspinner:1.0.1] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\6b2e4d41c73d67c17c763440f875de7b\jetified-powerspinner-1.0.1\AndroidManifest.xml:7:5-9:41
 MERGED from [me.dm7.barcodescanner:zxing:1.9.13] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\426dccc59eb88cf5b4d757c88562401a\jetified-zxing-1.9.13\AndroidManifest.xml:7:5-9:41

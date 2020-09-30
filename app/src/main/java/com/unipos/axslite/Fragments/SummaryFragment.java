@@ -1,14 +1,20 @@
 package com.unipos.axslite.Fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.os.Parcel;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.phappytech.library.CustomSeekBar;
+import com.phappytech.library.ProgressSegment;
 import com.unipos.axslite.R;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +36,7 @@ public class SummaryFragment extends Fragment {
     public SummaryFragment() {
         // Required empty public constructor
     }
+
     public static SummaryFragment newInstance(String param1, String param2) {
         SummaryFragment fragment = new SummaryFragment();
         Bundle args = new Bundle();
@@ -52,6 +59,18 @@ public class SummaryFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_summary, container, false);
+        View view = inflater.inflate(R.layout.fragment_summary, container, false);
+        ArrayList<ProgressSegment> progressSegments = new ArrayList<>();
+        int[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.GRAY, Color.YELLOW};
+        for (int i = 0; i < 5; i++) {
+            ProgressSegment progressSegment = new ProgressSegment(Parcel.obtain());
+            progressSegment.name = "progress" + i;
+            progressSegment.progress = (i + 3) * 10;
+            progressSegment.color = colors[i];
+            progressSegments.add(progressSegment);
+        }
+        CustomSeekBar customSeekBar = view.findViewById(R.id.custom);
+        customSeekBar.setProgressSegments(progressSegments);
+        return view;
     }
 }
