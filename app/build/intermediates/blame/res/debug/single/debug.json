@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_dc_pin.png.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\drawable\\dc_pin.png"
+    },
+    {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\mipmap-anydpi-v26\\ic_launcher_round.xml"
     },
@@ -56,12 +60,12 @@
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\fragment_selfdispatch.xml"
     },
     {
-        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_menu.xml.flat",
-        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\fragment_menu.xml"
-    },
-    {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\mipmap-mdpi_ic_launcher.png.flat",
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\mipmap-mdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_fragment_menu.xml.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\fragment_menu.xml"
     },
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_shipment_reason_fragment.xml.flat",
@@ -434,6 +438,10 @@
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_marker_dialog.xml.flat",
         "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\marker_dialog.xml"
+    },
+    {
+        "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\layout_progressbar.xml.flat",
+        "source": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\src\\main\\res\\layout\\progressbar.xml"
     },
     {
         "merged": "C:\\Users\\Pranj\\Documents\\GitHub\\SRG-AXS-Android\\app\\build\\intermediates\\res\\merged\\debug\\drawable_ic_launcher_background.xml.flat",

@@ -32,6 +32,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.collection.ArraySet;
 import androidx.core.content.FileProvider;
 
 import android.os.Environment;
@@ -119,6 +120,11 @@ public class MapFragmentView {
     private TextView markerTxt;
     List<String> routeNameList = new ArrayList<>();
     ImageView centerMap;
+    ArrayList<String> coordinatesList = new ArrayList();
+    private ArraySet<MapPolyline> m_polylines = new ArraySet<>();
+    String dcName = "";
+    double lat;
+    double lon;
 //    private Scen mapScene;
 
     /**
@@ -126,11 +132,20 @@ public class MapFragmentView {
      * such as MapPolygon, MapPolyline, MapCircle and MapMarker.
      *
      * @param activity
+     * @param lon
+     * @param lat
+     * @param dcName
      */
-    public MapFragmentView(AppCompatActivity activity, ArrayList<String> routeSelectionList, List<TaskInfoEntity> taskInfoEntities) {
+    public MapFragmentView(AppCompatActivity activity, ArrayList<String> coordinatesList,
+                           ArrayList<String> routeSelectionList, List<TaskInfoEntity> taskInfoEntities,
+                           double lon, double lat, String dcName) {
         m_activity = activity;
+        this.coordinatesList = coordinatesList;
         this.routeSelectionList = routeSelectionList;
         this.taskInfoEntities = taskInfoEntities;
+        this.lon = lon;
+        this.lat = lat;
+        this.dcName = dcName;
         initMapFragment();
         initUI();
     }
@@ -165,9 +180,15 @@ public class MapFragmentView {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (m_mapFragment != null && m_map != null) {
                     if (i == 0) {
-                        m_map.setZoomLevel(13.3, Map.Animation.BOW);
-                        m_map.setCenter(PositioningManager.getInstance().getLastKnownPosition().getCoordinate(), Map.Animation.BOW);
+                        m_map.setZoomLevel(8.6, Map.Animation.BOW);
+                        m_map.setCenter(new GeoCoordinate(lat, lon), Map.Animation.BOW);
                         markerTxt.setVisibility(View.GONE);
+                    }
+                    if (i == 1) {
+                        m_map.setZoomLevel(14.3, Map.Animation.BOW);
+                        m_map.setCenter(new GeoCoordinate(lat, lon), Map.Animation.BOW);
+                        markerTxt.setVisibility(View.VISIBLE);
+                        markerTxt.setText(dcName);
                     }
                     if (i > 1) {
                         markerTxt.setVisibility(View.VISIBLE);
@@ -177,22 +198,22 @@ public class MapFragmentView {
 //                        double longi = Double.parseDouble(taskInfoEntities.get(i).getLongitude());
                         m_map.setCenter(geoCoordinates.get(i)/*new GeoCoordinate(lat, longi)*/,
                                 Map.Animation.BOW);
-                        markerTxt.setText(taskInfoEntities.get(i).getName());
+                        markerTxt.setText(routeSpinner.getSelectedItem().toString());
                     }
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-                m_map.setCenter(PositioningManager.getInstance().getLastKnownPosition().getCoordinate(),
-                        Map.Animation.BOW);
+//                m_map.setCenter(PositioningManager.getInstance().getLastKnownPosition().getCoordinate(),
+//                        Map.Animation.BOW);
             }
         });
         centerMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 m_map.setZoomLevel(13.3, Map.Animation.BOW);
-                m_map.setCenter(PositioningManager.getInstance().getLastKnownPosition().getCoordinate(),
+                m_map.setCenter(new GeoCoordinate(lat, lon),
                         Map.Animation.BOW);
             }
         });
@@ -224,30 +245,34 @@ public class MapFragmentView {
                 public void onEngineInitializationCompleted(Error error) {
 
                     if (error == Error.NONE) {
+
                         /*
                          * If no error returned from map fragment initialization, the map will be
                          * rendered on screen at this moment.Further actions on map can be provided
                          * by calling Map APIs.
                          */
-                        m_map = m_mapFragment.getMap();
 
+                        m_map = m_mapFragment.getMap();
 
                         /*
                          * Set the map center to the 4350 Still Creek Dr Burnaby BC (no animation).
                          */
+
                         geoCoordinate = new GeoCoordinate(LocationService.latitude, LocationService.longitude);
                         geoCoordinate = PositioningManager.getInstance().getLastKnownPosition().getCoordinate();
-                        m_map.setCenter(geoCoordinate,
+                        m_map.setCenter(new GeoCoordinate(lat, lon),
                                 Map.Animation.BOW);
 
                         /* Set the zoom level to the average between min and max zoom level. */
-                        m_map.setZoomLevel(15);
+                        m_map.setZoomLevel(8.5);
 
                         m_activity.supportInvalidateOptionsMenu();
                         m_mapFragment.getMapGesture().addOnGestureListener(onGestureListener, 0, false);
 //                        m_map =
-                        /*MapPolyline mapPolyline =*/
+//                        MapPolyline mapPolyline;
+                        addPolylineObject();
                         createPolyline();
+
 //                        m_map.addMapObject(mapPolyline);
                         /*
                          * Set up a handler for handling MapMarker drag events.
@@ -340,7 +365,6 @@ public class MapFragmentView {
 
         @Override
         public void onRotateLocked() {
-
         }
 
         @Override
@@ -372,7 +396,26 @@ public class MapFragmentView {
     /**
      * create a MapCircle and add the MapCircle to active map view.
      */
+    private void addPolylineObject() {
+        // add boundingBox's top left and bottom right vertices to list of GeoCoordinates
+        List<GeoCoordinate> coordinates = new ArrayList<GeoCoordinate>();
+        for (int i = 0; i < coordinatesList.size(); i++) {
+            String[] latLong = coordinatesList.get(i).split(",");
+            double lat = Double.parseDouble(latLong[0]);
+            double longi = Double.parseDouble(latLong[1]);
+            coordinates.add(new GeoCoordinate(lat, longi));
+//            Log.e(TAG, "createPolyline: " + geoCoordinates.get(i));
+        }
+        // create GeoPolyline with list of GeoCoordinates
+        GeoPolyline geoPolyline = new GeoPolyline(coordinates);
+        MapPolyline polyline = new MapPolyline(geoPolyline);
+        polyline.setLineColor(Color.BLUE);
+        polyline.setLineWidth(12);
 
+        // add GeoPolyline to current active map
+        m_map.addMapObject(polyline);
+        m_polylines.add(polyline);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void createPolyline() {
@@ -390,28 +433,47 @@ public class MapFragmentView {
             }
         }
         geoCoordinates.addAll(coordinates);
+//        for (int i = 0; i < coordinatesList.size(); i++) {
+//            String[] latLong = coordinatesList.get(i).split(",");
+//            double lat = Double.parseDouble(latLong[0]);
+//            double longi = Double.parseDouble(latLong[1]);
+//            geoCoordinates.add(new GeoCoordinate(lat, longi));
+//            Log.e(TAG, "createPolyline: " + geoCoordinates.get(i).toString());
+//        }
+
 //        coordinates.add(new GeoCoordinate(29.9753092, 77.571972));
 //        coordinates.add(new GeoCoordinate(29.9685473, 77.5644495));
 //        coordinates.add(new GeoCoordinate(29.9623858, 77.5483282));
 //        coordinates.add(new GeoCoordinate(29.9701266, 77.5698228));
-
+        Image img = new Image();
+        try {
+            img.setImageResource(R.drawable.dc_pin);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 //        GeoPolyline geoPolyline;
+        MapMarker dcMarker = new MapMarker(new GeoCoordinate(lat, lon), img);
+        dcMarker.setAnchorPoint(new PointF(img.getWidth() / 2, img.getHeight()));
+        dcMarker.setCoordinate(new GeoCoordinate(lat, lon));
+        dcMarker.setTitle(dcName);
+        dcMarker.setVisible(true);
+        m_map.addMapObject(dcMarker);
         /* Initialize a CoreRouter */
-        CoreRouter coreRouter = new CoreRouter();
-
-        /* Initialize a RoutePlan */
-        RoutePlan routePlan = new RoutePlan();
-        RouteOptions routeOptions = new RouteOptions();
-        /* Other transport modes are also available e.g Pedestrian */
-        routeOptions.setTransportMode(RouteOptions.TransportMode.CAR);
-        /* Disable highway in this route. */
-        routeOptions.setHighwaysAllowed(false);
-        /* Calculate the shortest route available. */
-        routeOptions.setRouteType(RouteOptions.Type.SHORTEST);
-        /* Calculate 1 route. */
-        routeOptions.setRouteCount(1);
-        /* Finally set the route option */
-        routePlan.setRouteOptions(routeOptions);
+//        CoreRouter coreRouter = new CoreRouter();
+//
+//        /* Initialize a RoutePlan */
+//        RoutePlan routePlan = new RoutePlan();
+//        RouteOptions routeOptions = new RouteOptions();
+//        /* Other transport modes are also available e.g Pedestrian */
+//        routeOptions.setTransportMode(RouteOptions.TransportMode.CAR);
+//        /* Disable highway in this route. */
+//        routeOptions.setHighwaysAllowed(false);
+//        /* Calculate the shortest route available. */
+//        routeOptions.setRouteType(RouteOptions.Type.SHORTEST);
+//        /* Calculate 1 route. */
+//        routeOptions.setRouteCount(1);
+//        /* Finally set the route option */
+//        routePlan.setRouteOptions(routeOptions);
         Image image = new Image();
         try {
             image.setImageResource(R.drawable.pin);
@@ -422,14 +484,12 @@ public class MapFragmentView {
         for (int i = 0; i < coordinates.size(); i++) {
 
 //            RouteWaypoint destination = ;
-            routePlan.addWaypoint(new RouteWaypoint(coordinates.get(i)));
-
+//            routePlan.addWaypoint(new RouteWaypoint(coordinates.get(i)));
             MapMarker defaultMarker = new MapMarker(coordinates.get(i), image);
             defaultMarker.setAnchorPoint(new PointF(image.getWidth() / 2, image.getHeight()));
             defaultMarker.setCoordinate(coordinates.get(i));
             defaultMarker.setTitle(routeNameList.get(i));
             defaultMarker.setVisible(true);
-
             m_map.addMapObject(defaultMarker);
 
         }
@@ -449,21 +509,22 @@ public class MapFragmentView {
 //        MapPolyline mapPolyline = new MapPolyline(geoPolyline);
 //        mapPolyline.setLineColor(generateColor());
 //        mapPolyline.setLineWidth(widthInPixels);
-        coreRouter.calculateRoute(coordinates, routeOptions, new Router.Listener<List<RouteResult>, RoutingError>() {
-            @Override
-            public void onProgress(int i) {
-
-            }
-
-            @Override
-            public void onCalculateRouteFinished(@Nullable List<RouteResult> routeResults, @NonNull RoutingError routingError) {
-                if (routingError == RoutingError.NONE) {
-                    m_route = routeResults.get(0).getRoute();
-                    mapRoute = new MapRoute(m_route);
-                    m_map.addMapObject(mapRoute);
-                }
-            }
-        });
+//        coreRouter.calculateRoute(coordinates, routeOptions, new Router.Listener<List<RouteResult>, RoutingError>() {
+//            @Override
+//            public void onProgress(int i) {
+//
+//            }
+//
+//            @Override
+//            public void onCalculateRouteFinished(@Nullable List<RouteResult> routeResults, @NonNull RoutingError routingError) {
+//                if (routingError == RoutingError.NONE) {
+//                    m_route = routeResults.get(0).getRoute();
+//                    mapRoute = new MapRoute(m_route);
+//                    m_map.addMapObject(mapRoute);
+//                }
+//                Log.e(TAG, "onCalculateRouteFinished: " + routingError.name());
+//            }
+//        });
     }
 
 

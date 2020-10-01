@@ -1,6 +1,8 @@
 package com.unipos.axslite.ApiService;
 
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
+import com.unipos.axslite.POJO.BatchRoutePath;
+import com.unipos.axslite.POJO.ConfirmNextModel;
 import com.unipos.axslite.POJO.DriverDepartureResponse;
 import com.unipos.axslite.POJO.DriverLogDutyResponse;
 import com.unipos.axslite.POJO.LoginResponse;
@@ -29,9 +31,22 @@ public interface ApiService {
                                                 @Header("Authorization") String authorizationHeader);
 
     @POST("confirm-dc-departure")
+    @FormUrlEncoded
     Call<DriverDepartureResponse> comfirmDCdeparture(
             @Field("batchId") String batchId,
             @Field("departureTime") String departureTime,
+            @Header("Authorization") String authorizationHeader);
+
+    @POST("confirm-nextstop")
+    @FormUrlEncoded
+    Call<ConfirmNextModel> confirmNextStop(
+            @Field("batchId") String batchId,
+            @Field("locationKey") String locationKey,
+            @Header("Authorization") String authorizationHeader);
+
+    @GET("batch-route-path")
+    Call<BatchRoutePath> batchRoutePath(
+            @Query("batchId") String batchId,
             @Header("Authorization") String authorizationHeader);
 
     @POST("driver-logduty")

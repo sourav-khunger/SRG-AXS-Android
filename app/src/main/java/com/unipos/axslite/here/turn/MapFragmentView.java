@@ -99,7 +99,7 @@ public class MapFragmentView {
     private AndroidXMapFragment m_mapFragment;
     private AppCompatActivity m_activity;
     private Button m_naviControlButton, m_arrivedButton;
-    boolean isArrived = true;
+    boolean isArrived = false;
     TextView distanceTxt, speedTxt, turnTxt, nxtDisTxt;
     ImageView turnIV, compass;
     private Map m_map;

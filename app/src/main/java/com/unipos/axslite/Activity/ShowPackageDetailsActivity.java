@@ -24,8 +24,12 @@ import com.here.android.mpa.mapping.AndroidXMapFragment;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapMarker;
 import com.unipos.axslite.Adapter.TaskInfoGroupByListViewAdapter;
+import com.unipos.axslite.ApiService.ApiService;
+import com.unipos.axslite.ApiService.ApiUtils;
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
 import com.unipos.axslite.Database.ViewModel.TaskInfoViewModel;
+import com.unipos.axslite.POJO.ConfirmNextModel;
+import com.unipos.axslite.POJO.LoginResponse;
 import com.unipos.axslite.POJO.TaskInfoGroupByLocationKey;
 import com.unipos.axslite.R;
 import com.unipos.axslite.Utils.Constants;
@@ -34,6 +38,10 @@ import com.unipos.axslite.here.turn.HereTurnNavActivity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ShowPackageDetailsActivity extends AppCompatActivity {
 
@@ -53,6 +61,7 @@ public class ShowPackageDetailsActivity extends AppCompatActivity {
     Button continue_btn;
     int LAUNCH_SECOND_ACTIVITY = 1;
     private Button scanPackageBtn, navigationStartButton;
+    ApiService apiService;
 
     //    private Button scanPackageBtn;
     @Override
@@ -64,27 +73,32 @@ public class ShowPackageDetailsActivity extends AppCompatActivity {
         listView = findViewById(R.id.taskInfoGroupListView);
         navigationStartButton = findViewById(R.id.naviCtrlButton);
         continue_btn = findViewById(R.id.continue_btn);
+        apiService = ApiUtils.getAPIService();
         Log.e(TAG, "onCreate: " + taskInfoEntityList.size());
         listViewAdapter = new TaskInfoGroupByListViewAdapter(ShowPackageDetailsActivity.this, taskInfoEntityList, getApplication());
         listView.setAdapter(listViewAdapter);
         String taskInfoGroupByLocation = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.SELECTED_LOCATION, "");
+
+//        TaskInfoGroupByLocationKey locationKey = new Gson().fromJson(taskInfoGroupByLocation, TaskInfoGroupByLocationKey.class);
+
+        String batchId = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(Constants.SELECTED_BATCH_ID, "");
         Log.e(TAG, "onCreate: " + taskInfoGroupByLocation);
         String taskINfo = getIntent().getStringExtra("task");
 
         scanPackageBtn = findViewById(R.id.scan_package_btn);
 
-        navigationStartButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ShowPackageDetailsActivity.this, HereTurnNavActivity.class);
-                intent.putExtra("task", taskINfo);
-                startActivity(intent);
-            }
-        });
 
         taskInfoGroupByLocationKey = new Gson().fromJson(taskInfoGroupByLocation, TaskInfoGroupByLocationKey.class);
         String locationKey = taskInfoGroupByLocationKey.getLocationKey();
+        navigationStartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+                confirmNextStopAPI(taskINfo, batchId, locationKey);
+
+            }
+        });
 
         try {
             taskInfoViewModel.getTaskInfoByLocationKey(locationKey).observe(this, new Observer<List<TaskInfoEntity>>() {
@@ -124,6 +138,32 @@ public class ShowPackageDetailsActivity extends AppCompatActivity {
             }
         }
     };
+
+    void confirmNextStopAPI(String taskInfo, String batchId, String locationKey) {
+        Log.e(TAG, "confirmNextStopAPI: "+batchId+locationKey );
+        String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(this).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
+        LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
+        String token = loginResponse.getToken();
+        apiService.confirmNextStop(batchId, locationKey, Constants.AUTHORIZATION_TOKEN + token).enqueue(new Callback<ConfirmNextModel>() {
+            @Override
+            public void onResponse(Call<ConfirmNextModel> call, Response<ConfirmNextModel> response) {
+                if (response.code() == 200) {
+                    Log.e(TAG, "onResponse: " + response.body().getLocationKey() + batchId);
+                    if (locationKey.equals(response.body().getLocationKey())) {
+                        Log.e(TAG, "onResponse: Location is same");
+                        Intent intent = new Intent(ShowPackageDetailsActivity.this, HereTurnNavActivity.class);
+                        intent.putExtra("task", taskInfo);
+                        startActivity(intent);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ConfirmNextModel> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+            }
+        });
+    }
 
     @Override
     protected void onResume() {

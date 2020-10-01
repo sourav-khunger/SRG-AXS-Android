@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.app.Activity;
@@ -74,6 +76,7 @@ import com.larvalabs.svgandroid.SVGParser;
 import com.unipos.axslite.BackgroudService.Workers.LocationService;
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
 import com.unipos.axslite.Database.Repository.TaskInfoRepository;
+import com.unipos.axslite.Database.ViewModel.TaskInfoViewModel;
 import com.unipos.axslite.POJO.LoginResponse;
 import com.unipos.axslite.R;
 import com.unipos.axslite.Utils.Constants;
@@ -88,6 +91,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class MapsFragment extends Fragment implements OnEngineInitListener {
@@ -114,13 +119,15 @@ public class MapsFragment extends Fragment implements OnEngineInitListener {
     private TextView markerTxt;
     ImageView centerMap;
     MapView mapView;
+    TaskInfoViewModel taskInfoViewModel;
+    ApplicationContext appContext;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
             m_activity = (AppCompatActivity) activity;
-            //mCallbacks = (MyNavigationDrawerCallbacks) activity;
+
         } catch (ClassCastException e) {
             Log.e(TAG, "onAttach: " + e);
         }
@@ -129,36 +136,14 @@ public class MapsFragment extends Fragment implements OnEngineInitListener {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ApplicationContext appContext = new ApplicationContext(m_activity.getApplicationContext());
-        MapEngine.getInstance().init(appContext, this::onEngineInitializationCompleted);
+        appContext = new ApplicationContext(m_activity.getApplicationContext());
+        // private app's path
+        String path = new File(m_activity.getExternalFilesDir(null), ".here-map-data")
+                .getAbsolutePath();
+        // This method will throw IllegalArgumentException if provided path is not writable
+        com.here.android.mpa.common.MapSettings.setDiskCacheRootPath(path);
     }
 
-    public Boolean writeToSD(String text, int i) {
-        Boolean write_successful = false;
-        File root = null;
-        try {
-            // <span id="IL_AD8" class="IL_AD">check for</span> SDcard
-            root = Environment.getExternalStorageDirectory();
-            Log.e("SVG CREATE", "path.." + root.getAbsolutePath());
-
-            //check sdcard permission
-            if (root.canWrite()) {
-                File fileDir = new File(root.getAbsolutePath() + "/AXS Files/Temp/");
-                fileDir.mkdirs();
-
-                File file = new File(fileDir, "icon" + i + ".svg");
-                FileWriter filewriter = new FileWriter(file);
-                BufferedWriter out = new BufferedWriter(filewriter);
-                out.write(text);
-                out.close();
-                write_successful = true;
-            }
-        } catch (IOException e) {
-            Log.e("ERROR:---", "Could not write file to SDCard" + e.getMessage());
-            write_successful = false;
-        }
-        return write_successful;
-    }
 
     @Nullable
     @Override
@@ -172,37 +157,50 @@ public class MapsFragment extends Fragment implements OnEngineInitListener {
 
 //        initMapFragment();
 
+
         return view;
     }
 
-    String createSVG(int i) {
-
-        String sBody = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +
-                "<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\"" +
-                " xmlns:xlink=\"http://www.w3.org/1999/xlink\" preserveAspectRatio=\"xMidYMid meet\" viewBox=\"0 0 640 640\" width=\"64\" height=\"64\"><defs><path d=\"M0 0L640 0L640 640L0 640L0 0Z\" id=\"b7WpYcHvrD\"></path><clipPath id=\"clipk2A0EotMI\"><use xlink:href=\"#b7WpYcHvrD\" opacity=\"1\"></use></clipPath><path d=\"M459.88 238.45C459.88 318.94 397.2 384.29 320 384.29C242.8 384.29 180.12 318.94 180.12 238.45C180.12 157.96 242.8 92.62 320 92.62C397.2 92.62 459.88 157.96 459.88 238.45Z\" id=\"b32wp0jpMi\"></path><text id=\"alwzunQkB\" x=\"300\" y=\"230.95\" font-size=\"250\" font-family=\"Roboto\" font-weight=\"bold\" font-style=\"normal\" letter-spacing=\"0\" alignment-baseline=\"before-edge\" transform=\"matrix(1 0 0 1 -36.904761904761926 -133.3333333333334)\" style=\"line-height:100%\" xml:space=\"preserve\" dominant-baseline=\"text-before-edge\"><tspan x=\"280.71\" dy=\"0em\" alignment-baseline=\"before-edge\" dominant-baseline=\"text-before-edge\" text-anchor=\"start\">" + i + "</tspan></text>\n" +
-                "</defs><g><g><g><g clip-path=\"url(#clipk2A0EotMI)\" opacity=\"1\"><image xlink:href=\"data:image/png;base64,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\" x=\"0\" y=\"0\" width=\"64\" height=\"64\" transform=\"matrix(10.000000000000002 0 0 9.999999999999996 -4.547473508864641e-13 9.094947017729282e-13)\"></image></g></g><g><use xlink:href=\"#b32wp0jpMi\" opacity=\"1\" fill=\"#1f93da\" fill-opacity=\"1\"></use></g><g id=\"b2X52gOkqZ\"><use xlink:href=\"#alwzunQkB\" opacity=\"1\" fill=\"#ffffff\" fill-opacity=\"1\"></use></g></g></g></svg>";
-//        writeFileOnInternalStorage(this, "icon.svg", sBody);
-        writeToSD(sBody, i);
-        return sBody;
-    }
 
     void initUI(View v) {
 //        m_naviControlButton = (Button) m_activity.findViewById(R.id.naviCtrlButton);
         mapView = v.findViewById(R.id.here_map);
         centerMap = v.findViewById(R.id.centerMap);
 
-        mTaskInfoRepository = new TaskInfoRepository(getActivity().getApplication());
-        taskInfoEntities = mTaskInfoRepository.getTaskInfos1();
+//        mTaskInfoRepository = new TaskInfoRepository(getActivity().getApplication());
+//        taskInfoEntities = mTaskInfoRepository.getTaskInfos1();
 
+
+        taskInfoViewModel = new ViewModelProvider(m_activity).get(TaskInfoViewModel.class);
+
+        taskInfoViewModel.getTaskInfoList().observe(m_activity, new Observer<List<TaskInfoEntity>>() {
+            @Override
+            public void onChanged(List<TaskInfoEntity> taskInfoEnt) {
+                Log.e(TAG, "onChanged: " + taskInfoEnt.size());
+                taskInfoEntities.clear();
+                taskInfoEntities.addAll(taskInfoEnt);
+                MapEngine.getInstance().init(appContext, MapsFragment.this);
+
+//                Collections.sort(taskInfoEntities, new Comparator<TaskInfoEntity>() {
+//                    public int compare(TaskInfoEntity obj1, TaskInfoEntity obj2) {
+//                        // ## Ascending order
+//                        return Integer.valueOf(obj1.getSeqNo()).compareTo(obj2.getSeqNo());// To compare string values
+//                        // return Integer.valueOf(obj1.empId).compareTo(Integer.valueOf(obj2.empId)); // To compare integer values
+//
+//                        // ## Descending order
+//                        // return obj2.firstName.compareToIgnoreCase(obj1.firstName); // To compare string values
+//                        // return Integer.valueOf(obj2.empId).compareTo(Integer.valueOf(obj1.empId)); // To compare integer values
+//                    }
+//                });
+            }
+        });
   /*      routeSelectionList.add("    Show All   ");
         routeSelectionList.add("    Show DC   ");
         for (int i = 0; i < taskInfoEntities.size(); i++) {
 
             routeSelectionList.add(" " + (i + 1) + ". " + taskInfoEntities.get(i).getName());
         }*/
-        for (int i = 0; i < taskInfoEntities.size(); i++) {
-            createSVG((i + 1));
-        }
+
         centerMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -362,25 +360,25 @@ public class MapsFragment extends Fragment implements OnEngineInitListener {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
+        Image image = new Image();
+        try {
 
+            image.setImageResource(R.drawable.pin);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 //        List<RouteWaypoint> routeWaypoints = new ArrayList<>();
         for (int i = 0; i < coordinates.size(); i++) {
 //            SVG svg = SVGParser.getSVGFromString();
 
-            Image image = new Image();
 
-            try {
-
-                image.setImageResource(R.drawable.pin);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            Log.e(TAG, "createPolyline: " + coordinates.get(i));
             MapLabeledMarker defaultMarker = new MapLabeledMarker(coordinates.get(i), image);
             defaultMarker.setLabelText("eng", "" + (i + 1));
             defaultMarker.setFontScalingFactor(4f);
             defaultMarker.setAnchorPoint(new PointF(image.getWidth() / 2, image.getHeight()));
-            defaultMarker.setCoordinate(coordinates.get(i));
+//            defaultMarker.setCoordinate(coordinates.get(i));
             defaultMarker.setTitle(taskInfoEntities.get(i).getName());
             defaultMarker.setVisible(true);
             m_map.addMapObject(defaultMarker);
@@ -446,18 +444,14 @@ public class MapsFragment extends Fragment implements OnEngineInitListener {
                 longi = Double.parseDouble(taskInfoEntities.get(0).getLongitude());
                 lat = Double.parseDouble(taskInfoEntities.get(0).getLatitude());
                 geoCoordinate = new GeoCoordinate(lat, longi);
-
             } else {
                 geoCoordinate = PositioningManager.getInstance().getLastKnownPosition().getCoordinate();
-
             }
 
-            m_map.setCenter(geoCoordinate,
-                    Map.Animation.BOW);
-            m_map.setCenter(geoCoordinate,
-                    Map.Animation.BOW);
+
+            m_map.setCenter(geoCoordinate, Map.Animation.NONE);
             /* Set the zoom level to the average between min and max zoom level. */
-            m_map.setZoomLevel(13.6);
+            m_map.setZoomLevel(8.6);
 
             m_activity.supportInvalidateOptionsMenu();
             mapView.getMapGesture().addOnGestureListener(onGestureListener, 0, false);
@@ -469,14 +463,12 @@ public class MapsFragment extends Fragment implements OnEngineInitListener {
 
             if (isOnduty == 1) {
                 createPolyline();
-            } else {
-
             }
-//                        m_map.addMapObject(mapPolyline);
+
+//          m_map.addMapObject(mapPolyline);
             /*
              * Set up a handler for handling MapMarker drag events.
              */
-
             mapView.setMapMarkerDragListener(new OnDragListenerHandler());
 
         } else {
@@ -497,8 +489,7 @@ public class MapsFragment extends Fragment implements OnEngineInitListener {
         }
     }
 
-
-    private class OnDragListenerHandler implements MapMarker.OnDragListener {
+    private static class OnDragListenerHandler implements MapMarker.OnDragListener {
         @Override
         public void onMarkerDrag(MapMarker mapMarker) {
 
@@ -560,7 +551,7 @@ public class MapsFragment extends Fragment implements OnEngineInitListener {
                                 Map.Animation.BOW);
 
                         /* Set the zoom level to the average between min and max zoom level. */
-                        m_map.setZoomLevel(14);
+                        m_map.setZoomLevel(8.7);
 
                         m_activity.supportInvalidateOptionsMenu();
                         m_mapFragment.getMapGesture().addOnGestureListener(onGestureListener, 0, false);

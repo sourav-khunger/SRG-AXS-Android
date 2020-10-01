@@ -16,21 +16,23 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.gson.Gson;
-import com.unipos.axslite.Adapter.RunTaskAdapter;
+
 import com.unipos.axslite.ApiService.ApiService;
 import com.unipos.axslite.ApiService.ApiUtils;
 import com.unipos.axslite.Database.Entities.TaskInfoEntity;
 import com.unipos.axslite.Database.Repository.TaskInfoRepository;
+import com.unipos.axslite.POJO.BatchRoutePath;
 import com.unipos.axslite.POJO.LoginResponse;
 import com.unipos.axslite.POJO.RunInfo;
-import com.unipos.axslite.POJO.TaskInfo;
+
 import com.unipos.axslite.POJO.TaskInfoResponse;
 import com.unipos.axslite.R;
 import com.unipos.axslite.Utils.Constants;
+import com.unipos.axslite.Utils.CustomProgressBar;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -49,6 +51,10 @@ public class RouteFragment extends Fragment {
     List<TaskInfoEntity> taskInfoEntities;
     List<RunInfo> runInfoList;
     ApiService apiService;
+    ArrayList<String> routeList;
+    double lat, lon;
+    String DC = "";
+    CustomProgressBar customProgressBar;
 
     public RouteFragment() {
         // Required empty public constructor
@@ -64,9 +70,13 @@ public class RouteFragment extends Fragment {
         mTaskInfoRepository = new TaskInfoRepository(getActivity().getApplication());
         taskInfoEntities = mTaskInfoRepository.getTaskInfos1();
         apiService = ApiUtils.getAPIService();
+        customProgressBar = new CustomProgressBar(getActivity());
 
+        String batchId = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getString(Constants.SELECTED_BATCH_ID, "");
 
         pullData();
+        batchRoutePathAPI(batchId);
 ////        stringArrayList.add("    Run No. 1  ");
 //        for (int i = 0; i < taskInfoEntities.size(); i++) {
 //
@@ -86,6 +96,8 @@ public class RouteFragment extends Fragment {
 //                        Log.e(TAG, "onItemClick: " + routeSelectionList.get(a));
                     }
                 }
+                batchRoutePathAPI(runInfoList.get(i).getBatchId());
+
                 Log.e(TAG, "onItemSelected: " + routeSelectionList.size());
             }
 
@@ -100,10 +112,13 @@ public class RouteFragment extends Fragment {
                 Intent intent = new Intent(getContext(), MapRouteActivity.class);
                 intent.putExtra("list", routeSpinner.getSelectedItem().toString().replaceAll("Run #", ""));
                 intent.putStringArrayListExtra("list", routeSelectionList);
+                intent.putStringArrayListExtra("routeList", routeList);
+                intent.putExtra("dcName", DC);
+                intent.putExtra("dcLat", lat);
+                intent.putExtra("dcLon", lon);
 //                Bundle bundle = new Bundle();
 //                bundle.
                 Log.e(TAG, "onClick: " + routeSpinner.getSelectedItem().toString().replaceAll("Run #", ""));
-
                 startActivity(intent);
             }
         });
@@ -157,6 +172,37 @@ public class RouteFragment extends Fragment {
             public void onFailure(Call<TaskInfoResponse> call, Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
                 Toast.makeText(getContext(), "" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    void batchRoutePathAPI(String batchId) {
+        customProgressBar.showProgress();
+        String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
+        LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
+
+        apiService.batchRoutePath(batchId, Constants.AUTHORIZATION_TOKEN + loginResponse.getToken()).enqueue(new Callback<BatchRoutePath>() {
+            @Override
+            public void onResponse(Call<BatchRoutePath> call, Response<BatchRoutePath> response) {
+                customProgressBar.hideProgress();
+
+                if (response.code() == 200) {
+                    List<String> routes = Arrays.asList(response.body().getRoute().split("\\|"));
+                    routeList = new ArrayList<>();
+                    routeList.addAll(routes);
+                    DC = response.body().getDcName();
+                    lat = response.body().getDcLat();
+                    lon = response.body().getDcLon();
+                    Log.e(TAG, "onResponse: Size" + routes.size());
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<BatchRoutePath> call, Throwable t) {
+                Log.e(TAG, "onFailure: " + t.getMessage());
+                customProgressBar.hideProgress();
+
             }
         });
     }

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -31,16 +32,25 @@ public class MapRouteActivity extends AppCompatActivity {
     };
     private MapFragmentView m_mapFragmentView;
     ArrayList<String> taskInfoEntityList = new ArrayList<>();
+    ArrayList<String> routeList = new ArrayList<>();
     private TaskInfoRepository mTaskInfoRepository;
     List<TaskInfoEntity> taskInfoEntities;
-
+    ArrayList<String> getRouteList;
+    double lat, lon;
+    String dcName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_route);
         if (getIntent() != null) {
             taskInfoEntityList = getIntent().getStringArrayListExtra("list");
+            getRouteList = getIntent().getStringArrayListExtra("routeList");
+            dcName = getIntent().getStringExtra("dcName");
+            lat = getIntent().getDoubleExtra("dcLat", 0);
+            lon = getIntent().getDoubleExtra("dcLon", 0);
+//            Log.e("TAG", "onCreate: " + getRouteList);
         }
+
         mTaskInfoRepository = new TaskInfoRepository(getApplication());
         taskInfoEntities = mTaskInfoRepository.getTaskInfos1();
         if (hasPermissions(this, RUNTIME_PERMISSIONS)) {
@@ -104,6 +114,6 @@ public class MapRouteActivity extends AppCompatActivity {
     private void setupMapFragmentView() {
         // All permission requests are being handled. Create map fragment view. Please note
         // the HERE Mobile SDK requires all permissions defined above to operate properly.
-        m_mapFragmentView = new MapFragmentView(this, taskInfoEntityList, taskInfoEntities);
+        m_mapFragmentView = new MapFragmentView(this, getRouteList, taskInfoEntityList, taskInfoEntities,lon,lat,dcName);
     }
 }
