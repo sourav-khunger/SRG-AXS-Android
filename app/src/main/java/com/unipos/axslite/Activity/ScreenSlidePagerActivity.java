@@ -253,6 +253,7 @@ public class ScreenSlidePagerActivity extends AppCompatActivity implements Navig
                     Toast.makeText(getApplicationContext(), "Local Data is not synced with server yet! Please try after some time.", Toast.LENGTH_LONG).show();
                 } else {
                     mTaskInfoRepository.deleteAll();
+//                    mTaskInfoRepository.deleteAllRunList();
 
                     stopService(new Intent(getApplicationContext(), SyncRemoteServerService.class));
                     startService(new Intent(getApplicationContext(), SyncRemoteServerService.class));

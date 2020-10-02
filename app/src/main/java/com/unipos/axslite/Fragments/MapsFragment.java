@@ -457,7 +457,7 @@ public class MapsFragment extends Fragment implements OnEngineInitListener {
             mapView.getMapGesture().addOnGestureListener(onGestureListener, 0, false);
 //                        m_map =
             /*MapPolyline mapPolyline =*/
-            String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
+            String jsonLoginResponse = PreferenceManager.getDefaultSharedPreferences(m_activity).getString(Constants.PREF_KEY_LOGIN_RESPONSE, "");
             LoginResponse loginResponse = new Gson().fromJson(jsonLoginResponse, LoginResponse.class);
             int isOnduty = loginResponse.getDriverInfo().getOnDuty();
 

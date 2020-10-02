@@ -76,7 +76,7 @@ public class RouteFragment extends Fragment {
                 .getString(Constants.SELECTED_BATCH_ID, "");
 
         pullData();
-        batchRoutePathAPI(batchId);
+//        batchRoutePathAPI(batchId);
 ////        stringArrayList.add("    Run No. 1  ");
 //        for (int i = 0; i < taskInfoEntities.size(); i++) {
 //
@@ -98,7 +98,7 @@ public class RouteFragment extends Fragment {
                 }
                 batchRoutePathAPI(runInfoList.get(i).getBatchId());
 
-                Log.e(TAG, "onItemSelected: " + routeSelectionList.size());
+//                Log.e(TAG, "onItemSelected: " + routeSelectionList.size());
             }
 
             @Override
@@ -109,17 +109,21 @@ public class RouteFragment extends Fragment {
         showRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), MapRouteActivity.class);
-                intent.putExtra("list", routeSpinner.getSelectedItem().toString().replaceAll("Run #", ""));
-                intent.putStringArrayListExtra("list", routeSelectionList);
-                intent.putStringArrayListExtra("routeList", routeList);
-                intent.putExtra("dcName", DC);
-                intent.putExtra("dcLat", lat);
-                intent.putExtra("dcLon", lon);
-//                Bundle bundle = new Bundle();
-//                bundle.
-                Log.e(TAG, "onClick: " + routeSpinner.getSelectedItem().toString().replaceAll("Run #", ""));
-                startActivity(intent);
+                if (routeSelectionList.size() > 0) {
+                    Intent intent = new Intent(getContext(), MapRouteActivity.class);
+                    intent.putExtra("list", routeSpinner.getSelectedItem().toString().replaceAll("Run #", ""));
+                    intent.putStringArrayListExtra("list", routeSelectionList);
+                    intent.putStringArrayListExtra("routeList", routeList);
+                    intent.putExtra("dcName", DC);
+                    intent.putExtra("dcLat", lat);
+                    intent.putExtra("dcLon", lon);
+
+                    Log.e(TAG, "onClick: " + routeSpinner.getSelectedItem().toString().replaceAll("Run #", ""));
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "you have no deliveries ", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         filterTaskList.setOnClickListener(new View.OnClickListener() {
