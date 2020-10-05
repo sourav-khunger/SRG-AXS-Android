@@ -187,7 +187,7 @@
 93-->[androidx.work:work-runtime:2.4.0] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\627c73c63f7931943fddb6f59e49c80f\work-runtime-2.4.0\AndroidManifest.xml:28:22-74
 94
 95    <application
-95-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:39:5-121:19
+95-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:39:5-122:19
 96        android:allowBackup="false"
 96-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:40:9-36
 97        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
@@ -233,45 +233,45 @@
 114-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:55:9-73
 114-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:55:19-70
 115        <activity
-115-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:56:9-58:59
+115-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:57:9-59:59
 116            android:name="com.unipos.axslite.Activity.ScreenSlidePagerActivity"
-116-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:57:13-62
+116-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:58:13-62
 117            android:theme="@style/AppTheme.NoActionBar" />
-117-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:58:13-56
+117-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:59:13-56
 118        <activity
-118-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:59:9-61:59
+118-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:60:9-62:59
 119            android:name="com.unipos.axslite.Activity.ShipmentActivity"
-119-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:60:13-54
+119-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:61:13-54
 120            android:theme="@style/AppTheme.NoActionBar" />
-120-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:61:13-56
+120-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:62:13-56
 121        <activity
-121-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:62:9-64:59
+121-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:63:9-65:59
 122            android:name="com.unipos.axslite.Activity.ChooseCompanyActivity"
-122-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:63:13-59
+122-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:64:13-59
 123            android:theme="@style/AppTheme.NoActionBar" />
-123-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:64:13-56
+123-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:65:13-56
 124        <activity android:name="com.unipos.axslite.Activity.SignatureActivity" />
-124-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:65:9-64
-124-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:65:19-61
+124-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:66:9-64
+124-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:66:19-61
 125        <activity android:name="com.unipos.axslite.Activity.GPS_StatusActivity" />
-125-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:66:9-65
-125-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:66:19-62
+125-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:67:9-65
+125-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:67:19-62
 126        <activity android:name="com.unipos.axslite.Activity.ScanPackageActivity" />
-126-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:67:9-66
-126-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:67:19-63
+126-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:68:9-66
+126-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:68:19-63
 127
 128        <service android:name="com.unipos.axslite.BackgroudService.Workers.SyncRemoteServerService" />
-128-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:69:9-85
-128-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:69:18-82
+128-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:70:9-85
+128-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:70:18-82
 129        <service android:name="com.unipos.axslite.BackgroudService.Workers.LocationService" />
-129-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:70:9-77
-129-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:70:18-74
+129-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:71:9-77
+129-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:71:18-74
 130        <service android:name="com.unipos.axslite.BackgroudService.Workers.UploadImageService" />
-130-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:71:9-80
-130-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:71:18-77
+130-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:72:9-80
+130-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:72:18-77
 131        <service android:name="com.unipos.axslite.BackgroudService.Workers.Foreground_GPS_Service" />
-131-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:72:9-84
-131-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:72:18-81
+131-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:73:9-84
+131-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:73:18-81
 132        <!--
 133             The API key for Google Maps-based APIs is defined as a string resource.
 134             (See the file "res/values/google_maps_api.xml").
@@ -281,78 +281,78 @@
 138             You can define the keys for the debug and release targets in src/debug/ and src/release/.
 139        -->
 140        <meta-data
-140-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:81:9-83:55
+140-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:82:9-84:55
 141            android:name="com.google.android.geo.API_KEY"
-141-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:82:13-58
+141-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:83:13-58
 142            android:value="@string/google_maps_key" />
-142-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:83:13-52
+142-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:84:13-52
 143
 144        <activity android:name="com.unipos.axslite.MainActivity" >
-144-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:85:9-91:20
-144-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:85:19-47
+144-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:86:9-92:20
+144-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:86:19-47
 145            <intent-filter>
-145-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:86:13-90:29
+145-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:87:13-91:29
 146                <action android:name="android.intent.action.MAIN" />
-146-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:87:17-69
-146-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:87:25-66
+146-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:88:17-69
+146-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:88:25-66
 147
 148                <category android:name="android.intent.category.LAUNCHER" />
-148-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:89:17-77
-148-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:89:27-74
+148-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:90:17-77
+148-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:90:27-74
 149            </intent-filter>
 150        </activity>
 151        <activity android:name="com.unipos.axslite.here.turn.HereTurnNavActivity" />
-151-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:92:9-67
-151-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:92:19-64
+151-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:93:9-67
+151-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:93:19-64
 152        <activity android:name="com.unipos.axslite.here.adnav.HereAdvanceNavActivity" />
-152-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:93:9-71
-152-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:93:19-68
+152-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:94:9-71
+152-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:94:19-68
 153        <!--
 154Developers should put application credentials here.To obtain them, please register the application
 155         at https://developer.here.com/develop/mobile-sdks
 156        -->
 157        <meta-data
-157-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:98:9-100:52
+157-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:99:9-101:52
 158            android:name="com.here.android.maps.appid"
-158-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:99:13-55
+158-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:100:13-55
 159            android:value="CvjeJJL4RUq34uKkpxiP" />
-159-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:100:13-49
+159-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:101:13-49
 160        <meta-data
-160-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:101:9-103:54
+160-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:102:9-104:54
 161            android:name="com.here.android.maps.apptoken"
-161-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:102:13-58
+161-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:103:13-58
 162            android:value="EX4lKdnXTfofi4ZyXrT9ww" />
-162-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:103:13-51
+162-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:104:13-51
 163        <meta-data
-163-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:104:9-106:716
+163-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:105:9-107:716
 164            android:name="com.here.android.maps.license.key"
-164-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:105:13-61
+164-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:106:13-61
 165            android:value="UkvYc18cLZWcphRt69S/BUxLTzd1VOSnk1Jf8lbFlGsN2bIieGCFjWWC61svXaCvK3tLhC6eRY0I1bMitKdVhuhka226GHYcabEx6XWUTRIZ4xdbyvOCs6RGMwzfj2kdqgjyFBBU8xKECE+hqnldl/hdCt8TvEQSpt4W81/HnycMMpKUngKlFkRw3yEba5pS8Yb9Zl6FYhwruIur03fBOtSZr4dtB37pE9EpGUzMi3gBBJrV5tS1vDkFbd0A446DAmgLd6xARlF/SXZoLGV5nkCyy3u9k7+PPqSZzo8wJyPMMhT6EFwJpqes+hU4kiWRTm7Sp+lW8xuyBSGybeX6deO2nmA8YUGWUgRCcmhc/DzJLH6IoqjkhbPbP2EiVgpstghdZF0oR/3R4ZNq7YCxr0Dn2d5XZVUY0cZjQV6SyA2nb7/oxpxCQ6qxfzEMSZ/N52v6L/CMkKc9Oi4V/ul6z5pLUheJV4AmAEEPcFFNhQ6aMhfM5PAXxn6rTHdZ1sjBfBRccrTLEJNQnHgyc2wYg/gi8hn24DsluvQ3wH+K+n4vib7MyYlsQRLFtZ/4KNjeNXdB4TqcL65zumgiVUo9FmTCQidmSWsgYJygcLF96Ojzg4qlgI1ZSFrbcqmGRwRJpx8lMvODH/U0rqyP23nzk1Zqp+sUhli3YhBRvvF9wC8=" />
-165-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:106:13-713
+165-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:107:13-713
 166
 167        <provider
-167-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:108:9-118:20
+167-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:109:9-119:20
 168            android:name="androidx.core.content.FileProvider"
-168-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:109:13-62
+168-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:110:13-62
 169            android:authorities="com.unipos.axslite.Utils.FileProvider"
-169-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:110:13-72
+169-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:111:13-72
 170            android:exported="false"
-170-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:111:13-37
+170-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:112:13-37
 171            android:grantUriPermissions="true" >
-171-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:112:13-47
+171-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:113:13-47
 172
 173            <!-- ressource file to create -->
 174            <meta-data
-174-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:115:13-117:54
+174-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:116:13-118:54
 175                android:name="android.support.FILE_PROVIDER_PATHS"
-175-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:116:17-67
+175-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:117:17-67
 176                android:resource="@xml/file_paths" />
-176-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:117:17-51
+176-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:118:17-51
 177        </provider>
 178
 179        <service android:name="com.unipos.axslite.here.turn.HereTurnForegroundService" />
-179-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:120:9-72
-179-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:120:18-69
+179-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:121:9-72
+179-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:121:18-69
 180        <service
 180-->[HERE-sdk.aar] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\595c4239535c10e9b98c7c762342f9e3\jetified-HERE-sdk\AndroidManifest.xml:12:9-14:40
 181            android:name="com.nokia.maps.MapServiceInternal"
@@ -388,11 +388,11 @@
 197            android:grantUriPermissions="true" >
 197-->[com.github.dhaval2404:imagepicker:1.7.5] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\6040ddc469e7c682cbad227ca7e88310\jetified-imagepicker-1.7.5\AndroidManifest.xml:28:13-47
 198            <meta-data
-198-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:115:13-117:54
+198-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:116:13-118:54
 199                android:name="android.support.FILE_PROVIDER_PATHS"
-199-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:116:17-67
+199-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:117:17-67
 200                android:resource="@xml/image_picker_provider_paths" />
-200-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:117:17-51
+200-->C:\Users\Pranj\Documents\GitHub\SRG-AXS-Android\app\src\main\AndroidManifest.xml:118:17-51
 201        </provider> <!-- Needs to be explicitly declared on P+ -->
 202        <uses-library
 202-->[com.google.android.gms:play-services-maps:17.0.0] C:\Users\Pranj\.gradle\caches\transforms-2\files-2.1\7752dcb5f35954b62a1d54735ffd34b4\jetified-play-services-maps-17.0.0\AndroidManifest.xml:33:9-35:40

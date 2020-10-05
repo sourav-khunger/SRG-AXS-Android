@@ -53,6 +53,7 @@
         <activity android:name=".Activity.TaskInfoUpdateActivity" />
         <activity android:name=".Activity.ShowListOfTaskGroupByLocationKeyActivity" />
         <activity android:name=".Activity.ShowPackageDetailsActivity" />
+
         <activity
             android:name=".Activity.ScreenSlidePagerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
